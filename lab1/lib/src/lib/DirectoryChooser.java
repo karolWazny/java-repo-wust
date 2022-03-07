@@ -11,7 +11,7 @@ public class DirectoryChooser {
         chooser.setAcceptAllFileFilterUsed(false);
         chooser.showOpenDialog(null);
         File file = chooser.getSelectedFile();
-        return file.toPath();
+        return file == null ? null : file.toPath();
     }
 
     public static void main(String[] args){
