@@ -1,6 +1,5 @@
 package lib;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -9,37 +8,52 @@ import java.nio.file.Paths;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 public class FileHasher {
+    private Path filepath;
+    private DigestInputStream digestInputStream;
+    private MessageDigest messageDigest;
+    private byte[] hashValue;
+
     public String hashValueOf(Path file) {
+        this.filepath = file;
         try
         {
-            InputStream is = Files.newInputStream(file);
-            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-            DigestInputStream dis = new DigestInputStream(is, messageDigest);
-
-            dis.readAllBytes();
-
-            return bytesToHex(messageDigest.digest());
+            initializeMembers();
+            calculateHashBytes();
+            return buildHashRepresentation();
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (NoSuchAlgorithmException ignored) {
-
         }
-
         throw new RuntimeException("Error calculating hash for specified file: " + file);
     }
 
-    private static String bytesToHex(byte[] bytes) {
-        char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
-        char[] hexChars = new char[bytes.length * 2];
-        for (int j = 0; j < bytes.length; j++) {
-            int v = bytes[j] & 0xFF;
-            hexChars[j * 2] = HEX_ARRAY[v >>> 4];
-            hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
+    private void initializeMembers() throws IOException {
+        InputStream is = Files.newInputStream(filepath);
+        messageDigest = null;
+        try {
+            messageDigest = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException ignored) {
+
         }
-        return new String(hexChars);
+        digestInputStream = new DigestInputStream(is, messageDigest);
+    }
+
+    private void calculateHashBytes() throws IOException {
+        this.digestInputStream.readAllBytes();
+        this.hashValue = messageDigest.digest();
+    }
+
+    private String buildHashRepresentation(){
+        return bytesToHex(this.hashValue);
+    }
+
+    private String bytesToHex(byte[] bytes) {
+        StringBuilder output = new StringBuilder();
+        for(byte singleByte : bytes){
+            output.append(String.format("%02x", singleByte));
+        }
+        return output.toString();
     }
 
     public static void main(String[] args){
