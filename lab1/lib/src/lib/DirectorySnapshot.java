@@ -9,6 +9,10 @@ public class DirectorySnapshot {
     List<FileSnapshot> files;
     Time timeCalculated;
 
+    public Changes changesSince(DirectorySnapshot previousVersion){
+        return null;
+    }
+
     public DirectorySnapshot(Path directory) {
         this.directory = directory;
     }
@@ -35,5 +39,15 @@ public class DirectorySnapshot {
 
     public void setTimeCalculated(Time timeCalculated) {
         this.timeCalculated = timeCalculated;
+    }
+
+    public static class Changes {
+        public Time previousCheckTime;
+        public Time currentCheckTime;
+
+        public List<Path> addedFiles;
+        public List<Path> deletedFiles;
+        public List<Path> changedFiles;
+        public List<Path> unchangedFiles;
     }
 }
