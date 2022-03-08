@@ -3,6 +3,7 @@ package lib;
 import java.nio.file.Path;
 import java.sql.Time;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,7 +13,52 @@ public class DirectorySnapshot {
     Time timeCalculated;
 
     public Changes changesSince(DirectorySnapshot previousVersion){
-        return null;
+        Changes output = new Changes();
+        output.setCurrentCheckTime(timeCalculated);
+        output.setPreviousCheckTime(previousVersion.timeCalculated);
+
+        Iterator<FileSnapshot> currentSnaps = files.iterator();
+        Iterator<FileSnapshot> previousSnaps = previousVersion.files.iterator();
+
+        FileSnapshot current = null;
+        FileSnapshot previous = null;
+
+        Comparator<FileSnapshot> comparator = Comparator.comparing((FileSnapshot fileSnapshot)
+                -> fileSnapshot.getFilepath().toString());
+
+        while(currentSnaps.hasNext() && previousSnaps.hasNext()){
+            if(current == null)
+                current = currentSnaps.next();
+            if(previous == null)
+                previous = previousSnaps.next();
+            int comparisonResult = comparator.compare(current, previous);
+            if(comparisonResult == 0){
+                if(current.getChecksum().equals(previous.getChecksum())){
+                    output.unchangedFiles.add(current.getFilepath());
+                } else {
+                    output.changedFiles.add(current.getFilepath());
+                }
+                current = previous = null;
+            } else if (comparisonResult > 0){
+                output.deletedFiles.add(previous.getFilepath());
+                previous = null;
+            } else {
+                output.addedFiles.add(current.getFilepath());
+                current = null;
+            }
+        }
+
+        while(currentSnaps.hasNext())
+            output.addedFiles.add(currentSnaps.next().getFilepath());
+        while(previousSnaps.hasNext())
+            output.deletedFiles.add(previousSnaps.next().getFilepath());
+
+        System.out.println("CHANGED: " + output.changedFiles);
+        System.out.println("UNCHANGED: " + output.unchangedFiles);
+        System.out.println("ADDED: " + output.addedFiles);
+        System.out.println("DELETED: " + output.deletedFiles);
+
+        return output;
     }
 
     public List<String> toLines(){
@@ -67,13 +113,29 @@ public class DirectorySnapshot {
     }
 
     public static class Changes {
-        public Time previousCheckTime;
-        public Time currentCheckTime;
+        private Time previousCheckTime;
+        private Time currentCheckTime;
 
-        public List<Path> addedFiles;
-        public List<Path> deletedFiles;
-        public List<Path> changedFiles;
-        public List<Path> unchangedFiles;
+        public List<Path> addedFiles = new LinkedList<>();
+        public List<Path> deletedFiles = new LinkedList<>();
+        public List<Path> changedFiles = new LinkedList<>();
+        public List<Path> unchangedFiles = new LinkedList<>();
+
+        public Time getPreviousCheckTime() {
+            return previousCheckTime;
+        }
+
+        public Time getCurrentCheckTime() {
+            return currentCheckTime;
+        }
+
+        public void setPreviousCheckTime(Time previousCheckTime) {
+            this.previousCheckTime = previousCheckTime;
+        }
+
+        public void setCurrentCheckTime(Time currentCheckTime) {
+            this.currentCheckTime = currentCheckTime;
+        }
     }
 
     public static class UnsupportedVersionError extends RuntimeException {

@@ -11,7 +11,7 @@ public class FileSnapshot {
     public static FileSnapshot fromLine(String line){
         int separatorPosition = line.indexOf(' ');
         String hash = line.substring(0, separatorPosition);
-        String pathString = line.substring(separatorPosition);
+        String pathString = line.substring(separatorPosition).trim();
         Path path = Paths.get(pathString);
         return new FileSnapshot(path, hash);
     }

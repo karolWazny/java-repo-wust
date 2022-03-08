@@ -2,6 +2,7 @@ package lib;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
@@ -14,8 +15,12 @@ public class SnapshotFileHandler {
     }
 
     public DirectorySnapshot read() throws IOException {
-        List<String> lines = Files.readAllLines(file);
-        return DirectorySnapshot.fromLines(lines);
+        try{
+            List<String> lines = Files.readAllLines(file);
+            return DirectorySnapshot.fromLines(lines);
+        } catch (NoSuchFileException e){
+            return null;
+        }
     }
 
     public void write(DirectorySnapshot snapshot) throws IOException {
