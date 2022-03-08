@@ -46,7 +46,7 @@ public class SnapshotCreator {
     }
 
     private DirectorySnapshot buildDirSnapshot(){
-        DirectorySnapshot directorySnapshot = new DirectorySnapshot(folder);
+        DirectorySnapshot directorySnapshot = new DirectorySnapshot();
         directorySnapshot.setTimeCalculated(timeGenerated);
         directorySnapshot.setFiles(fileSnapshots);
         return directorySnapshot;

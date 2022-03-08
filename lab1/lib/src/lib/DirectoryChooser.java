@@ -5,7 +5,7 @@ import java.io.File;
 import java.nio.file.Path;
 
 public class DirectoryChooser {
-    Path chooseDirectory(){
+    public Path chooseDirectory(){
         JFileChooser chooser = new JFileChooser();
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setAcceptAllFileFilterUsed(false);

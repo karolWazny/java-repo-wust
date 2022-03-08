@@ -2,10 +2,12 @@ package lib;
 
 import java.nio.file.Path;
 import java.sql.Time;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 public class DirectorySnapshot {
-    Path directory;
+    public final static String version = "alpha 0.0.0";
     List<FileSnapshot> files;
     Time timeCalculated;
 
@@ -13,24 +15,47 @@ public class DirectorySnapshot {
         return null;
     }
 
-    public DirectorySnapshot(Path directory) {
-        this.directory = directory;
+    public List<String> toLines(){
+        List<String> output = new LinkedList<>();
+        output.add(version);
+        output.add(timeCalculated.toString());
+        for (FileSnapshot snap:
+             files) {
+            output.add(snap.toLine());
+        }
+        return output;
     }
 
-    public Path getDirectory() {
-        return directory;
+    public static DirectorySnapshot fromLines(List<String> lines){
+        String[] version = versionFromString(lines.remove(0));
+        if(!version[0].equals(version()[0]))
+            throw new UnsupportedVersionError();
+        Time timeGenerated = Time.valueOf(lines.remove(0));
+        List<FileSnapshot> fileSnapshots = new LinkedList<>();
+        for (String line:
+             lines) {
+            fileSnapshots.add(FileSnapshot.fromLine(line));
+        }
+
+        DirectorySnapshot output = new DirectorySnapshot();
+        output.setFiles(fileSnapshots);
+        output.setTimeCalculated(timeGenerated);
+
+        return output;
     }
 
-    public void setDirectory(Path directory) {
-        this.directory = directory;
+    private static String[] versionFromString(String version){
+        String[] output = new String[3];
+        return version.split("\\.");
     }
 
-    public List<FileSnapshot> getFiles() {
-        return files;
+    private static String[] version(){
+        return versionFromString(version);
     }
 
     public void setFiles(List<FileSnapshot> files) {
         this.files = files;
+        this.files.sort(Comparator.comparing((FileSnapshot fileSnapshot) -> fileSnapshot.getFilepath().toString()));
     }
 
     public Time getTimeCalculated() {
@@ -49,5 +74,11 @@ public class DirectorySnapshot {
         public List<Path> deletedFiles;
         public List<Path> changedFiles;
         public List<Path> unchangedFiles;
+    }
+
+    public static class UnsupportedVersionError extends RuntimeException {
+        public UnsupportedVersionError() {
+            super("Provided file cannot be parsed, because it was created with unsupported version of the library.");
+        }
     }
 }
