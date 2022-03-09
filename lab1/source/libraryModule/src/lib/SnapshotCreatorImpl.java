@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Time;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,7 +17,7 @@ public class SnapshotCreatorImpl implements SnapshotCreator {
     private Set<Path> paths;
     private FileHasher hasher = new FileHasher();
     private List<FileSnapshot> fileSnapshots;
-    private Time timeGenerated;
+    private LocalDateTime timeGenerated;
 
     @Override
     public DirectorySnapshot snapshotOf(Path folderPath) throws IOException {
@@ -28,7 +29,7 @@ public class SnapshotCreatorImpl implements SnapshotCreator {
     }
 
     private void prepareTimeStamp(){
-        timeGenerated = Time.valueOf(LocalTime.now());
+        timeGenerated = LocalDateTime.now();
     }
 
     private void listFiles() throws IOException {

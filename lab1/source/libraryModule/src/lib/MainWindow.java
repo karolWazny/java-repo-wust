@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.format.DateTimeFormatter;
 
 public class MainWindow extends JFrame {
     private JTextArea unchangedFiles = uneditableArea();
@@ -64,7 +65,8 @@ public class MainWindow extends JFrame {
         if(changes.getPreviousCheckTime() == null) {
             metaField.setText("This directory has never been checked before.");
         } else {
-            metaField.setText("Last checked: " + changes.getPreviousCheckTime());
+            metaField.setText("Last checked: " + changes.getPreviousCheckTime()
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
         }
         directoryTextField.setText(directory.toString());
         StringBuilder buffer = new StringBuilder();

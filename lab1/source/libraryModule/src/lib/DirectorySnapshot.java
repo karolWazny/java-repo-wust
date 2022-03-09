@@ -1,16 +1,17 @@
 package lib;
 
 import java.nio.file.Path;
-import java.sql.Time;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 public class DirectorySnapshot {
-    public final static String version = "alpha 0.0.0";
+    public final static String version = "alpha 1.0.0";
     List<FileSnapshot> files;
-    Time timeCalculated;
+    LocalDateTime timeCalculated;
 
     public Changes changesSince(DirectorySnapshot previousVersion){
         Changes output = new Changes();
@@ -58,7 +59,7 @@ public class DirectorySnapshot {
     public List<String> toLines(){
         List<String> output = new LinkedList<>();
         output.add(version);
-        output.add(timeCalculated.toString());
+        output.add(timeCalculated.format(dateTimeFormatter()));
         for (FileSnapshot snap:
              files) {
             output.add(snap.toLine());
@@ -66,11 +67,16 @@ public class DirectorySnapshot {
         return output;
     }
 
+    private static DateTimeFormatter dateTimeFormatter(){
+        return DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    }
+
     public static DirectorySnapshot fromLines(List<String> lines){
         String[] version = versionFromString(lines.remove(0));
         if(!version[0].equals(version()[0]))
             throw new UnsupportedVersionError();
-        Time timeGenerated = Time.valueOf(lines.remove(0));
+        LocalDateTime timeGenerated = LocalDateTime.parse(lines.remove(0),
+                dateTimeFormatter());
         List<FileSnapshot> fileSnapshots = new LinkedList<>();
         for (String line:
              lines) {
@@ -98,36 +104,36 @@ public class DirectorySnapshot {
         this.files.sort(Comparator.comparing((FileSnapshot fileSnapshot) -> fileSnapshot.getFilepath().toString()));
     }
 
-    public Time getTimeCalculated() {
+    public LocalDateTime getTimeCalculated() {
         return timeCalculated;
     }
 
-    public void setTimeCalculated(Time timeCalculated) {
+    public void setTimeCalculated(LocalDateTime timeCalculated) {
         this.timeCalculated = timeCalculated;
     }
 
     public static class Changes {
-        private Time previousCheckTime;
-        private Time currentCheckTime;
+        private LocalDateTime previousCheckTime;
+        private LocalDateTime currentCheckTime;
 
         public List<Path> addedFiles = new LinkedList<>();
         public List<Path> deletedFiles = new LinkedList<>();
         public List<Path> changedFiles = new LinkedList<>();
         public List<Path> unchangedFiles = new LinkedList<>();
 
-        public Time getPreviousCheckTime() {
+        public LocalDateTime getPreviousCheckTime() {
             return previousCheckTime;
         }
 
-        public Time getCurrentCheckTime() {
+        public LocalDateTime getCurrentCheckTime() {
             return currentCheckTime;
         }
 
-        public void setPreviousCheckTime(Time previousCheckTime) {
+        public void setPreviousCheckTime(LocalDateTime previousCheckTime) {
             this.previousCheckTime = previousCheckTime;
         }
 
-        public void setCurrentCheckTime(Time currentCheckTime) {
+        public void setCurrentCheckTime(LocalDateTime currentCheckTime) {
             this.currentCheckTime = currentCheckTime;
         }
     }
