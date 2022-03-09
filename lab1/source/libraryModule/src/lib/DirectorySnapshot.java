@@ -52,12 +52,6 @@ public class DirectorySnapshot {
             output.addedFiles.add(currentSnaps.next().getFilepath());
         while(previousSnaps.hasNext())
             output.deletedFiles.add(previousSnaps.next().getFilepath());
-
-        System.out.println("CHANGED: " + output.changedFiles);
-        System.out.println("UNCHANGED: " + output.unchangedFiles);
-        System.out.println("ADDED: " + output.addedFiles);
-        System.out.println("DELETED: " + output.deletedFiles);
-
         return output;
     }
 
