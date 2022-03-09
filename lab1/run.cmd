@@ -1,0 +1,1 @@
+java -cp jars/library.jar;jars/snapshooter.jar main.App
