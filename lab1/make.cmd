@@ -16,3 +16,13 @@ rm app_sources.txt
 
 jar --create --file jars/snapshooter.jar --main-class main.App -C classes .
 rm -r -f classes
+
+IF exist build\ (rm -r -f build)
+jlink --module-path jars --add-modules applicationModule,libraryModule --output build
+
+REM cleaning up
+IF exist release\ (rm -r -f release)
+mkdir release
+move jars release
+move build release
+

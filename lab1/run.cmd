@@ -1,1 +1,1 @@
-java -cp jars/library.jar;jars/snapshooter.jar main.App
+release\build\bin\java.exe --module applicationModule/main.App
