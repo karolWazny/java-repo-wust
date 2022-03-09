@@ -26,3 +26,5 @@ mkdir release
 move jars release
 move build release
 
+REM add run script inside build folder
+echo bin\java.exe --module applicationModule/main.App > release\build\run.cmd
