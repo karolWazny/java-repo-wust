@@ -52,6 +52,7 @@ public class BottomPanel extends JPanel {
 
         rightPane.setMinimumSize(new Dimension(400, 500));
         rightPane.setPreferredSize(new Dimension(400, 500));
+        rightPane.add(recordRenderer);
 
         add(leftPane);
         add(rightPane);
