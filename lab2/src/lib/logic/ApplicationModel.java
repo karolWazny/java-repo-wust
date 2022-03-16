@@ -10,6 +10,7 @@ public class ApplicationModel {
     private final RecordsLister recordsLister = new RecordsLister();
 
     private final Map<String, Record> cachedRecords = new WeakHashMap<>();
+    private boolean lastRecordFromCache = false;
 
     public List<String> recordNames(){
         return recordsLister.listRecords()
@@ -27,11 +28,18 @@ public class ApplicationModel {
     }
 
     public Record getRecord(String key){
-        if(cachedRecords.containsKey(key))
+        if(cachedRecords.containsKey(key)){
+            lastRecordFromCache = true;
             return cachedRecords.get(key);
+        }
         RecordLoader loader = new RecordLoader();
         Record record = loader.load(getDirectory().resolve(key));
         cachedRecords.put(key, record);
+        lastRecordFromCache = false;
         return record;
+    }
+
+    public boolean wasLastRecordInCache(){
+        return lastRecordFromCache;
     }
 }
