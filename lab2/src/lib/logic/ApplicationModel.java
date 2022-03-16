@@ -1,5 +1,6 @@
 package lib.logic;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -32,11 +33,16 @@ public class ApplicationModel {
             lastRecordFromCache = true;
             return cachedRecords.get(key);
         }
-        RecordLoader loader = new RecordLoader();
-        Record record = loader.load(getDirectory().resolve(key));
-        cachedRecords.put(key, record);
-        lastRecordFromCache = false;
-        return record;
+        try{
+            RecordLoader loader = new RecordLoader();
+            Record record = loader.load(getDirectory().resolve(key));
+            cachedRecords.put(key, record);
+            lastRecordFromCache = false;
+            return record;
+        } catch (IOException ignored){
+
+        }
+        throw new RuntimeException("Problem loading record: " + key);
     }
 
     public boolean wasLastRecordInCache(){
