@@ -16,10 +16,12 @@ public class MainWindow extends JFrame {
     private final JTextField directoryTextField;
     private JButton browseButton;
     private JTextField metaField;
+    private BottomPanel bottomPanel;
 
     public void setDirectory(Path directory) {
         model.setDirectory(directory);
         directoryTextField.setText(directory.toString());
+        bottomPanel.setRecords(model.recordNames());
     }
 
     private static JTextArea uneditableArea(){
@@ -63,14 +65,11 @@ public class MainWindow extends JFrame {
 
         add(metaField);
 
-        JPanel bottomPanel = new BottomPanel();
-
-        JScrollPane scrollPane = new JScrollPane(bottomPanel);
-        add(scrollPane);
+        bottomPanel = new BottomPanel(model);
+        add(bottomPanel);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        pack();
         setLocationRelativeTo(null);
         setVisible(true);
         setResizable(true);
