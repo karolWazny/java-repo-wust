@@ -6,6 +6,8 @@ import java.io.File;
 import java.nio.file.Path;
 
 public class DirectoryChooserImpl implements DirectoryChooser {
+    private Path lastChoice;
+
     @Override
     public Path chooseDirectory(){
         return chooseDirectory(null);
@@ -13,13 +15,14 @@ public class DirectoryChooserImpl implements DirectoryChooser {
 
     @Override
     public Path chooseDirectory(JFrame parent){
-        JFileChooser chooser = new JFileChooser();
+        JFileChooser chooser = lastChoice == null ? new JFileChooser() : new JFileChooser("" + lastChoice);
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setAcceptAllFileFilterUsed(false);
         chooser.showOpenDialog(parent);
         chooser.setDialogTitle("Select directory.");
         File file = chooser.getSelectedFile();
-        return file == null ? null : file.toPath();
+        lastChoice =  file == null ? null : file.toPath();
+        return lastChoice;
     }
 
     public static void main(String[] args){
