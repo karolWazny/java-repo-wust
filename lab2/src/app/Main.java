@@ -1,13 +1,11 @@
 package app;
 
-import lib.logic.DirectoryChooser;
-import lib.logic.DirectoryChooserImpl;
-import lib.logic.RecordsLister;
+import lib.gui.MainWindow;
+import lib.logic.ApplicationModel;
 
 public class Main {
     public static void main(String[] args){
-        DirectoryChooser chooser = new DirectoryChooserImpl();
-        RecordsLister lister = new RecordsLister(chooser.chooseDirectory());
-        System.out.println(lister.listRecords());
+        ApplicationModel model = new ApplicationModel();
+        MainWindow window = new MainWindow(model);
     }
 }

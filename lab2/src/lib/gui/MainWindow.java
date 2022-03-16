@@ -1,6 +1,6 @@
 package lib.gui;
 
-import app.BottomPanel;
+import lib.logic.ApplicationModel;
 import lib.logic.DirectoryChooser;
 import lib.logic.DirectoryChooserImpl;
 
@@ -11,20 +11,26 @@ import java.nio.file.Path;
 
 public class MainWindow extends JFrame {
     private DirectoryChooser dirChooser = new DirectoryChooserImpl();
+    private ApplicationModel model;
 
     private final JTextField directoryTextField;
     private JButton browseButton;
     private JTextField metaField;
 
-    private Path directory;
-
     public void setDirectory(Path directory) {
-        this.directory = directory;
+        model.setDirectory(directory);
         directoryTextField.setText(directory.toString());
     }
 
-    public MainWindow() {
-        super("Snapshooter - windowed");
+    private static JTextArea uneditableArea(){
+        JTextArea output = new JTextArea();
+        output.setEditable(false);
+        return output;
+    }
+
+    public MainWindow(ApplicationModel model) throws HeadlessException {
+        super("Records viewer - windowed");
+        this.model = model;
 
         setLayout(new BoxLayout(this.getContentPane(), BoxLayout.PAGE_AXIS));
 
@@ -71,13 +77,7 @@ public class MainWindow extends JFrame {
         setMinimumSize(new Dimension(700, 230));
     }
 
-    private static JTextArea uneditableArea(){
-        JTextArea output = new JTextArea();
-        output.setEditable(false);
-        return output;
-    }
-
     public static void main(String[] args){
-        JFrame frame = new MainWindow();
+        JFrame frame = new MainWindow(new ApplicationModel());
     }
 }
