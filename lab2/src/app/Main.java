@@ -1,8 +1,8 @@
 package app;
 
-import lib.DirectoryChooser;
-import lib.DirectoryChooserImpl;
-import lib.RecordsLister;
+import lib.logic.DirectoryChooser;
+import lib.logic.DirectoryChooserImpl;
+import lib.logic.RecordsLister;
 
 public class Main {
     public static void main(String[] args){

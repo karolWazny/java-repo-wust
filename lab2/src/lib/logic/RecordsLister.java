@@ -1,4 +1,4 @@
-package lib;
+package lib.logic;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,6 +10,8 @@ import java.util.stream.Stream;
 
 public class RecordsLister {
     private Path directory;
+
+    public RecordsLister() {}
 
     public RecordsLister(Path directory) {
         this.directory = Objects.requireNonNull(directory);
@@ -28,6 +30,7 @@ public class RecordsLister {
             return stream
                     .filter(file -> Files.exists(file.resolve("record.txt")))
                     .filter(file -> Files.exists(file.resolve("image.png")))
+                    .map((Path dir)-> directory.relativize(dir))
                     .collect(Collectors.toList());
         } catch (IOException e){
             e.printStackTrace();

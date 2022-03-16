@@ -1,4 +1,4 @@
-package lib;
+package lib.logic;
 
 import javax.swing.*;
 import java.nio.file.Path;
