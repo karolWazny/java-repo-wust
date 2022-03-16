@@ -1,4 +1,4 @@
-package lib.logic;
+package com.lib.logic;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -33,10 +33,18 @@ public class RecordLoader {
             String key = line.substring(0, spaceIndex);
             String value = line.substring(spaceIndex).trim();
             switch (key) {
-                case "FIRST_NAME" -> output.setFirstName(value);
-                case "LAST_NAME" -> output.setLastName(value);
-                case "BIRTH_DATE" -> output.setBirthDate(LocalDate.parse(value, formatter()));
-                case "EMAIL" -> output.setEmail(value);
+                case "FIRST_NAME":
+                    output.setFirstName(value);
+                    break;
+                case "LAST_NAME":
+                    output.setLastName(value);
+                    break;
+                case "BIRTH_DATE":
+                    output.setBirthDate(LocalDate.parse(value, formatter()));
+                    break;
+                case "EMAIL":
+                    output.setEmail(value);
+                    break;
             }
         }
     }

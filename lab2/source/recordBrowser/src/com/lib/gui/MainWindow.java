@@ -1,10 +1,10 @@
-package lib.gui;
+package com.lib.gui;
 
-import lib.logic.ApplicationModel;
-import lib.logic.DirectoryChooser;
-import lib.logic.DirectoryChooserImpl;
-import lib.logic.observer.Event;
-import lib.logic.observer.Listener;
+import com.lib.logic.ApplicationModel;
+import com.lib.logic.DirectoryChooser;
+import com.lib.logic.DirectoryChooserImpl;
+import com.lib.logic.observer.Event;
+import com.lib.logic.observer.Listener;
 
 import javax.swing.*;
 import java.awt.*;

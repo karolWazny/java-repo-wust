@@ -1,10 +1,10 @@
-package lib.gui;
+package com.lib.gui;
 
-import lib.logic.ApplicationModel;
-import lib.logic.Record;
-import lib.logic.observer.DefaultEvent;
-import lib.logic.observer.Listener;
-import lib.logic.observer.Observable;
+import com.lib.logic.ApplicationModel;
+import com.lib.logic.Record;
+import com.lib.logic.observer.DefaultEvent;
+import com.lib.logic.observer.Listener;
+import com.lib.logic.observer.Observable;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;

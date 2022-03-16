@@ -1,4 +1,4 @@
-package lib.logic;
+package com.lib.logic;
 
 import java.io.IOException;
 import java.nio.file.Path;

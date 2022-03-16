@@ -1,4 +1,4 @@
-package lib.logic.observer;
+package com.lib.logic.observer;
 
 public class DefaultEvent implements Event {
     private final Observable source;

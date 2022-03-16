@@ -1,4 +1,4 @@
-package lib.logic;
+package com.lib.logic;
 
 import javax.swing.*;
 import java.awt.*;

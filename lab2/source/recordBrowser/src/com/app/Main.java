@@ -1,7 +1,7 @@
-package app;
+package com.app;
 
-import lib.gui.MainWindow;
-import lib.logic.ApplicationModel;
+import com.lib.gui.MainWindow;
+import com.lib.logic.ApplicationModel;
 
 public class Main {
     public static void main(String[] args){

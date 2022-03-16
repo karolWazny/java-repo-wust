@@ -1,4 +1,4 @@
-package lib.logic;
+package com.lib.logic;
 
 import java.awt.image.BufferedImage;
 import java.time.LocalDate;
