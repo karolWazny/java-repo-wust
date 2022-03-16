@@ -1,6 +1,7 @@
 package lib.gui;
 
 import lib.logic.ApplicationModel;
+import lib.logic.RecordRenderer;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -13,6 +14,8 @@ public class BottomPanel extends JPanel {
     private JPanel leftPane = new JPanel();
     private JPanel rightPane = new JPanel();
     private JList<String> recordsView = new JList<>();
+
+    private RecordRenderer recordRenderer = new DefaultRenderer();
 
     private ApplicationModel model;
 
