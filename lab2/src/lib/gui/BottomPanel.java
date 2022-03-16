@@ -24,7 +24,10 @@ public class BottomPanel extends JPanel {
         buttons.setLayout(new BoxLayout(buttons, BoxLayout.LINE_AXIS));
 
         JButton previousButt = new JButton("Previous");
+        previousButt.addActionListener(action-> previousItem());
         JButton nextButt = new JButton("Next");
+        nextButt.addActionListener(action -> nextItem());
+
 
         buttons.add(previousButt);
         buttons.add(nextButt);
@@ -62,10 +65,12 @@ public class BottomPanel extends JPanel {
     }
 
     public void previousItem(){
-
+        int index = recordsView.getSelectedIndex();
+        recordsView.setSelectedIndex(index - 1);
     }
 
     public void nextItem(){
-
+        int index = recordsView.getSelectedIndex();
+        recordsView.setSelectedIndex(index + 1);
     }
 }
