@@ -55,7 +55,7 @@ public class MainWindow extends JFrame {
         });
         topPanel.add(browseButton);
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.LINE_AXIS));
-        topPanel.setPreferredSize(new Dimension(900, 30));
+        topPanel.setPreferredSize(new Dimension(700, 30));
 
         add(topPanel);
 

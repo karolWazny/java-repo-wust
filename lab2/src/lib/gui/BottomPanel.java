@@ -46,10 +46,12 @@ public class BottomPanel extends JPanel {
         });
 
         JScrollPane scrollPane = new JScrollPane(recordsView);
-        scrollPane.setMinimumSize(new Dimension(100, 100));
+        scrollPane.setMinimumSize(new Dimension(200, 100));
+        scrollPane.setPreferredSize(new Dimension(200, 100));
         leftPane.add(scrollPane);
 
-        rightPane.setMinimumSize(new Dimension(800, 500));
+        rightPane.setMinimumSize(new Dimension(400, 500));
+        rightPane.setPreferredSize(new Dimension(400, 500));
 
         add(leftPane);
         add(rightPane);
