@@ -59,7 +59,6 @@ public class OriginalRatioImagePanel extends ImagePanel{
         try {
             g2d.drawImage(image, 0, 0, (int)(getWidthToHeightRatio() * height), (int)height, this);
         } catch (NullPointerException ignored){
-            ignored.printStackTrace();
         }
     }
 }

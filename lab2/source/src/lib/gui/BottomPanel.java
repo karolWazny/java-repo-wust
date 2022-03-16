@@ -15,18 +15,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class BottomPanel extends JPanel implements Observable {
-    private JPanel leftPane = new JPanel();
-    private JPanel rightPane = new JPanel();
-    private JList<String> recordsView = new JList<>();
-    private List<Listener> listeners = new LinkedList<>();
+    private final JList<String> recordsView = new JList<>();
+    private final List<Listener> listeners = new LinkedList<>();
 
-    private RecordRenderer recordRenderer = new DefaultRenderer();
+    private final RecordRenderer recordRenderer = new DefaultRenderer();
 
-    private ApplicationModel model;
+    private final ApplicationModel model;
 
     public BottomPanel(ApplicationModel model){
         this.model = model;
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+        JPanel leftPane = new JPanel();
         leftPane.setLayout(new BoxLayout(leftPane, BoxLayout.PAGE_AXIS));
 
         JPanel buttons = new JPanel();
@@ -59,6 +58,7 @@ public class BottomPanel extends JPanel implements Observable {
 
         /*rightPane.setMinimumSize(new Dimension(400, 500));
         rightPane.setPreferredSize(new Dimension(400, 500));*/
+        JPanel rightPane = new JPanel();
         rightPane.add(recordRenderer);
 
         add(leftPane);

@@ -12,13 +12,12 @@ import java.awt.event.ActionEvent;
 import java.nio.file.Path;
 
 public class MainWindow extends JFrame implements Listener {
-    private DirectoryChooser dirChooser = new DirectoryChooserImpl();
-    private ApplicationModel model;
+    private final DirectoryChooser dirChooser = new DirectoryChooserImpl();
+    private final ApplicationModel model;
 
     private final JTextField directoryTextField;
-    private JButton browseButton;
-    private JTextField metaField;
-    private BottomPanel bottomPanel;
+    private final JTextField metaField;
+    private final BottomPanel bottomPanel;
 
     public void setDirectory(Path directory) {
         model.setDirectory(directory);
@@ -42,7 +41,7 @@ public class MainWindow extends JFrame implements Listener {
         directoryTextField.setEditable(false);
         directoryTextField.setMaximumSize(new Dimension(1000, 30));
         topPanel.add(directoryTextField);
-        browseButton = new JButton("Browse");
+        JButton browseButton = new JButton("Browse");
         browseButton.addActionListener((ActionEvent action)->{
             Path dirChosen = dirChooser.chooseDirectory(this);
             if(dirChosen == null)

@@ -11,12 +11,11 @@ public class DefaultRenderer extends RecordRenderer {
 
     private Record record;
 
-    private JTextField name = uneditableTextField();
-    private JTextField lastName = uneditableTextField();
-    private JTextField email = uneditableTextField();
-    private JTextField birthDate = uneditableTextField();
-    private ImagePanel imagePanel = defaultImageRenderer();
-    private Dimension dimension = new Dimension(100, 100);
+    private final JTextField name = uneditableTextField();
+    private final JTextField lastName = uneditableTextField();
+    private final JTextField email = uneditableTextField();
+    private final JTextField birthDate = uneditableTextField();
+    private final ImagePanel imagePanel = defaultImageRenderer();
 
     public DefaultRenderer(){
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
