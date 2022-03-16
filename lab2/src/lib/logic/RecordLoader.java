@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 public class RecordLoader {
     private List<String> lines;
@@ -29,7 +31,7 @@ public class RecordLoader {
                 lines){
             int spaceIndex = line.indexOf(' ');
             String key = line.substring(0, spaceIndex);
-            String value = line.substring(spaceIndex);
+            String value = line.substring(spaceIndex).trim();
             switch (key){
                 case "FIRST_NAME":
                     output.setFirstName(value);
@@ -38,7 +40,7 @@ public class RecordLoader {
                     output.setLastName(value);
                     break;
                 case "BIRTH_DATE":
-                    output.setBirthDate(LocalDate.parse(value));
+                    output.setBirthDate(LocalDate.parse(value, formatter()));
                     break;
                 case "EMAIL":
                     output.setEmail(value);
@@ -46,6 +48,11 @@ public class RecordLoader {
             }
         }
     }
+
+    private DateTimeFormatter formatter(){
+        return DateTimeFormatter.ofPattern("dd-LLL-yyyy", Locale.US);
+    }
+
     private void processImage(){
         output.setImage(image);
     }

@@ -1,4 +1,6 @@
-package lib.logic;
+package lib.gui;
+
+import lib.logic.Record;
 
 import javax.swing.*;
 
