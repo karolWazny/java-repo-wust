@@ -4,6 +4,7 @@ lab1/out/
 lab1/.idea/
 
 *.bak
+*.class
 
 lab2/.idea/
 lab2/out/
