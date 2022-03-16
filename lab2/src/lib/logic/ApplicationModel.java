@@ -36,7 +36,7 @@ public class ApplicationModel {
         try{
             RecordLoader loader = new RecordLoader();
             Record record = loader.load(getDirectory().resolve(key));
-            cachedRecords.put(key, record);
+            cachedRecords.put(new String(key), record);
             lastRecordFromCache = false;
             return record;
         } catch (IOException ignored){

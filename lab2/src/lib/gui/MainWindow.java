@@ -82,6 +82,10 @@ public class MainWindow extends JFrame implements Listener {
     public void onEventHappened(Event event) {
         Dimension dim = getSize();
         setSize(new Dimension(bottomPanel.getWidth(), dim.height));
+        if(model.wasLastRecordInCache())
+            metaField.setText("This record was loaded from RAM.");
+        else
+            metaField.setText("This record was loaded from hard drive.");
         //pack();
     }
 }
