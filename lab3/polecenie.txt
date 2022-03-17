@@ -1,0 +1,1 @@
+DODATKOWE WYMAGANIE: Użycie klasy Preferences do zapisania chociażby języka, w którym była zamknięta i wystartuje aplikacja.
