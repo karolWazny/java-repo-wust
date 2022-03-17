@@ -4,3 +4,8 @@ lab1/out/
 lab1/.idea/
 
 *.bak
+*.class
+
+lab2/.idea/
+lab2/out/
+lab2/source/recordBrowser/recordBrowser.iml
