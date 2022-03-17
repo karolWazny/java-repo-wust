@@ -2,15 +2,13 @@ package com.lib.logic;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ApplicationModel {
     private final RecordsLister recordsLister = new RecordsLister();
 
-    private final Map<String, Record> cachedRecords = new WeakHashMap<>();
+    private final Map<Key, Record> cachedRecords = new WeakHashMap<>();
     private boolean lastRecordFromCache = false;
 
     public List<String> recordNames(){
@@ -29,14 +27,14 @@ public class ApplicationModel {
     }
 
     public Record getRecord(String key){
-        if(cachedRecords.containsKey(key)){
+        if(cachedRecords.containsKey(new Key(key))){
             lastRecordFromCache = true;
-            return cachedRecords.get(key);
+            return cachedRecords.get(new Key(key));
         }
         try{
             RecordLoader loader = new RecordLoader();
             Record record = loader.load(getDirectory().resolve(key));
-            cachedRecords.put(key, record);
+            cachedRecords.put(new Key(key), record);
             lastRecordFromCache = false;
             return record;
         } catch (IOException ignored){
