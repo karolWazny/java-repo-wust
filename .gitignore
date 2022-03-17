@@ -9,3 +9,7 @@ lab1/.idea/
 lab2/.idea/
 lab2/out/
 lab2/source/recordBrowser/recordBrowser.iml
+lab3/.idea/
+*.iml
+
+lab3/out
