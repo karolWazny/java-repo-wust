@@ -5,9 +5,10 @@ import com.pwr.java.lab3.lib.Question;
 import java.util.Locale;
 
 public class CountriesOnContinentQuestion extends Question {
+    private final static String bundleName = "CountriesOnContinentBundle";
+
     public CountriesOnContinentQuestion(){
-        Locale locale = new Locale("pl", "PL");
-        setLocale(locale);
+        super(bundleName);
     }
 
     @Override

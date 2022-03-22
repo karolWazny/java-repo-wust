@@ -2,6 +2,8 @@ package com.pwr.java.lab3.lib.questions;
 
 import com.pwr.java.lab3.lib.Question;
 
+import java.util.Locale;
+
 public class AdminDivisionsQuestion extends Question {
     private final static String bundleName = "AdminDivisionsBundle";
 
@@ -16,7 +18,7 @@ public class AdminDivisionsQuestion extends Question {
 
     @Override
     public String getQuestion() {
-        return null;
+        return resourceBundle.getString("greetings");
     }
 
     @Override
@@ -32,5 +34,12 @@ public class AdminDivisionsQuestion extends Question {
     @Override
     public boolean wasAnswerCorrect() {
         return false;
+    }
+
+    public static void main(String[] args){
+        Question question = new AdminDivisionsQuestion();
+        System.out.println(question.getQuestion());
+        question.setLocale(new Locale("en", "EN"));
+        System.out.println(question.getQuestion());
     }
 }
