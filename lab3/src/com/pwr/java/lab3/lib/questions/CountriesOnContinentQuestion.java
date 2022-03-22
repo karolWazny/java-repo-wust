@@ -5,7 +5,7 @@ import com.pwr.java.lab3.lib.Question;
 import java.util.Locale;
 
 public class CountriesOnContinentQuestion extends Question {
-    private final static String bundleName = "CountriesOnContinentBundle";
+    private final static String bundleName = "com.pwr.java.lab3.resources.CountriesOnContinentBundle";
 
     public CountriesOnContinentQuestion(){
         super(bundleName);
@@ -18,7 +18,7 @@ public class CountriesOnContinentQuestion extends Question {
 
     @Override
     public String getQuestion() {
-        return null;
+        return resourceBundle.getString("greetings");
     }
 
     @Override
@@ -34,5 +34,12 @@ public class CountriesOnContinentQuestion extends Question {
     @Override
     public boolean wasAnswerCorrect() {
         return false;
+    }
+
+    public static void main(String[] args){
+        Question question = new CountriesOnContinentQuestion();
+        System.out.println(question.getQuestion());
+        question.setLocale(new Locale("en", "EN"));
+        System.out.println(question.getQuestion());
     }
 }
