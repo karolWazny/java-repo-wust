@@ -8,6 +8,11 @@ import java.util.Objects;
 public abstract class Question {
     protected DataSource dataSource;
     private Locale locale;
+    private final String bundleName;
+
+    public Question(String bundleName) {
+        this.bundleName = bundleName;
+    }
 
     public void setDataSource(DataSource dataSource) {
         this.dataSource = Objects.requireNonNull(dataSource);
