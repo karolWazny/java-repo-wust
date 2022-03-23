@@ -1,4 +1,4 @@
-package com.pwr.java.lab3.resources;
+package resources;
 
 import java.util.ListResourceBundle;
 

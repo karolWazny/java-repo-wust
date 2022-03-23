@@ -1,6 +1,4 @@
-package com.pwr.java.lab3.lib;
-
-import com.pwr.java.lab3.lib.DataSource;
+package lib;
 
 import java.util.Locale;
 import java.util.Objects;

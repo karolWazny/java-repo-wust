@@ -1,4 +1,4 @@
-package com.pwr.java.lab3.lib;
+package lib;
 
 public interface DataSource {
     String[] getContinents();

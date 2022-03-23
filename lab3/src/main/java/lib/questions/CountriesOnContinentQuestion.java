@@ -1,6 +1,6 @@
-package com.pwr.java.lab3.lib.questions;
+package lib.questions;
 
-import com.pwr.java.lab3.lib.Question;
+import lib.Question;
 
 import java.util.Locale;
 
