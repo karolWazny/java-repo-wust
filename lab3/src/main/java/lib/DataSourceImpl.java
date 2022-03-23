@@ -91,6 +91,11 @@ public class DataSourceImpl implements DataSource{
     }
 
     public static void main(String[] args) throws Exception {
-        System.out.println(new DataSourceImpl().getCountries());
+        new DataSourceImpl().getContinents()
+                .forEach(continent->{
+                    System.out.println("CONTINENT: " + continent);
+                    new DataSourceImpl().getCountries(continent)
+                            .forEach(System.out::println);
+                });
     }
 }

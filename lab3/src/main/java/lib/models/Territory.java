@@ -27,6 +27,6 @@ public class Territory {
 
     @Override
     public String toString(){
-        return name + "-" + geonameCode;
+        return name;
     }
 }

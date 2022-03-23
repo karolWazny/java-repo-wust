@@ -5,7 +5,7 @@ import lib.Question;
 import java.util.Locale;
 
 public class CountriesOnContinentQuestion extends Question {
-    private final static String bundleName = "com.pwr.java.lab3.resources.CountriesOnContinentBundle";
+    private final static String bundleName = "resources.CountriesOnContinentBundle";
 
     public CountriesOnContinentQuestion(){
         super(bundleName);
