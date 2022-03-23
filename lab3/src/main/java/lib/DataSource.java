@@ -1,7 +1,13 @@
 package lib;
 
+import lib.models.Territory;
+
+import java.util.List;
+
 public interface DataSource {
-    String[] getContinents();
-    String[] getCountries(String continent);
+    List<Territory> getContinents();
+
+    List<Territory> getCountries(Territory territory);
+
     String[] getAdminDivisions(String country);
 }
