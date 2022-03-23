@@ -27,15 +27,38 @@ public class DataSourceImpl implements DataSource{
                 .asJsonArray()
                 .stream()
                 .map(item-> new Territory(item.asJsonObject().getString("name"),
-                        getJsonFromEndpoint(item.asJsonObject().getString("href"))
-                                .asJsonObject()
-                                .getString("geonames_code")))
+                        codeFromHref(item.asJsonObject().getString("href"))))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Territory> getCountries(Territory territory) {
-        return null;
+    public List<Territory> getCountries(Territory continent) {
+        String endpoint = "countries/";
+        if(continent != null){
+            endpoint = "continents/" + continent.getGeonameCode() + "/" + endpoint;
+        }
+        return jsonToCountries(
+                getJsonFromEndpoint(api + endpoint)
+        );
+    }
+
+    @Override
+    public List<Territory> getCountries(){
+        return getCountries(null);
+    }
+
+    private List<Territory> jsonToCountries(JsonStructure json){
+        return json.getValue("/_links/country:items")
+                .asJsonArray()
+                .stream()
+                .map(item-> new Territory(item.asJsonObject().getString("name"),
+                        codeFromHref(item.asJsonObject().getString("href"))))
+                .collect(Collectors.toList());
+    }
+
+    private String codeFromHref(String href){
+        String[] elements = href.split("/");
+        return elements[elements.length - 1];
     }
 
     @Override
@@ -68,6 +91,6 @@ public class DataSourceImpl implements DataSource{
     }
 
     public static void main(String[] args) throws Exception {
-        System.out.println(new DataSourceImpl().getContinents());
+        System.out.println(new DataSourceImpl().getCountries());
     }
 }
