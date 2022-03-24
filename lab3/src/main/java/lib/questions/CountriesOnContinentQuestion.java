@@ -1,29 +1,33 @@
 package lib.questions;
 
 import lib.Question;
+import lib.models.Territory;
 
+import java.text.MessageFormat;
+import java.util.List;
 import java.util.Locale;
 
 public class CountriesOnContinentQuestion extends Question {
     private final static String bundleName = "resources.CountriesOnContinentBundle";
+    private Territory continent = new Territory("South America", null);
 
     public CountriesOnContinentQuestion(){
         super(bundleName);
     }
 
     @Override
-    public void setParameters(String[] parameters) {
+    public void setParameters(Object[] parameters) {
 
     }
 
     @Override
     public String getQuestion() {
-        return resourceBundle.getString("greetings");
+        String questionTemplate = resourceBundle.getString("question");
+        return MessageFormat.format(questionTemplate, continent);
     }
 
-    @Override
-    public void answer(String answer) {
-
+    public List<Territory> possibleContinents(){
+        return dataSource.getContinents();
     }
 
     @Override
@@ -33,7 +37,7 @@ public class CountriesOnContinentQuestion extends Question {
 
     @Override
     public boolean wasAnswerCorrect() {
-        return false;
+        return dataSource.getCountries(continent).size() == Integer.parseInt(answer);
     }
 
     public static void main(String[] args){

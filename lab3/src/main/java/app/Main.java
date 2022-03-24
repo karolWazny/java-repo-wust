@@ -1,4 +1,4 @@
-package com.pwr.java.lab3.app;
+package app;
 
 import java.net.URI;
 import java.net.http.HttpClient;

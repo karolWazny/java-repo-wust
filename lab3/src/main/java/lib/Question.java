@@ -9,6 +9,7 @@ public abstract class Question {
     private Locale locale;
     private final String bundleName;
     protected ResourceBundle resourceBundle;
+    protected String answer;
 
     public Question(String bundleName) {
         this.bundleName = bundleName;
@@ -32,9 +33,12 @@ public abstract class Question {
         resourceBundle = ResourceBundle.getBundle(bundleName, locale);
     }
 
-    public abstract void setParameters(String[] parameters);
+    public abstract void setParameters(Object[] parameters);
+
     public abstract String getQuestion();
-    public abstract void answer(String answer);
+    public void answer(String answer){
+        this.answer = answer;
+    }
     public abstract String getAnswerComment();
     public abstract boolean wasAnswerCorrect();
 }

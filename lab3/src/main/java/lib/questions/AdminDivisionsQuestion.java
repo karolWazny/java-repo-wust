@@ -12,18 +12,13 @@ public class AdminDivisionsQuestion extends Question {
     }
 
     @Override
-    public void setParameters(String[] parameters) {
+    public void setParameters(Object[] parameters) {
 
     }
 
     @Override
     public String getQuestion() {
         return resourceBundle.getString("greetings");
-    }
-
-    @Override
-    public void answer(String answer) {
-
     }
 
     @Override
