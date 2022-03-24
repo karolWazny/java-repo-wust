@@ -37,9 +37,11 @@ public abstract class QuestionPanel extends JPanel {
         answerLabel.setText(resourceBundle.getString("answerLabel"));
         okButton.setText(resourceBundle.getString("confirmButton"));
         question.setLocale(l);
+        updateQuestionContentLanguage();
         invalidate();
     }
 
+    protected abstract void updateQuestionContentLanguage();
     protected abstract JPanel getQuestionContentPanel();
     private JPanel createAnswerPanel(){
         JPanel panel = new JPanel();

@@ -6,7 +6,7 @@ public class CountriesOnContinentBundle extends ListResourceBundle {
     @Override
     protected Object[][] getContents() {
         return new Object[][]{
-                {"question", "How many countries are there in {0}?"}
+                {"question", "How many countries are there in "}
         };
     }
 }

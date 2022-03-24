@@ -6,7 +6,7 @@ public class CountriesOnContinentBundle_pl_PL extends ListResourceBundle {
     @Override
     protected Object[][] getContents() {
         return new Object[][]{
-                {"question", "Ile jest pa\u0144stw na kontynencie {0}?"}
+                {"question", "Ile jest pa\u0144stw na kontynencie "}
         };
     }
 }
