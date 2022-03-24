@@ -46,4 +46,10 @@ public class CountriesOnContinentPanel extends QuestionPanel{
         panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
         return panel;
     }
+
+    @Override
+    protected void getParametersAndAnswerTheQuestion() {
+        question.setParameters(new Object[]{continentsBox.getSelectedItem()});
+        question.answer(answerBox.getText());
+    }
 }

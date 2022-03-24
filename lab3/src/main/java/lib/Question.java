@@ -40,5 +40,5 @@ public abstract class Question {
         this.answer = answer;
     }
     public abstract String getAnswerComment();
-    public abstract boolean wasAnswerCorrect();
+    public abstract boolean answerWasCorrect();
 }

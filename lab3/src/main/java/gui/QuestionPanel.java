@@ -17,7 +17,7 @@ public abstract class QuestionPanel extends JPanel {
 
     private JLabel answerLabel;
     private JButton okButton;
-    private JTextField answerBox;
+    protected JTextField answerBox;
 
     private JLabel responseLabel;
 
@@ -37,6 +37,7 @@ public abstract class QuestionPanel extends JPanel {
         answerLabel.setText(resourceBundle.getString("answerLabel"));
         okButton.setText(resourceBundle.getString("confirmButton"));
         question.setLocale(l);
+        responseLabel.setText(question.getAnswerComment());
         updateQuestionContentLanguage();
         invalidate();
     }
@@ -52,6 +53,7 @@ public abstract class QuestionPanel extends JPanel {
         answerBox.setSize(new Dimension(100, 30));
         panel.add(answerBox);
         okButton = new JButton("placeholder");
+        okButton.addActionListener(action -> answerTheQuestion());
         panel.add(okButton);
         panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
         panel.setMinimumSize(new Dimension(600, 30));
@@ -59,6 +61,14 @@ public abstract class QuestionPanel extends JPanel {
         panel.setMaximumSize(new Dimension(600, 30));
         return panel;
     }
+
+    private void answerTheQuestion(){
+        getParametersAndAnswerTheQuestion();
+        responseLabel.setText(question.getAnswerComment());
+    }
+
+    protected abstract void getParametersAndAnswerTheQuestion();
+
     private JPanel createResponsePanel(){
         JPanel panel = new JPanel();
         responseLabel = new JLabel("");

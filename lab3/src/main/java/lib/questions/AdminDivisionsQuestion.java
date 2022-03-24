@@ -27,7 +27,7 @@ public class AdminDivisionsQuestion extends Question {
     }
 
     @Override
-    public boolean wasAnswerCorrect() {
+    public boolean answerWasCorrect() {
         return false;
     }
 

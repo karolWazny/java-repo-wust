@@ -9,7 +9,8 @@ import java.util.Locale;
 
 public class CountriesOnContinentQuestion extends Question {
     private final static String bundleName = "resources.CountriesOnContinentBundle";
-    private Territory continent = new Territory("South America", null);
+    private Territory continent;
+    private Integer correctAnswer;
 
     public CountriesOnContinentQuestion(){
         super(bundleName);
@@ -17,7 +18,8 @@ public class CountriesOnContinentQuestion extends Question {
 
     @Override
     public void setParameters(Object[] parameters) {
-
+        continent = (Territory) parameters[0];
+        correctAnswer = dataSource.getCountries(continent).size();
     }
 
     @Override
@@ -32,12 +34,24 @@ public class CountriesOnContinentQuestion extends Question {
 
     @Override
     public String getAnswerComment() {
-        return null;
+        if(answer == null || answer.trim().equals(""))
+            return "";
+        if(answerWasCorrect()){
+            return resourceBundle.getString("correct");
+        } else {
+            return MessageFormat.format(
+                    resourceBundle.getString("incorrect"),
+                    correctAnswer);
+        }
     }
 
     @Override
-    public boolean wasAnswerCorrect() {
-        return dataSource.getCountries(continent).size() == Integer.parseInt(answer);
+    public boolean answerWasCorrect() {
+        try{
+            return correctAnswer.equals(Integer.parseInt(answer));
+        } catch (NumberFormatException e){
+            return false;
+        }
     }
 
     public static void main(String[] args){
