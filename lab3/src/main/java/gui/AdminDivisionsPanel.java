@@ -3,24 +3,24 @@ package gui;
 import lib.DataSource;
 import lib.DataSourceImpl;
 import lib.models.Territory;
-import lib.questions.CountriesOnContinentQuestion;
+import lib.questions.AdminDivisionsQuestion;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ResourceBundle;
 
-public class CountriesOnContinentPanel extends QuestionPanel{
-    private static final String bundleName = "resources.CountriesOnContinentBundle";
+public class AdminDivisionsPanel extends QuestionPanel{
+    private static final String bundleName = "resources.AdminDivisionsBundle";
 
     private JLabel questionContent;
     private JComboBox<Territory> continentsBox;
 
-    public CountriesOnContinentPanel(){
-        super(new CountriesOnContinentQuestion());
+    public AdminDivisionsPanel() {
+        super(new AdminDivisionsQuestion());
         DataSource dataSource = new DataSourceImpl();
         question.setDataSource(dataSource);
         DefaultComboBoxModel<Territory> model = new DefaultComboBoxModel<>();
-        model.addAll(dataSource.getContinents());
+        model.addAll(dataSource.getCountries());
         continentsBox.setModel(model);
         continentsBox.setSelectedIndex(0);
     }
@@ -39,7 +39,7 @@ public class CountriesOnContinentPanel extends QuestionPanel{
         questionContent = new JLabel("Lorem ipsum");
         panel.add(questionContent);
         continentsBox = new JComboBox<>();
-        continentsBox.setMaximumSize(new Dimension(140, 30));
+        continentsBox.setMaximumSize(new Dimension(290, 30));
         panel.add(continentsBox);
         panel.add(new JLabel("?"));
         panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));

@@ -1,5 +1,6 @@
 package app;
 
+import gui.AdminDivisionsPanel;
 import gui.CountriesOnContinentPanel;
 import gui.QuestionPanel;
 
@@ -14,13 +15,23 @@ public class MainWindow extends JFrame {
     private final static Map<String, Locale> locales = getLocales();
 
     private QuestionPanel currentQuestionPanel;
-    private List<QuestionPanel> questionPanels = new ArrayList<>();
+    private List<QuestionPanel> questionPanels = acquireQuestionPanels();
     private String currentLanguage;
     private Locale currentLocale;
 
     private JButton languageButton;
     private JButton questionButton;
 
+    private JPanel topPanel = new JPanel();
+
+    private int currentQuestionIndex = 0;
+
+    private static List<QuestionPanel> acquireQuestionPanels(){
+        List<QuestionPanel> questionPanels = new ArrayList<>(2);
+        questionPanels.add(0, new CountriesOnContinentPanel());
+        questionPanels.add(1, new AdminDivisionsPanel());
+        return questionPanels;
+    }
     private static Map<String, Locale> getLocales(){
         Map<String, Locale> output = new HashMap<>();
         output.put("polski", new Locale("pl", "PL"));
@@ -33,9 +44,10 @@ public class MainWindow extends JFrame {
 
         setLayout(new BoxLayout(this.getContentPane(), BoxLayout.PAGE_AXIS));
 
-        currentQuestionPanel = new CountriesOnContinentPanel();
+        currentQuestionPanel = questionPanels.get(currentQuestionIndex);
 
-        add(currentQuestionPanel);
+        topPanel.add(currentQuestionPanel);
+        add(topPanel);
         add(createBottomPanel());
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -44,7 +56,7 @@ public class MainWindow extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
         setResizable(true);
-        setMinimumSize(new Dimension(600, 160));
+        setMinimumSize(new Dimension(680, 160));
 
         loadLanguage();
     }
@@ -77,7 +89,7 @@ public class MainWindow extends JFrame {
         } catch (Exception ignored) {
 
         }
-
+        repaint();
         invalidate();
     }
 
@@ -88,8 +100,18 @@ public class MainWindow extends JFrame {
         languageButton.addActionListener(action->switchLanguage());
         panel.add(languageButton);
         questionButton = new JButton("piwo");
+        questionButton.addActionListener(action -> changeQuestion());
         panel.add(questionButton);
         return panel;
+    }
+
+    private void changeQuestion(){
+        currentQuestionIndex = (currentQuestionIndex + 1) % 2;
+        topPanel.remove(0);
+        currentQuestionPanel = questionPanels.get(currentQuestionIndex);
+        topPanel.add(currentQuestionPanel);
+        topPanel.invalidate();
+        updateControlsLanguage();
     }
 
     private void switchLanguage(){

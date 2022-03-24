@@ -47,6 +47,24 @@ public class DataSourceImpl implements DataSource{
         return getCountries(null);
     }
 
+    @Override
+    public List<Territory> getAdminDivisions(Territory country) {
+        String endpoint = "countries/" + country.getGeonameCode().replace(":", "%3A") + "/admin1_divisions/";
+        System.out.println(endpoint);
+        return jsonToAdminDivs(
+                getJsonFromEndpoint(api + endpoint)
+        );
+    }
+
+    private List<Territory> jsonToAdminDivs(JsonStructure json){
+        return json.getValue("/_links/a1:items")
+                .asJsonArray()
+                .stream()
+                .map(item-> new Territory(item.asJsonObject().getString("name"),
+                        codeFromHref(item.asJsonObject().getString("href"))))
+                .collect(Collectors.toList());
+    }
+
     private List<Territory> jsonToCountries(JsonStructure json){
         return json.getValue("/_links/country:items")
                 .asJsonArray()
@@ -59,11 +77,6 @@ public class DataSourceImpl implements DataSource{
     private String codeFromHref(String href){
         String[] elements = href.split("/");
         return elements[elements.length - 1];
-    }
-
-    @Override
-    public String[] getAdminDivisions(String country) {
-        return new String[0];
     }
 
     private String getStringFromEndpoint(String endpoint){

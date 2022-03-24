@@ -8,5 +8,5 @@ public interface DataSource {
     List<Territory> getContinents();
     List<Territory> getCountries(Territory continent);
     List<Territory> getCountries();
-    String[] getAdminDivisions(String country);
+    List<Territory> getAdminDivisions(Territory continent);
 }
