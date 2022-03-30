@@ -136,7 +136,6 @@ public class MainWindow extends JFrame {
         statusField.setText("" + status.getProgress());
         if(status.getProgress() == 100){
             outputField.setText(processor.getResult());
-            processor = null;
         }
     }
 
