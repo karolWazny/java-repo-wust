@@ -1,16 +1,33 @@
 package gui;
 
+import lib.DirectoryChooser;
+import lib.DirectoryChooserImpl;
+import lib.processing.Processor;
+import lib.processing.Status;
+import lib.processors.SampleProcessor;
+
 import javax.swing.*;
 import java.awt.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class MainWindow extends JFrame {
-    private final static String bundleName = "resources.MainWindowBundle";
+    private DirectoryChooser directoryChooser = new DirectoryChooserImpl();
+    private Path currentDirectory;
+    private JTextArea processorDescription;
+    private Processor processor;
 
-    private int currentQuestionIndex = 0;
+    private JTextField taskField;
+    private JTextField statusField;
+    private JTextField outputField;
 
     public MainWindow() {
         super();
         setTitle("Laboratorium 4");
+
+        currentDirectory = Paths.get("")
+                .toAbsolutePath();
+        System.out.println(currentDirectory);
 
         JPanel firstPanel = new JPanel();
         JLabel label = new JLabel("Available processors");
@@ -21,7 +38,9 @@ public class MainWindow extends JFrame {
         buttons.setLayout(new BoxLayout(buttons, BoxLayout.LINE_AXIS));
         buttons.add(new JButton("Load"));
         buttons.add(new JButton("Refresh"));
-        buttons.add(new JButton("Directory"));
+        JButton dirButton = new JButton("Directory");
+        dirButton.addActionListener(action->currentDirectory = directoryChooser.chooseDirectory(this));
+        buttons.add(dirButton);
         firstPanel.add(buttons);
         firstPanel.setLayout(new BoxLayout(firstPanel, BoxLayout.PAGE_AXIS));
         add(firstPanel);
@@ -40,14 +59,23 @@ public class MainWindow extends JFrame {
         JPanel thirdPanel = new JPanel();
         thirdPanel.setLayout(new BoxLayout(thirdPanel, BoxLayout.PAGE_AXIS));
         thirdPanel.add(new JLabel("Task"));
-        thirdPanel.add(new JTextField());
+        taskField = new JTextField();
+        thirdPanel.add(taskField);
         thirdPanel.add(new JLabel("Chosen processor"));
-        thirdPanel.add(new JTextArea());
-        thirdPanel.add(new JButton("Process"));
+        processorDescription = new JTextArea();
+        processorDescription.setEditable(false);
+        thirdPanel.add(processorDescription);
+        JButton processButton = new JButton("Process");
+        processButton.addActionListener(action->process());
+        thirdPanel.add(processButton);
         thirdPanel.add(new JLabel("Status"));
-        thirdPanel.add(new JTextField());
+        statusField = new JTextField();
+        statusField.setEditable(false);
+        thirdPanel.add(statusField);
         thirdPanel.add(new JLabel("Output"));
-        thirdPanel.add(new JTextField());
+        outputField = new JTextField();
+        outputField.setEditable(false);
+        thirdPanel.add(outputField);
         add(thirdPanel);
 
         setLayout(new BoxLayout(this.getContentPane(), BoxLayout.LINE_AXIS));
@@ -59,6 +87,28 @@ public class MainWindow extends JFrame {
         setVisible(true);
         setResizable(true);
         setMinimumSize(new Dimension(680, 160));
+    }
+
+    private void process(){
+        processor = getProcessor();
+        processorDescription.setText(processor.getInfo());
+
+        statusField.setText("0");
+        outputField.setText("");
+        processor.submitTask(taskField.getText(), this::processorEventCallback);
+    }
+
+    private void processorEventCallback(Status status){
+        statusField.setText("" + status.getProgress());
+        if(status.getProgress() == 100){
+            System.out.println(processor.getResult());
+            outputField.setText(processor.getResult());
+            processor = null;
+        }
+    }
+
+    private Processor getProcessor(){
+        return new SampleProcessor();
     }
 
     public static void main(String[] args){
