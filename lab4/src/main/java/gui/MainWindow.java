@@ -33,7 +33,6 @@ public class MainWindow extends JFrame {
 
         currentDirectory = Paths.get("")
                 .toAbsolutePath();
-        System.out.println(currentDirectory);
 
         JPanel firstPanel = new JPanel();
         JLabel label = new JLabel("Available processors");
@@ -136,7 +135,6 @@ public class MainWindow extends JFrame {
     private void processorEventCallback(Status status){
         statusField.setText("" + status.getProgress());
         if(status.getProgress() == 100){
-            System.out.println(processor.getResult());
             outputField.setText(processor.getResult());
             processor = null;
         }
