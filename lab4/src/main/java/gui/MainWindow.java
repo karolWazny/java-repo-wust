@@ -1,25 +1,31 @@
 package gui;
 
+import lib.ClassFilesFinder;
 import lib.DirectoryChooser;
 import lib.DirectoryChooserImpl;
+import lib.loader.MyClassLoader;
 import lib.processing.Processor;
 import lib.processing.Status;
 import lib.processors.SampleProcessor;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class MainWindow extends JFrame {
-    private DirectoryChooser directoryChooser = new DirectoryChooserImpl();
+    private final DirectoryChooser directoryChooser = new DirectoryChooserImpl();
+    private final ClassFilesFinder finder = new ClassFilesFinder();
     private Path currentDirectory;
-    private JTextArea processorDescription;
+    private final JTextArea processorDescription;
     private Processor processor;
 
-    private JTextField taskField;
-    private JTextField statusField;
-    private JTextField outputField;
+    private final JTextField taskField;
+    private final JTextField statusField;
+    private final JTextField outputField;
+
+    private final DefaultListModel<Path> availableProcessorsModel = new DefaultListModel<>();
 
     public MainWindow() {
         super();
@@ -33,28 +39,27 @@ public class MainWindow extends JFrame {
         JLabel label = new JLabel("Available processors");
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
         firstPanel.add(label);
-        firstPanel.add(new JList<>(new String[]{"dupa", "cycki", "piwo"}));
+        JList<Path> availableProcessors = new JList<>(availableProcessorsModel);
+        availableProcessors.addListSelectionListener(action->{
+            loadProcessor(availableProcessors.getSelectedValue());
+        });
+        availableProcessors.setMinimumSize(new Dimension(200, 300));
+        firstPanel.add(new JScrollPane(availableProcessors));
         JPanel buttons = new JPanel();
         buttons.setLayout(new BoxLayout(buttons, BoxLayout.LINE_AXIS));
-        buttons.add(new JButton("Load"));
-        buttons.add(new JButton("Refresh"));
+        JButton refreshButton = new JButton("Refresh");
+        refreshButton.addActionListener(action->this.refresh());
+        buttons.add(refreshButton);
         JButton dirButton = new JButton("Directory");
-        dirButton.addActionListener(action->currentDirectory = directoryChooser.chooseDirectory(this));
+        dirButton.addActionListener(action->{
+            Path path = directoryChooser.chooseDirectory(this);
+            currentDirectory = (path != null ? path : currentDirectory);
+            refresh();
+        });
         buttons.add(dirButton);
         firstPanel.add(buttons);
         firstPanel.setLayout(new BoxLayout(firstPanel, BoxLayout.PAGE_AXIS));
         add(firstPanel);
-
-        JPanel secondPanel = new JPanel();
-        secondPanel.setLayout(new BoxLayout(secondPanel, BoxLayout.PAGE_AXIS));
-        label = new JLabel("Loaded processors");
-        label.setAlignmentX(Component.CENTER_ALIGNMENT);
-        secondPanel.add(label);
-        secondPanel.add(new JList<>(new String[]{"beczkowe", "kuflowe", "piwo marki piwo"}));
-        JButton unloadButton = new JButton("Unload");
-        unloadButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        secondPanel.add(unloadButton);
-        add(secondPanel);
 
         JPanel thirdPanel = new JPanel();
         thirdPanel.setLayout(new BoxLayout(thirdPanel, BoxLayout.PAGE_AXIS));
@@ -82,20 +87,50 @@ public class MainWindow extends JFrame {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        refresh();
+
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
         setResizable(true);
-        setMinimumSize(new Dimension(680, 160));
+        setMinimumSize(new Dimension(850, 220));
+    }
+
+    private void refresh(){
+        availableProcessorsModel.removeAllElements();
+        finder.classesUnder(this.currentDirectory)
+                .stream()
+                .map(item-> currentDirectory.relativize(item))
+                .forEach(availableProcessorsModel::addElement);
     }
 
     private void process(){
-        processor = getProcessor();
-        processorDescription.setText(processor.getInfo());
-
         statusField.setText("0");
         outputField.setText("");
         processor.submitTask(taskField.getText(), this::processorEventCallback);
+    }
+
+    private void loadProcessor(Path path){
+        MyClassLoader loader = new MyClassLoader(getClass().getClassLoader());
+        loader.setClassRoot(currentDirectory);
+        try {
+            Class<?> processorClass = loader.loadClass(pathToClassName(path));
+            processor = (Processor) processorClass.newInstance();
+            displayProcessorInfo();
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void displayProcessorInfo(){
+        processorDescription.setText(processor.getInfo());
+    }
+
+    private String pathToClassName(Path path){
+        String output = path.toString();
+        output = output.replaceFirst("\\.class$", "");
+        output = output.replace(File.separatorChar, '.');
+        return output;
     }
 
     private void processorEventCallback(Status status){
@@ -105,10 +140,6 @@ public class MainWindow extends JFrame {
             outputField.setText(processor.getResult());
             processor = null;
         }
-    }
-
-    private Processor getProcessor(){
-        return new SampleProcessor();
     }
 
     public static void main(String[] args){
