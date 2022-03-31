@@ -114,6 +114,8 @@ public class MainWindow extends JFrame {
         loader.setClassRoot(currentDirectory);
         try {
             Class<?> processorClass = loader.loadClass(pathToClassName(path));
+            processor = null;
+            System.gc();
             processor = (Processor) processorClass.newInstance();
             displayProcessorInfo();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
