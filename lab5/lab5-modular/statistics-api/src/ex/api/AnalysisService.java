@@ -10,5 +10,5 @@ public interface AnalysisService {
     // metoda pobierająca wynik analizy, zwracająca null jeśli trwa jeszcze przetwarzanie lub nie przekazano danych do analizy
     // wyrzucająca wyjątek - jeśli podczas przetwarzania doszło do jakichś błędów
     // clear = true - jeśli wyniki po pobraniu mają zniknąć z serwisu
-    public DataSet retrieve(boolean clear) throws ClusteringException;
+    public DataSet retrieve(boolean clear) throws AnalysisException;
 }
