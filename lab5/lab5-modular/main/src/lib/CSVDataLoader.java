@@ -6,27 +6,41 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class CSVDataLoader {
     private String delimiter = ",";
     public DataSet readFromFile(Path file) throws FileFormatException {
         try {
-            String[][] lines = (String[][]) Files.lines(file)
+            String[][] outputData = Files.lines(file)
+                    .skip(1)
                     .map(line-> Arrays.stream(line.split(delimiter))
-                            .map(String::trim))
-                    .toArray();
-            String[][] outputData = new String[lines.length - 1][];
+                            .map(String::trim)
+                            .collect(Collectors.toList())
+                            .toArray(new String[0]))
+                    .collect(Collectors.toList())
+                    .toArray(new String[0][]);
+            String[] header = Files.lines(file)
+                    .findFirst()
+                    .stream()
+                    .map(line-> Arrays.stream(line.split(delimiter))
+                            .map(String::trim)
+                            .collect(Collectors.toList())
+                            .toArray(new String[0]))
+                    .collect(Collectors.toList())
+                    .get(0);
 
             int index = 0;
-            for(String[] line : lines){
-                if(line.length != lines[0].length)
+            for(String[] line
+                    : outputData){
+                if(line.length != header.length)
                     throw new FileFormatException("This is not a proper CSV file.");
                 outputData[index] = line;
                 index++;
             }
             DataSet dataSet = new DataSet();
             dataSet.setData(outputData);
-            dataSet.setHeader(lines[0]);
+            dataSet.setHeader(header);
             return dataSet;
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,14 +1,15 @@
-package deviation;
+package mediane;
 
 import ex.api.AbstractService;
 import ex.api.AnalysisException;
 import ex.api.DataSet;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class StandardDeviationService extends AbstractService {
+public class MedianService extends AbstractService {
     private DataSet output;
     private DataSet input;
 
@@ -16,8 +17,7 @@ public class StandardDeviationService extends AbstractService {
 
     private int numberOfRows;
 
-    private List<String> firstRow;
-    private List<String> secondRow;
+    private List<String> outputValues;
     private List<String> headers;
 
     @Override
@@ -27,7 +27,7 @@ public class StandardDeviationService extends AbstractService {
 
     @Override
     public String getName() {
-        return "Standard deviation";
+        return "Median";
     }
 
     @Override
@@ -44,10 +44,8 @@ public class StandardDeviationService extends AbstractService {
     }
 
     private void process(){
-        firstRow = new LinkedList<>();
-        firstRow.add("mean");
-        secondRow = new LinkedList<>();
-        secondRow.add("deviation");
+        outputValues = new LinkedList<>();
+        outputValues.add("median");
         headers = new LinkedList<>();
         headers.add("statistic:");
 
@@ -67,30 +65,26 @@ public class StandardDeviationService extends AbstractService {
     private DataSet buildResult(){
         DataSet output = new DataSet();
         output.setHeader(headers.toArray(new String[0]));
-        String[][] data = new String[2][];
-        data[0] = firstRow.toArray(new String[0]);
-        data[1] = secondRow.toArray(new String[0]);
+        String[][] data = new String[1][];
+        data[0] = outputValues.toArray(new String[0]);
         output.setData(data);
         return output;
     }
 
     private void processColumnWithIndex(int columnIndex){
-        double sum = 0.0;
         String[][] data = input.getData();
-        List<Double> values = new LinkedList<>();
+        List<Double> values = new ArrayList<>(numberOfRows);
         for(int i = 0; i < input.getData().length; i++){
             double value = Double.parseDouble(data[i][columnIndex].trim());
-            sum += value;
-            values.add(value);
+            values.add(i, value);
         }
-        double mean = sum / (double) numberOfRows;
-        sum = 0.0;
-        for(Double value : values){
-            sum += (mean - value) * (mean - value);
-        }
-        double deviation = Math.sqrt(sum / numberOfRows);
-        firstRow.add("" + mean);
-        secondRow.add("" + deviation);
+        values.sort(Double::compareTo);
+        double medianValue;
+        if(values.size() % 2 == 1)
+            medianValue = values.get(values.size()/2);
+        else
+            medianValue = (values.get(values.size() / 2) + values.get(values.size() / 2 - 1)) / 2.0;
+        outputValues.add("" + medianValue);
         headers.add(input.getHeader()[columnIndex]);
     }
 

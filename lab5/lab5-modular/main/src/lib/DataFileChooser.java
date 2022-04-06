@@ -17,7 +17,7 @@ public class DataFileChooser {
         JFileChooser chooser = lastChoice == null ? new JFileChooser() : new JFileChooser("" + lastChoice);
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         chooser.setAcceptAllFileFilterUsed(false);
-        chooser.addChoosableFileFilter(new FileNameExtensionFilter("CSV files.", "csv"));
+        chooser.addChoosableFileFilter(new FileNameExtensionFilter("CSV files", "csv"));
         chooser.showOpenDialog(parent);
         chooser.setDialogTitle("Select directory.");
         File file = chooser.getSelectedFile();
