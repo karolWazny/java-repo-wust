@@ -1,0 +1,1 @@
+java -jar lab5-maven/main/target/main-1.0-SNAPSHOT.jar
