@@ -35,24 +35,6 @@
             <artifactId>statistics-api</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>pl.edu.pwr.java</groupId>
-            <artifactId>standard-deviation-implementation</artifactId>
-            <version>${project.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>pl.edu.pwr.java</groupId>
-            <artifactId>mediane-implementation</artifactId>
-            <version>${project.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>pl.edu.pwr.java</groupId>
-            <artifactId>trendline-implementation</artifactId>
-            <version>${project.version}</version>
-            <scope>runtime</scope>
-        </dependency>
     </dependencies>
 
     <properties>
