@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="trendline-implementation:jar">
+    <output-path>$PROJECT_DIR$/../release/modular</output-path>
+    <root id="archive" name="trendline-implementation.jar">
+      <element id="module-output" name="trendline-implementation" />
+    </root>
+  </artifact>
+</component>

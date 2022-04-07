@@ -1,4 +1,4 @@
-package com.lib.logic.observer;
+package ex.api.observer;
 
 public interface Observable {
     void addListener(Listener listener);

@@ -1,4 +1,4 @@
-package com.lib.logic.observer;
+package ex.api.observer;
 
 public interface Event {
     Observable getSource();
