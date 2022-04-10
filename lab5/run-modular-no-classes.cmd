@@ -1,1 +1,1 @@
-java -jar release/modular/main.jar
+java -p release/modular --add-modules statistics.api -jar release/modular/main.jar
