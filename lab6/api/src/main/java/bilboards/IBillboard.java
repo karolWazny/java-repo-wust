@@ -40,7 +40,7 @@ public interface IBillboard extends Remote {
      * Metoda dodająca tekst ogłoszenia do tablicy ogłoszeniowej (wywoływana przez
      * Menadżera po przyjęciu zamówienia od Klienta)
      *
-     * @param advertTextn   - tekst ogłoszenia, jakie ma pojawić się na tablicy
+     * @param advertText   - tekst ogłoszenia, jakie ma pojawić się na tablicy
      *                      ogłoszeniowej
      * @param displayPeriod - czas wyświetlania ogłoszenia liczony od pierwszego
      *                      jego ukazania się na tablicy ogłoszeniowej
