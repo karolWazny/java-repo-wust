@@ -70,8 +70,17 @@ public class App implements IManager {
 
     @Override
     public boolean withdrawOrder(int i) throws RemoteException {
+        billboards.values()
+                        .stream()
+                                .forEach(iBillboard -> {
+                                    try {
+                                        iBillboard.removeAdvertisement(i);
+                                    } catch (RemoteException e) {
+                                        e.printStackTrace();
+                                    }
+                                });
         log.info("Withdrawn order with id " + i);
-        return false;
+        return true;
     }
 
     public static void main(String args[]) throws Exception {

@@ -50,11 +50,19 @@ public class App implements IClient {
             log.info("Could not place order.");
     }
 
+    private void withdrawOrder(int id){
+        try {
+            manager.withdrawOrder(id);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) throws Exception {
         App app = new App(args);
         app.placeOrder("duupa", Duration.ofMinutes(3));
         app.placeOrder("piwo", Duration.ofMinutes(1));
         app.placeOrder("cycki", Duration.ofMinutes(1));
-
+        app.withdrawOrder(0);
     }
 }
