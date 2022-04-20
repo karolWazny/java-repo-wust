@@ -3,14 +3,14 @@ package main;
 import bilboards.IBillboard;
 import bilboards.IManager;
 import bilboards.Order;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-@Log4j2
+@Slf4j
 public class App implements IManager {
     public static void main(String args[]) throws Exception {
         ProgramArgumentsHandler arguments = new ProgramArgumentsHandler(args);
@@ -23,9 +23,9 @@ public class App implements IManager {
             Registry registry = LocateRegistry.createRegistry(arguments.getPort());
             registry.bind(arguments.getRmiName(), stub);
 
-            System.err.println("Server ready");
+            log.info("Server ready");
         } catch (Exception e) {
-            System.err.println("Server exception: " + e.toString());
+            log.error("Server exception: " + e.toString());
             e.printStackTrace();
         }
     }
