@@ -26,7 +26,7 @@ public class Payment {
     @JoinColumn(name = "person_id")
     @ManyToOne
     private Person person;
-    
+
     @JoinColumn(name = "event_id")
     @ManyToOne
     private Event event;
