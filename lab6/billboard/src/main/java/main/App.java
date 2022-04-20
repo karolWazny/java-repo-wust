@@ -61,7 +61,7 @@ public class App implements IBillboard {
         Thread thread = new Thread(()->{
             Integer currentKey = Integer.MAX_VALUE;
            while(active.get() && adverts.size() > 0){
-               currentKey = adverts.ceilingKey(currentKey);
+               currentKey = adverts.higherKey(currentKey);
                if(currentKey == null)
                    currentKey = adverts.firstKey();
                Advertisement currentAd = adverts.get(currentKey);

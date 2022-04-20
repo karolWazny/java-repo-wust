@@ -43,11 +43,18 @@ public class App implements IClient {
         order.client = selfStub;
         order.displayPeriod = duration;
         log.info("Placing order...");
-        manager.placeOrder(order);
+        boolean success = manager.placeOrder(order);
+        if(success)
+            log.info("Successfully placed order.");
+        else
+            log.info("Could not place order.");
     }
 
     public static void main(String[] args) throws Exception {
         App app = new App(args);
         app.placeOrder("duupa", Duration.ofMinutes(3));
+        app.placeOrder("piwo", Duration.ofMinutes(1));
+        app.placeOrder("cycki", Duration.ofMinutes(1));
+
     }
 }

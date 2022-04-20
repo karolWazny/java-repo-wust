@@ -9,8 +9,11 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.time.Duration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class App implements IManager {
@@ -34,8 +37,35 @@ public class App implements IManager {
     @Override
     public boolean placeOrder(Order order) throws RemoteException {
         log.info("Placed order: " + order.advertText);
+        List<IBillboard> availableBillboards = getBillboardsWithFreeSlots();
+        if(availableBillboards.isEmpty())
+            return false;
+        Duration durationPerBillboard = order.displayPeriod.dividedBy(availableBillboards.size());
+        availableBillboards.forEach(iBillboard -> {
+            try {
+                iBillboard.addAdvertisement(order.advertText, durationPerBillboard, nextOrderId);
+                iBillboard.start();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        });
         order.client.setOrderId(nextOrderId++);
         return true;
+    }
+
+    private List<IBillboard> getBillboardsWithFreeSlots(){
+        return billboards.values()
+                .stream()
+                .filter(billboard -> {
+                    try {
+                        int[] capacity = billboard.getCapacity();
+                        return capacity[0] < capacity[1];
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                    return false;
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
