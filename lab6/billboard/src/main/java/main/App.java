@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.RMISocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 import java.time.Duration;
 import java.util.concurrent.*;
@@ -103,6 +104,9 @@ public class App implements IBillboard {
     }
     public static void main(String[] args) throws Exception {
         ProgramArgumentsHandler arguments = new ProgramArgumentsHandler(args);
+        if(System.getSecurityManager() == null)
+            System.setSecurityManager(new SecurityManager());
+        RMISocketFactory.setSocketFactory(new SafeSocketFactory());
         App app = new App();
         try {
             Registry registry = LocateRegistry.getRegistry(arguments.getHost(), arguments.getPort());

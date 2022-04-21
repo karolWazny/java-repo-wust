@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.RMISocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 import java.time.Duration;
 
@@ -59,6 +60,9 @@ public class App implements IClient {
     }
 
     public static void main(String[] args) throws Exception {
+        if(System.getSecurityManager() == null)
+            System.setSecurityManager(new SecurityManager());
+        RMISocketFactory.setSocketFactory(new SafeSocketFactory());
         App app = new App(args);
         app.placeOrder("duupa", Duration.ofMinutes(3));
         app.placeOrder("piwo", Duration.ofMinutes(1));

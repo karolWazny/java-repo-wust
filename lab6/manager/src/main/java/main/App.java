@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.RMISocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 import java.time.Duration;
 import java.util.HashMap;
@@ -85,10 +86,12 @@ public class App implements IManager {
 
     public static void main(String args[]) throws Exception {
         ProgramArgumentsHandler arguments = new ProgramArgumentsHandler(args);
-
+        if(System.getSecurityManager() == null)
+            System.setSecurityManager(new SecurityManager());
+        RMISocketFactory.setSocketFactory(new SafeSocketFactory());
         try {
             App obj = new App();
-            IManager stub = (IManager) UnicastRemoteObject.exportObject(obj, arguments.getManagerObjectPort());
+            IManager stub = (IManager) UnicastRemoteObject.exportObject(obj, 0);
 
             // Bind the remote object's stub in the registry
             Registry registry = LocateRegistry.createRegistry(arguments.getPort());
