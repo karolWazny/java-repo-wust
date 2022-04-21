@@ -5,6 +5,8 @@ import bilboards.IManager;
 import bilboards.Order;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.swing.*;
+import java.awt.*;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -17,10 +19,51 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class App implements IManager {
+public class App extends JFrame implements IManager {
     private int nextBillboardId = 0;
     private int nextOrderId = 0;
     private Map<Integer, IBillboard> billboards = new HashMap<>();
+
+    public App(){
+        super();
+        setTitle("Laboratorium 6 - manager");
+        createFirstPanel();
+        createSecondPanel();
+        createThirdPanel();
+
+        setLayout(new BoxLayout(this.getContentPane(), BoxLayout.LINE_AXIS));
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
+        setResizable(true);
+        setMinimumSize(new Dimension(850, 220));
+
+        log.info("Application started.");
+    }
+
+    private void createThirdPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+
+        add(panel);
+    }
+
+    private void createSecondPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+
+        add(panel);
+    }
+
+    private void createFirstPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+
+        add(panel);
+    }
 
     @Override
     public int bindBillboard(IBillboard iBillboard) throws RemoteException {
