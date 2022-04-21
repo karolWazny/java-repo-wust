@@ -6,6 +6,7 @@ import bilboards.Order;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -23,6 +24,8 @@ public class App extends JFrame implements IManager {
     private int nextBillboardId = 0;
     private int nextOrderId = 0;
     private Map<Integer, IBillboard> billboards = new HashMap<>();
+    private DefaultTableModel tableModel = new DefaultTableModel();
+    private Map<Integer, BillboardMeta> billboardsMeta = new HashMap<>();
 
     public App(){
         super();
@@ -55,19 +58,81 @@ public class App extends JFrame implements IManager {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
+        panel.add(new JLabel("Swap interval"));
+        JTextField swapTextField = new JTextField();
+        swapTextField.setMaximumSize(new Dimension(100, 30));
+        panel.add(swapTextField);
+        JButton setSwapInterval = new JButton("Set interval");
+        panel.add(setSwapInterval);
+        JButton stopButton = new JButton("Stop");
+        panel.add(stopButton);
+        JButton startButton = new JButton("Start");
+        panel.add(startButton);
+
         add(panel);
     }
 
     private void createFirstPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-
+        JTable table = new JTable(tableModel);
+        table.setFillsViewportHeight(true);
+        JScrollPane scrollPane = new JScrollPane(table);
+        panel.add(scrollPane);
+        tableModel.setColumnIdentifiers(obtainHeaders());
+        JButton button = new JButton("Refresh");
+        panel.add(button);
         add(panel);
+    }
+
+    private String[] obtainHeaders(){
+        return new String[]{
+          "ID",
+                "Swap interval",
+          "Active",
+          "Used slots",
+          "Total capacity"
+        };
+    }
+
+    private void refreshTable(){
+        tableModel.setDataVector(obtainBillboardsData(), obtainHeaders());
+    }
+
+    private String[][] obtainBillboardsData(){
+        String[][] output = new String[0][];
+        output = billboardsMeta.values().stream()
+                .map(meta->{
+                    try {
+                        int[] capacity = meta.billboard.getCapacity();
+                        return new String[]{
+                                "" + meta.id,
+                                "" + meta.swapInterval,
+                                "" + (meta.active && capacity[0] > 0),
+                                "" + capacity[0],
+                                "" + capacity[1]
+                        };
+                    } catch (RemoteException e) {
+                        log.error(e.toString());
+                        return null;
+                    }
+
+                }).collect(Collectors.toList())
+                .toArray(output);
+        return output;
     }
 
     @Override
     public int bindBillboard(IBillboard iBillboard) throws RemoteException {
         billboards.put(nextBillboardId, iBillboard);
+        BillboardMeta meta = new BillboardMeta();
+        iBillboard.setDisplayInterval(Duration.ofSeconds(4));
+        meta.billboard = iBillboard;
+        meta.active = false;
+        meta.id = nextBillboardId;
+        meta.swapInterval = 4;
+        billboardsMeta.put(nextBillboardId, meta);
+        refreshTable();
         log.info("Bound billboard with id " + nextBillboardId);
         return nextBillboardId++;
     }
@@ -93,6 +158,7 @@ public class App extends JFrame implements IManager {
                 e.printStackTrace();
             }
         });
+        refreshTable();
         order.client.setOrderId(nextOrderId++);
         return true;
     }
@@ -124,6 +190,7 @@ public class App extends JFrame implements IManager {
                                     }
                                 });
         log.info("Withdrawn order with id " + i);
+        refreshTable();
         return true;
     }
 
