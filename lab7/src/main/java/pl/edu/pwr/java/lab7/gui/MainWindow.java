@@ -1,14 +1,18 @@
 package pl.edu.pwr.java.lab7.gui;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import pl.edu.pwr.java.lab7.lib.CSVDataLoader;
 import pl.edu.pwr.java.lab7.lib.DataFileChooser;
 import pl.edu.pwr.java.lab7.lib.DataSet;
-import pl.edu.pwr.java.lab7.lib.FileFormatException;
+import pl.edu.pwr.java.lab7.model.entity.Person;
+import pl.edu.pwr.java.lab7.service.PersonService;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.nio.file.Path;
+import java.util.Stack;
 
+@Slf4j
 public class MainWindow extends JFrame {
     private final DataFileChooser fileChooser = new DataFileChooser();
     private final CSVDataLoader dataLoader = new CSVDataLoader();
@@ -17,11 +21,14 @@ public class MainWindow extends JFrame {
     private DefaultTableModel inputTableModel = new DefaultTableModel();
     private DefaultTableModel outputTableModel = new DefaultTableModel();
 
-    private JComboBox<String> comboBox;
+    private JComboBox<String> firstComboBox;
+    private JComboBox<String> secondComboBox;
+
+    private PersonService personService;
 
     public MainWindow() {
         super();
-        setTitle("Laboratorium 5");
+        setTitle("Laboratorium 7");
 
         createFirstPanel();
         createSecondPanel();
@@ -42,30 +49,38 @@ public class MainWindow extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
-        panel.add(new JLabel("Data:"));
-        JTable table = new JTable(inputTableModel);
-        table.setFillsViewportHeight(true);
-        table.setEnabled(false);
-        JScrollPane scrollPane = new JScrollPane(table);
-        panel.add(scrollPane);
-
-        JButton button = new JButton("Load data");
+        JButton button = new JButton("New person");
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        button.addActionListener(action->loadData());
+        button.addActionListener(action->createPerson());
         panel.add(button);
+
+        JButton newEventButt = new JButton("New event");
+        newEventButt.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(newEventButt);
+
+        JButton newInstallmentButt = new JButton("New installment");
+        newInstallmentButt.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(newInstallmentButt);
+
+        JButton paymentButt = new JButton("Payment");
+        paymentButt.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(paymentButt);
+
+        JButton refreshButt = new JButton("Refresh");
+        refreshButt.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(refreshButt);
+
         add(panel);
     }
 
-    private void loadData(){
-        Path pathToData = fileChooser.chooseFile(this);
-        if(pathToData != null){
-            try{
-                inputDataSet = dataLoader.readFromFile(pathToData);
-                inputTableModel.setDataVector(inputDataSet.getData(), inputDataSet.getHeader());
-                outputTableModel.setDataVector(new String[0][], new String[0]);
-            } catch (FileFormatException e){
-                throw new RuntimeException("File " + pathToData + " is not a proper CSV file.");
-            }
+    private void createPerson(){
+        log.info("Creating new person...");
+        Person person = CreatePersonDialogShower.show();
+        if(person != null) {
+            personService.createPerson(person);
+            log.info("Created new person.");
+        } else {
+            log.info("Creating new person canceled.");
         }
     }
 
@@ -73,33 +88,45 @@ public class MainWindow extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
-        panel.add(new JLabel("Choose function:"));
+        panel.add(new JComboBox<>(new String[]{
+                "People", "Events"
+        }));
 
-        JButton button = new JButton("Process");
-        button.addActionListener(action->processData());
-        panel.add(button);
+        panel.add(new JScrollPane(new JList<>()));
+
+        JPanel buttons = new JPanel();
+        buttons.add(new JButton("Prev"));
+        buttons.add(new JButton("Next"));
+        buttons.setLayout(new BoxLayout(buttons, BoxLayout.LINE_AXIS));
+
+        panel.add(buttons);
 
         add(panel);
-    }
-
-    private void processData(){
-
     }
 
     private void createThirdPanel(){
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
-        panel.add(new JLabel("Output:"));
-        JTable table = new JTable(outputTableModel);
-        table.setFillsViewportHeight(true);
-        JScrollPane scrollPane = new JScrollPane(table);
+        panel.add(new JComboBox<>(new String[]{
+                "Payments", "Installments"
+        }));
+
+        JList<String> list = new JList<>();
+        JScrollPane scrollPane = new JScrollPane(list);
         panel.add(scrollPane);
+
+        JPanel buttons = new JPanel();
+        buttons.add(new JButton("Prev"));
+        buttons.add(new JButton("Next"));
+        buttons.setLayout(new BoxLayout(buttons, BoxLayout.LINE_AXIS));
+        panel.add(buttons);
 
         add(panel);
     }
 
-    public static void main(String[] args){
-        new MainWindow();
+    @Autowired
+    public void setPersonService(PersonService personService) {
+        this.personService = personService;
     }
 }
