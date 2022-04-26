@@ -3,28 +3,34 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.edu.pwr.java.lab7.lib.CSVDataLoader;
 import pl.edu.pwr.java.lab7.lib.DataFileChooser;
-import pl.edu.pwr.java.lab7.lib.DataSet;
+import pl.edu.pwr.java.lab7.model.entity.Event;
+import pl.edu.pwr.java.lab7.model.entity.Identifiable;
 import pl.edu.pwr.java.lab7.model.entity.Person;
+import pl.edu.pwr.java.lab7.service.EventService;
 import pl.edu.pwr.java.lab7.service.PersonService;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
-import java.util.Stack;
+import java.awt.event.ActionEvent;
+import java.util.Objects;
 
 @Slf4j
 public class MainWindow extends JFrame {
     private final DataFileChooser fileChooser = new DataFileChooser();
     private final CSVDataLoader dataLoader = new CSVDataLoader();
 
-    private DataSet inputDataSet;
-    private DefaultTableModel inputTableModel = new DefaultTableModel();
-    private DefaultTableModel outputTableModel = new DefaultTableModel();
+    private DefaultListModel<Identifiable> peopleListModel = new DefaultListModel<>();
 
     private JComboBox<String> firstComboBox;
     private JComboBox<String> secondComboBox;
 
     private PersonService personService;
+    private EventService eventService;
+
+    private Integer firstComboBoxChoice;
+    private int firstListPage = 0;
+    private int secondListPage = 0;
 
     public MainWindow() {
         super();
@@ -56,6 +62,7 @@ public class MainWindow extends JFrame {
 
         JButton newEventButt = new JButton("New event");
         newEventButt.setAlignmentX(Component.CENTER_ALIGNMENT);
+        newEventButt.addActionListener(action->createEvent());
         panel.add(newEventButt);
 
         JButton newInstallmentButt = new JButton("New installment");
@@ -65,10 +72,6 @@ public class MainWindow extends JFrame {
         JButton paymentButt = new JButton("Payment");
         paymentButt.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(paymentButt);
-
-        JButton refreshButt = new JButton("Refresh");
-        refreshButt.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(refreshButt);
 
         add(panel);
     }
@@ -84,15 +87,35 @@ public class MainWindow extends JFrame {
         }
     }
 
+    private void createEvent(){
+
+        log.info("Creating new event...");
+        Event event = CreateEventDialog.show();
+        if(event != null) {
+            eventService.createEvent(event);
+            log.info("Created new event.");
+        } else {
+            log.info("Creating new event canceled.");
+        }
+    }
+
     private void createSecondPanel(){
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
-        panel.add(new JComboBox<>(new String[]{
+        firstComboBox = new JComboBox<>(new String[]{
                 "People", "Events"
-        }));
+        });
 
-        panel.add(new JScrollPane(new JList<>()));
+        panel.add(firstComboBox);
+        firstComboBox.addActionListener(this::firstComboBoxCallback);
+
+        JList<Identifiable> peopleList = new JList<>(peopleListModel);
+        DefaultListSelectionModel selectionModel = new DefaultListSelectionModel();
+        selectionModel.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
+        peopleList.setSelectionModel(selectionModel);
+        peopleList.addListSelectionListener(this::firstListSelectionCallback);
+        panel.add(new JScrollPane(peopleList));
 
         JPanel buttons = new JPanel();
         buttons.add(new JButton("Prev"));
@@ -102,6 +125,38 @@ public class MainWindow extends JFrame {
         panel.add(buttons);
 
         add(panel);
+    }
+
+    private void firstComboBoxCallback(ActionEvent event){
+        Integer newChoice = firstComboBox.getSelectedIndex();
+        if(!Objects.equals(firstComboBoxChoice, newChoice)) {
+            firstListPage = 0;
+            this.firstComboBoxChoice = newChoice;
+            if (firstComboBoxChoice == 0) {
+                choosePeople();
+            } else {
+                chooseEvents();
+            }
+        }
+    }
+
+    private void choosePeople(){
+        log.info("Chosen people in first combo box.");
+        peopleListModel.removeAllElements();
+        peopleListModel.addAll(personService.fetchPeople(firstListPage));
+    }
+
+    private void chooseEvents(){
+        log.info("Chosen events in first combo box.");
+        peopleListModel.removeAllElements();
+        peopleListModel.addAll(eventService.fetchEvents(firstListPage));
+    }
+
+    private void firstListSelectionCallback(ListSelectionEvent event){
+        if(event.getValueIsAdjusting()){
+            log.info("Selected item with index " + ((JList<?>)event.getSource()).getSelectedIndex());
+            log.info(event.toString());
+        }
     }
 
     private void createThirdPanel(){
@@ -128,5 +183,10 @@ public class MainWindow extends JFrame {
     @Autowired
     public void setPersonService(PersonService personService) {
         this.personService = personService;
+    }
+
+    @Autowired
+    public void setEventService(EventService eventService) {
+        this.eventService = eventService;
     }
 }

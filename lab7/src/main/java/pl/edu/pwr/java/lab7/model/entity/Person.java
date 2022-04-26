@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Person {
+public class Person implements Identifiable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,4 +21,9 @@ public class Person {
 
     @Column(name = "last_name")
     private String lastName;
+
+    @Override
+    public String toString() {
+        return firstName + " " + lastName;
+    }
 }

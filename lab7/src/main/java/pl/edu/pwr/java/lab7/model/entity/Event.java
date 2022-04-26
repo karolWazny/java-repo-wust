@@ -12,7 +12,7 @@ import java.sql.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Event {
+public class Event implements Identifiable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,4 +25,9 @@ public class Event {
 
     @Column
     private Date date;
+
+    @Override
+    public String toString() {
+        return name + " " + date;
+    }
 }
