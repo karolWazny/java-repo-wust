@@ -9,6 +9,8 @@ import pl.edu.pwr.java.lab7.model.entity.Event;
 import pl.edu.pwr.java.lab7.repository.EventRepository;
 import pl.edu.pwr.java.lab7.service.EventService;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -24,5 +26,10 @@ public class EventServiceImpl implements EventService {
     @Override
     public void createEvent(Event event) {
         eventRepository.save(event);
+    }
+
+    @Override
+    public List<Event> fetchFutureEvents() {
+        return eventRepository.findAllByDateGreaterThan(Date.valueOf(LocalDate.now()));
     }
 }

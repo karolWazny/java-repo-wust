@@ -5,8 +5,10 @@ import pl.edu.pwr.java.lab7.lib.CSVDataLoader;
 import pl.edu.pwr.java.lab7.lib.DataFileChooser;
 import pl.edu.pwr.java.lab7.model.entity.Event;
 import pl.edu.pwr.java.lab7.model.entity.Identifiable;
+import pl.edu.pwr.java.lab7.model.entity.Installment;
 import pl.edu.pwr.java.lab7.model.entity.Person;
 import pl.edu.pwr.java.lab7.service.EventService;
+import pl.edu.pwr.java.lab7.service.InstallmentService;
 import pl.edu.pwr.java.lab7.service.PersonService;
 
 import javax.swing.*;
@@ -27,6 +29,7 @@ public class MainWindow extends JFrame {
 
     private PersonService personService;
     private EventService eventService;
+    private InstallmentService installmentService;
 
     private Integer firstComboBoxChoice;
     private int firstListPage = 0;
@@ -67,6 +70,7 @@ public class MainWindow extends JFrame {
 
         JButton newInstallmentButt = new JButton("New installment");
         newInstallmentButt.setAlignmentX(Component.CENTER_ALIGNMENT);
+        newInstallmentButt.addActionListener(action->createInstallment());
         panel.add(newInstallmentButt);
 
         JButton paymentButt = new JButton("Payment");
@@ -88,7 +92,6 @@ public class MainWindow extends JFrame {
     }
 
     private void createEvent(){
-
         log.info("Creating new event...");
         Event event = CreateEventDialog.show();
         if(event != null) {
@@ -96,6 +99,17 @@ public class MainWindow extends JFrame {
             log.info("Created new event.");
         } else {
             log.info("Creating new event canceled.");
+        }
+    }
+
+    private void createInstallment(){
+        log.info("Creating new installment...");
+        Installment installment = CreateInstallmentDialog.show(eventService.fetchFutureEvents());
+        if(installment != null) {
+            installmentService.createInstallment(installment);
+            log.info("Created new installment.");
+        } else {
+            log.info("Creating new installment canceled.");
         }
     }
 
@@ -188,5 +202,10 @@ public class MainWindow extends JFrame {
     @Autowired
     public void setEventService(EventService eventService) {
         this.eventService = eventService;
+    }
+
+    @Autowired
+    public void setInstallmentService(InstallmentService installmentService) {
+        this.installmentService = installmentService;
     }
 }
