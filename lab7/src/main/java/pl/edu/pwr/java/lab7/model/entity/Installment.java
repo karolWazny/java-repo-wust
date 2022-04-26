@@ -29,4 +29,9 @@ public class Installment implements Identifiable {
 
     @Column
     private Integer amount;
+
+    @Override
+    public String toString() {
+        return event.getName() + " " + installmentNumber + ", " + amount;
+    }
 }

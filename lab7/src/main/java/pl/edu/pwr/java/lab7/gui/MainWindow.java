@@ -23,6 +23,7 @@ public class MainWindow extends JFrame {
     private final CSVDataLoader dataLoader = new CSVDataLoader();
 
     private DefaultListModel<Identifiable> peopleListModel = new DefaultListModel<>();
+    private DefaultListModel<Identifiable> secondListModel = new DefaultListModel<>();
 
     private JComboBox<String> firstComboBox;
     private JComboBox<String> secondComboBox;
@@ -170,6 +171,9 @@ public class MainWindow extends JFrame {
         if(event.getValueIsAdjusting()){
             log.info("Selected item with index " + ((JList<?>)event.getSource()).getSelectedIndex());
             log.info(event.toString());
+            Long id = ((Identifiable)((JList<?>)event.getSource()).getSelectedValue()).getId();
+            secondListModel.removeAllElements();
+            secondListModel.addAll(installmentService.fetchInstallmentsForPerson());
         }
     }
 
@@ -181,7 +185,7 @@ public class MainWindow extends JFrame {
                 "Payments", "Installments"
         }));
 
-        JList<String> list = new JList<>();
+        JList<Identifiable> list = new JList<>(secondListModel);
         JScrollPane scrollPane = new JScrollPane(list);
         panel.add(scrollPane);
 

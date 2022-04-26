@@ -7,6 +7,8 @@ import pl.edu.pwr.java.lab7.model.entity.Installment;
 import pl.edu.pwr.java.lab7.repository.InstallmentRepository;
 import pl.edu.pwr.java.lab7.service.InstallmentService;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -19,5 +21,10 @@ public class InstallmentServiceImpl implements InstallmentService {
         log.info("number of installments for this event: " + (installmentNumber - 1));
         installment.setInstallmentNumber(installmentNumber);
         installmentRepository.save(installment);
+    }
+
+    @Override
+    public List<Installment> fetchInstallmentsForPerson() {
+        return installmentRepository.findAll();
     }
 }
