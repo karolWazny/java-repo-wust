@@ -30,4 +30,4 @@ Program powinien:
 * automatycznie sprawdzać terminowość i wysokość wpłat oraz wysyłać monity o kolejnych płatnościach (wystarczy, że
 będzie pisał do pliku z logami monitów, upływ czasu należy zasymulować).
 * automatycznie eskalować monity w przypadku braku terminowej wpłaty (wystarczy, że będzie pisał do pliku z logami
-ekalowanych monitów, upływ czasu należy zasymulować)
+eskalowanych monitów, upływ czasu należy zasymulować)
