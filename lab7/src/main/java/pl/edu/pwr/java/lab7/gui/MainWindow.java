@@ -3,12 +3,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.edu.pwr.java.lab7.lib.CSVDataLoader;
 import pl.edu.pwr.java.lab7.lib.DataFileChooser;
+import pl.edu.pwr.java.lab7.model.entity.*;
 import pl.edu.pwr.java.lab7.model.entity.Event;
-import pl.edu.pwr.java.lab7.model.entity.Identifiable;
-import pl.edu.pwr.java.lab7.model.entity.Installment;
-import pl.edu.pwr.java.lab7.model.entity.Person;
 import pl.edu.pwr.java.lab7.service.EventService;
 import pl.edu.pwr.java.lab7.service.InstallmentService;
+import pl.edu.pwr.java.lab7.service.PaymentService;
 import pl.edu.pwr.java.lab7.service.PersonService;
 
 import javax.swing.*;
@@ -32,6 +31,7 @@ public class MainWindow extends JFrame {
     private PersonService personService;
     private EventService eventService;
     private InstallmentService installmentService;
+    private PaymentService paymentService;
 
     private Integer firstComboBoxChoice;
     private Integer secondComboBoxChoice = 0;
@@ -78,6 +78,7 @@ public class MainWindow extends JFrame {
 
         JButton paymentButt = new JButton("Payment");
         paymentButt.setAlignmentX(Component.CENTER_ALIGNMENT);
+        paymentButt.addActionListener(action->makePayment());
         panel.add(paymentButt);
 
         add(panel);
@@ -113,6 +114,17 @@ public class MainWindow extends JFrame {
             log.info("Created new installment.");
         } else {
             log.info("Creating new installment canceled.");
+        }
+    }
+
+    private void makePayment(){
+        log.info("Creating new payment...");
+        Payment payment = CreatePaymentDialog.show(personService.fetchAllPeople(), eventService.fetchAllEvents());
+        if(payment != null) {
+            paymentService.createPayment(payment);
+            log.info("Created new payment.");
+        } else {
+            log.info("Creating new payment canceled.");
         }
     }
 
@@ -220,6 +232,13 @@ public class MainWindow extends JFrame {
     private void choosePayments(){
         log.info("Chosen payments");
         secondListModel.removeAllElements();
+        try{
+            if(Objects.equals(firstComboBox.getSelectedItem(), "People")){
+                secondListModel.addAll(paymentService.fetchPaymentsForPerson(peopleList.getSelectedValue().getId(), secondListPage));
+            } else {
+                secondListModel.addAll(paymentService.fetchPaymentsForEvent(peopleList.getSelectedValue().getId(), secondListPage));
+            }
+        } catch (NullPointerException ignored){}
     }
 
     private void chooseInstallments(){
@@ -247,5 +266,10 @@ public class MainWindow extends JFrame {
     @Autowired
     public void setInstallmentService(InstallmentService installmentService) {
         this.installmentService = installmentService;
+    }
+
+    @Autowired
+    public void setPaymentService(PaymentService paymentService) {
+        this.paymentService = paymentService;
     }
 }

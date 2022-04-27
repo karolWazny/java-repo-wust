@@ -32,4 +32,9 @@ public class EventServiceImpl implements EventService {
     public List<Event> fetchFutureEvents() {
         return eventRepository.findAllByDateGreaterThan(Date.valueOf(LocalDate.now()));
     }
+
+    @Override
+    public List<Event> fetchAllEvents() {
+        return eventRepository.findAll();
+    }
 }

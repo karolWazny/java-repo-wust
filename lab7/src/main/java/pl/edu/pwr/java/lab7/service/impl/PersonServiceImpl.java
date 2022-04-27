@@ -25,4 +25,9 @@ public class PersonServiceImpl implements PersonService {
         return personRepository.findAll(PageRequest.of(page, 12, Sort.by("lastName").ascending())).getContent();
     }
 
+    @Override
+    public List<Person> fetchAllPeople() {
+        return personRepository.findAll();
+    }
+
 }

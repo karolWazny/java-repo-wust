@@ -7,4 +7,5 @@ import java.util.List;
 public interface PersonService {
     void createPerson(Person person);
     List<Person> fetchPeople(int page);
+    List<Person> fetchAllPeople();
 }

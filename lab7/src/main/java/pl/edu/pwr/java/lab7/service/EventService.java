@@ -8,4 +8,5 @@ public interface EventService {
     List<Event> fetchEvents(int page);
     void createEvent(Event event);
     List<Event> fetchFutureEvents();
+    List<Event> fetchAllEvents();
 }
