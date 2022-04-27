@@ -19,12 +19,14 @@ import java.util.Map;
 public class ReminderServiceImpl implements ReminderService {
     @Override
     public void remind(Map<Person, List<Installment>> pending) {
-        writeToFileWithPrefix("reminded_", pending);
+        if(!pending.isEmpty())
+            writeToFileWithPrefix("reminded_", pending);
     }
 
     @Override
     public void escalate(Map<Person, List<Installment>> overdue) {
-        writeToFileWithPrefix("escalated_", overdue);
+        if(!overdue.isEmpty())
+            writeToFileWithPrefix("escalated_", overdue);
     }
 
     private void writeToFileWithPrefix(String prefix, Map<Person, List<Installment>> elements){
@@ -44,10 +46,9 @@ public class ReminderServiceImpl implements ReminderService {
                     writer.write("" + installment + "\n");
                 }
             }
-
             writer.close();
         } catch (IOException e) {
-            log.error(e.toString());
+            log.info(e.toString());
         }
     }
 

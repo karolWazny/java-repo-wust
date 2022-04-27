@@ -1,6 +1,5 @@
 package pl.edu.pwr.java.lab7;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -10,22 +9,24 @@ import org.springframework.scheduling.annotation.Scheduled;
 import pl.edu.pwr.java.lab7.gui.MainWindow;
 import pl.edu.pwr.java.lab7.model.entity.Installment;
 import pl.edu.pwr.java.lab7.model.entity.Person;
-import pl.edu.pwr.java.lab7.repository.InstallmentRepository;
-import pl.edu.pwr.java.lab7.repository.PersonRepository;
-import pl.edu.pwr.java.lab7.service.InstallmentService;
+import pl.edu.pwr.java.lab7.service.ReminderService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @SpringBootApplication
 @EnableScheduling
 public class Lab7Application extends MainWindow {
+    private ReminderService reminderService;
+
     public static void main(String[] args) {
         SpringApplication.run(Lab7Application.class, args);
     }
 
     @Scheduled(cron = "${cron.expression}")
-    @Scheduled(initialDelay = 1000 * 5, fixedDelay=Long.MAX_VALUE)
+    @Scheduled(initialDelay = 1000 * 2, fixedDelay=Long.MAX_VALUE)
     private void checkPendingAndOverdue(){
         log.info("Checking pending installments...");
         checkPendingInstallments();
@@ -38,16 +39,29 @@ public class Lab7Application extends MainWindow {
     private void checkOverdueInstallments(){
         log.debug("checkOverdueInstallments() call");
         List<Person> people = personService.fetchAllPeople();
+        Map<Person, List<Installment>> allOverdue = new HashMap<>();
         for(Person person : people){
             List<Installment> overdueInstallments = installmentService.fetchOverdueInstallmentsForPerson(person.getId());
+            if(overdueInstallments.size() > 0)
+                allOverdue.put(person, overdueInstallments);
         }
+        reminderService.escalate(allOverdue);
     }
 
     private void checkPendingInstallments(){
         log.debug("checkPendingInstallments() call");
         List<Person> people = personService.fetchAllPeople();
+        Map<Person, List<Installment>> allPending = new HashMap<>();
         for(Person person : people){
             List<Installment> pendingInstallments = installmentService.fetchPendingInstallmentsForPerson(person.getId());
+            if(pendingInstallments.size() > 0)
+                allPending.put(person, pendingInstallments);
         }
+        reminderService.remind(allPending);
+    }
+
+    @Autowired
+    public void setReminderService(ReminderService reminderService) {
+        this.reminderService = reminderService;
     }
 }

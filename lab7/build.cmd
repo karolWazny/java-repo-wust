@@ -1,5 +1,5 @@
-mvn clean
-mvn package
+call mvn clean
+call mvn package
 rm -rf release
 mkdir release
 copy target\lab7*.jar release
