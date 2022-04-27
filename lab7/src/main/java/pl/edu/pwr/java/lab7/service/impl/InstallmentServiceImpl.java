@@ -26,7 +26,7 @@ public class InstallmentServiceImpl implements InstallmentService {
 
     @Override
     public List<Installment> fetchPendingInstallmentsForPerson(Long personId) {
-        log.info("using my query");
+        log.debug("using my query");
         return installmentRepository.findPendingByPersonId(personId);
     }
 
