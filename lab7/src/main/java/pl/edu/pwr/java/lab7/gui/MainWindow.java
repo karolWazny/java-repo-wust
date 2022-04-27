@@ -28,9 +28,9 @@ public class MainWindow extends JFrame {
     private JComboBox<String> firstComboBox;
     private JComboBox<String> secondComboBox;
 
-    private PersonService personService;
+    protected PersonService personService;
     private EventService eventService;
-    private InstallmentService installmentService;
+    protected InstallmentService installmentService;
     private PaymentService paymentService;
 
     private Integer firstComboBoxChoice;
@@ -246,7 +246,7 @@ public class MainWindow extends JFrame {
         secondListModel.removeAllElements();
         try{
             if(Objects.equals(firstComboBox.getSelectedItem(), "People")){
-                secondListModel.addAll(installmentService.fetchPendingInstallmentsForPerson(peopleList.getSelectedValue().getId()));
+                secondListModel.addAll(installmentService.fetchUnpaidInstallmentsForPerson(peopleList.getSelectedValue().getId()));
             } else {
                 secondListModel.addAll(installmentService.fetchInstallmentsForEvent(peopleList.getSelectedValue().getId(), secondListPage));
             }
