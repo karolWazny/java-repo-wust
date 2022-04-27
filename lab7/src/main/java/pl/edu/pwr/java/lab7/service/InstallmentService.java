@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface InstallmentService {
     void createInstallment(Installment installment);
-    List<Installment> fetchInstallmentsForPerson();
+    List<Installment> fetchPendingInstallmentsForPerson(Long personId, int page);
+    List<Installment> fetchInstallmentsForEvent(Long eventId, int page);
 }

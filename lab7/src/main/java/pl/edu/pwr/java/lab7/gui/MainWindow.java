@@ -22,6 +22,7 @@ public class MainWindow extends JFrame {
     private final DataFileChooser fileChooser = new DataFileChooser();
     private final CSVDataLoader dataLoader = new CSVDataLoader();
 
+    private JList<Identifiable> peopleList;
     private DefaultListModel<Identifiable> peopleListModel = new DefaultListModel<>();
     private DefaultListModel<Identifiable> secondListModel = new DefaultListModel<>();
 
@@ -33,6 +34,7 @@ public class MainWindow extends JFrame {
     private InstallmentService installmentService;
 
     private Integer firstComboBoxChoice;
+    private Integer secondComboBoxChoice = 0;
     private int firstListPage = 0;
     private int secondListPage = 0;
 
@@ -125,7 +127,7 @@ public class MainWindow extends JFrame {
         panel.add(firstComboBox);
         firstComboBox.addActionListener(this::firstComboBoxCallback);
 
-        JList<Identifiable> peopleList = new JList<>(peopleListModel);
+        peopleList = new JList<>(peopleListModel);
         DefaultListSelectionModel selectionModel = new DefaultListSelectionModel();
         selectionModel.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
         peopleList.setSelectionModel(selectionModel);
@@ -152,6 +154,7 @@ public class MainWindow extends JFrame {
             } else {
                 chooseEvents();
             }
+            refreshSecondList();
         }
     }
 
@@ -169,11 +172,7 @@ public class MainWindow extends JFrame {
 
     private void firstListSelectionCallback(ListSelectionEvent event){
         if(event.getValueIsAdjusting()){
-            log.info("Selected item with index " + ((JList<?>)event.getSource()).getSelectedIndex());
-            log.info(event.toString());
-            Long id = ((Identifiable)((JList<?>)event.getSource()).getSelectedValue()).getId();
-            secondListModel.removeAllElements();
-            secondListModel.addAll(installmentService.fetchInstallmentsForPerson());
+            refreshSecondList();
         }
     }
 
@@ -181,9 +180,12 @@ public class MainWindow extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
-        panel.add(new JComboBox<>(new String[]{
+        secondComboBox = new JComboBox<>(new String[]{
                 "Payments", "Installments"
-        }));
+        });
+
+        secondComboBox.addActionListener(this::secondComboBoxCallback);
+        panel.add(secondComboBox);
 
         JList<Identifiable> list = new JList<>(secondListModel);
         JScrollPane scrollPane = new JScrollPane(list);
@@ -196,6 +198,40 @@ public class MainWindow extends JFrame {
         panel.add(buttons);
 
         add(panel);
+    }
+
+    private void secondComboBoxCallback(ActionEvent event){
+        Integer newChoice = secondComboBox.getSelectedIndex();
+        if(!Objects.equals(secondComboBoxChoice, newChoice)) {
+            this.secondComboBoxChoice = newChoice;
+            refreshSecondList();
+        }
+    }
+
+    private void refreshSecondList(){
+        secondListPage = 0;
+        if (secondComboBoxChoice == 0) {
+            choosePayments();
+        } else {
+            chooseInstallments();
+        }
+    }
+
+    private void choosePayments(){
+        log.info("Chosen payments");
+        secondListModel.removeAllElements();
+    }
+
+    private void chooseInstallments(){
+        log.info("Chosen installments");
+        secondListModel.removeAllElements();
+        try{
+            if(Objects.equals(firstComboBox.getSelectedItem(), "People")){
+                secondListModel.addAll(installmentService.fetchPendingInstallmentsForPerson(peopleList.getSelectedValue().getId(), secondListPage));
+            } else {
+                secondListModel.addAll(installmentService.fetchInstallmentsForEvent(peopleList.getSelectedValue().getId(), secondListPage));
+            }
+        } catch (NullPointerException ignored){}
     }
 
     @Autowired

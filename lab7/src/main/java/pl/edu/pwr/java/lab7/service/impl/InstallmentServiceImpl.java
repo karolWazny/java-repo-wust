@@ -2,6 +2,7 @@ package pl.edu.pwr.java.lab7.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import pl.edu.pwr.java.lab7.model.entity.Installment;
 import pl.edu.pwr.java.lab7.repository.InstallmentRepository;
@@ -24,7 +25,12 @@ public class InstallmentServiceImpl implements InstallmentService {
     }
 
     @Override
-    public List<Installment> fetchInstallmentsForPerson() {
+    public List<Installment> fetchPendingInstallmentsForPerson(Long personId, int page) {
         return installmentRepository.findAll();
+    }
+
+    @Override
+    public List<Installment> fetchInstallmentsForEvent(Long eventId, int page) {
+        return installmentRepository.findAllByEventId(eventId, PageRequest.of(page, 12));
     }
 }
