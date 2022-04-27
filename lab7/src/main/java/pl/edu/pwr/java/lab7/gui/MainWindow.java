@@ -246,7 +246,7 @@ public class MainWindow extends JFrame {
         secondListModel.removeAllElements();
         try{
             if(Objects.equals(firstComboBox.getSelectedItem(), "People")){
-                secondListModel.addAll(installmentService.fetchPendingInstallmentsForPerson(peopleList.getSelectedValue().getId(), secondListPage));
+                secondListModel.addAll(installmentService.fetchPendingInstallmentsForPerson(peopleList.getSelectedValue().getId()));
             } else {
                 secondListModel.addAll(installmentService.fetchInstallmentsForEvent(peopleList.getSelectedValue().getId(), secondListPage));
             }
