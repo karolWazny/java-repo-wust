@@ -4,8 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class MainWindow extends JFrame {
@@ -14,7 +17,11 @@ public class MainWindow extends JFrame {
     private final DirectoryChooser directoryChooser = new DirectoryChooserImpl();
 
     private Path outputDirectory = Paths.get("");
+    private Path fileWithKey;
     private JTextField outputDirTextField;
+    private JTextField keyFileTextField;
+    private DefaultListModel<Path> inputFilesModel;
+    private JList<Path> inputFiles;
 
     public MainWindow() {
         super();
@@ -38,7 +45,8 @@ public class MainWindow extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
-        JList<Path> inputFiles = new JList<>();
+        inputFilesModel = new DefaultListModel<>();
+        inputFiles = new JList<>(inputFilesModel);
         inputFiles.setLayoutOrientation(JList.VERTICAL);
         panel.add(new JScrollPane(inputFiles));
 
@@ -47,10 +55,12 @@ public class MainWindow extends JFrame {
 
         JButton addFilesButt = new JButton("More files");
         addFilesButt.setAlignmentX(Component.CENTER_ALIGNMENT);
+        addFilesButt.addActionListener(action->this.chooseFilesToEncryptCallback());
         buttons.add(addFilesButt);
 
         JButton discardButt = new JButton("Discard");
         discardButt.setAlignmentX(Component.CENTER_ALIGNMENT);
+        discardButt.addActionListener(action->discardCallback());
         buttons.add(discardButt);
 
         panel.add(buttons);
@@ -68,6 +78,38 @@ public class MainWindow extends JFrame {
         panel.add(changeOutputDirButt);
 
         add(panel);
+    }
+
+    private void discardCallback(){
+        int[] selected = inputFiles.getSelectedIndices();
+        Arrays.stream(selected)
+                .forEach(index->inputFilesModel.remove(index));
+    }
+
+    private void chooseFilesToEncryptCallback(){
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        chooser.setMultiSelectionEnabled(true);
+        chooser.setAcceptAllFileFilterUsed(false);
+        chooser.showOpenDialog(this);
+        chooser.setDialogTitle("Select files to encrypt.");
+        File[] files = chooser.getSelectedFiles();
+        inputFilesModel.addAll(Arrays.stream(files)
+                .map(File::toPath).
+                collect(Collectors.toList()));
+    }
+
+    private void chooseKeyFile(){
+        JFileChooser chooser = fileWithKey == null ? new JFileChooser() : new JFileChooser(fileWithKey.getParent().toString());
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        chooser.setAcceptAllFileFilterUsed(false);
+        chooser.showOpenDialog(this);
+        chooser.setDialogTitle("Select key.");
+        File file = chooser.getSelectedFile();
+        if(file != null){
+            fileWithKey = file.toPath();
+            keyFileTextField.setText("" + fileWithKey);
+        }
     }
 
     private void chooseOutputDirCallback(){
@@ -89,10 +131,11 @@ public class MainWindow extends JFrame {
         panel.add(firstComboBox);
 
         panel.add(new JLabel("File with key:"));
-        JTextField keyFileTextField = new JTextField();
+        keyFileTextField = new JTextField();
         keyFileTextField.setEditable(false);
         panel.add(keyFileTextField);
         JButton chooseKeyButton = new JButton("Choose key");
+        chooseKeyButton.addActionListener(action->this.chooseKeyFile());
 
         JPanel buttons = new JPanel();
         buttons.add(chooseKeyButton);
