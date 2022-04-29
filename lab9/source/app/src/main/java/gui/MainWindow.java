@@ -4,26 +4,24 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Slf4j
 public class MainWindow extends JFrame {
     private final DataFileChooser fileChooser = new DataFileChooser();
 
-    private JComboBox<String> firstComboBox;
-    private JComboBox<String> secondComboBox;
+    private final DirectoryChooser directoryChooser = new DirectoryChooserImpl();
 
-    private Integer firstComboBoxChoice;
-    private Integer secondComboBoxChoice = 0;
-    private int firstListPage = 0;
-    private int secondListPage = 0;
+    private Path outputDirectory = Paths.get("");
+    private JTextField outputDirTextField;
 
     public MainWindow() {
         super();
-        setTitle("Laboratorium 7");
+        setTitle("Szyfrator 2000");
 
         createFirstPanel();
         createSecondPanel();
-        createThirdPanel();
 
         setLayout(new BoxLayout(this.getContentPane(), BoxLayout.LINE_AXIS));
 
@@ -40,38 +38,66 @@ public class MainWindow extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
-        JButton button = new JButton("New person");
-        button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(button);
+        JList<Path> inputFiles = new JList<>();
+        inputFiles.setLayoutOrientation(JList.VERTICAL);
+        panel.add(new JScrollPane(inputFiles));
 
-        JButton newEventButt = new JButton("New event");
-        newEventButt.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(newEventButt);
+        JPanel buttons = new JPanel();
+        buttons.setLayout(new BoxLayout(buttons, BoxLayout.LINE_AXIS));
 
-        JButton newInstallmentButt = new JButton("New installment");
-        newInstallmentButt.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(newInstallmentButt);
+        JButton addFilesButt = new JButton("More files");
+        addFilesButt.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buttons.add(addFilesButt);
 
-        JButton paymentButt = new JButton("Payment");
-        paymentButt.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(paymentButt);
+        JButton discardButt = new JButton("Discard");
+        discardButt.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buttons.add(discardButt);
+
+        panel.add(buttons);
+
+        panel.add(new JLabel("Output directory:"));
+
+        outputDirTextField = new JTextField();
+        outputDirTextField.setEditable(false);
+        outputDirTextField.setText(outputDirectory.toAbsolutePath().toString());
+        panel.add(outputDirTextField);
+
+        JButton changeOutputDirButt = new JButton("Change");
+        changeOutputDirButt.setAlignmentX(Component.CENTER_ALIGNMENT);
+        changeOutputDirButt.addActionListener(action->chooseOutputDirCallback());
+        panel.add(changeOutputDirButt);
 
         add(panel);
+    }
+
+    private void chooseOutputDirCallback(){
+        Path newPath = directoryChooser.chooseDirectory(this);
+        if(newPath != null){
+            outputDirectory = newPath;
+            outputDirTextField.setText(outputDirectory.toAbsolutePath().toString());
+        }
     }
 
     private void createSecondPanel(){
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
-        firstComboBox = new JComboBox<>(new String[]{
-                "People", "Events"
+        JComboBox<String> firstComboBox = new JComboBox<>(new String[]{
+                "AES", "RSA"
         });
 
         panel.add(firstComboBox);
 
+        panel.add(new JLabel("File with key:"));
+        JTextField keyFileTextField = new JTextField();
+        keyFileTextField.setEditable(false);
+        panel.add(keyFileTextField);
+        JButton chooseKeyButton = new JButton("Choose key");
+
         JPanel buttons = new JPanel();
-        buttons.add(new JButton("Prev"));
-        buttons.add(new JButton("Next"));
+        buttons.add(chooseKeyButton);
+        buttons.add(new JButton("Encrypt"));
+        buttons.add(new JButton("Decrypt"));
         buttons.setLayout(new BoxLayout(buttons, BoxLayout.LINE_AXIS));
 
         panel.add(buttons);
@@ -82,10 +108,6 @@ public class MainWindow extends JFrame {
     private void createThirdPanel(){
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-
-        secondComboBox = new JComboBox<>(new String[]{
-                "Payments", "Installments"
-        });
 
         JPanel buttons = new JPanel();
         buttons.add(new JButton("Prev"));

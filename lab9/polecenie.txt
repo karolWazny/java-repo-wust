@@ -1,7 +1,7 @@
 Lab09 (28.04.2022)
 
 Zaimplementuj aplikację pozwalającą na szyfrowanie/deszyfrowanie plików (taka aplikacja mogłaby pełnić
-rolę narzędzia służącego do szyfrowania/odszyfrowywania załączników do e-maili). 
+rolę narzędzia służącego do szyfrowania/odszyfrowywania załączników do e-maili).
 Na interfejsie graficznym aplikacji użytkownik powinien mieć możliwość wskazania plików wejściowych
 oraz wyjściowych, jak również algorytmu szyfrowania/deszyfrowania oraz wykorzystywanych kluczy: prywatnego
 (do szyfrowania) i publicznego (do deszyfrowania).
