@@ -14,7 +14,7 @@ Cryptography Extension (JCE).
 Proszę zwrócić uwagę na ograniczenia związane z rozmiarem szyfrowanych danych narzuczane przez wybrane algorytmu
 (zależy nam, by zaszyfrować dało się pliki o dowolnym rozmiarze).
 W trakcie realizacji laboratorium będzie trzeba skorzystać z repozytoriów kluczy i certyfikatów.  Ponadto proszę
-zapoznać się z zasadami korzystania z narzędzia jarsigner. 
+zapoznać się z zasadami korzystania z narzędzia jarsigner.
 
 Proszę w gitowym repozytorium kodu w gałęzi sources/releases stworzyć osobne podkatalogi:
 na bibliotekę (biblioteka) oraz na aplikację (aplikacja).

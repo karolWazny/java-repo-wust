@@ -12,8 +12,6 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class MainWindow extends JFrame {
-    private final DataFileChooser fileChooser = new DataFileChooser();
-
     private final DirectoryChooser directoryChooser = new DirectoryChooserImpl();
 
     private Path outputDirectory = Paths.get("");
