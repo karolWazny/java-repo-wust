@@ -1,12 +1,20 @@
 package gui;
 
+import api.StreamDecryptor;
+import api.StreamEncryptor;
 import lombok.extern.slf4j.Slf4j;
+import sampleImplementation.StreamDecryptorImpl;
+import sampleImplementation.StreamEncryptorImpl;
 
+import javax.crypto.*;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
+import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -20,6 +28,16 @@ public class MainWindow extends JFrame {
     private JTextField keyFileTextField;
     private DefaultListModel<Path> inputFilesModel;
     private JList<Path> inputFiles;
+
+    private SecretKey key;
+
+    {
+        try {
+            key = KeyGenerator.getInstance("AES").generateKey();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+    }
 
     public MainWindow() {
         super();
@@ -137,13 +155,69 @@ public class MainWindow extends JFrame {
 
         JPanel buttons = new JPanel();
         buttons.add(chooseKeyButton);
-        buttons.add(new JButton("Encrypt"));
-        buttons.add(new JButton("Decrypt"));
+        JButton encryptButton = new JButton("Encrypt");
+        encryptButton.addActionListener(action->encryptFilesCallback());
+        buttons.add(encryptButton);
+        JButton decryptButton = new JButton("Decrypt");
+        decryptButton.addActionListener(action->decryptFilesCallback());
+        buttons.add(decryptButton);
         buttons.setLayout(new BoxLayout(buttons, BoxLayout.LINE_AXIS));
 
         panel.add(buttons);
 
         add(panel);
+    }
+
+    private void encryptFilesCallback() {
+        log.info("Encrypting chosen files...");
+
+        for(int i = 0; i < inputFilesModel.getSize(); i++){
+            Path path = inputFilesModel.get(i);
+            String filename = path.getFileName().toString() + ".enc";
+            Path outputFile = outputDirectory.resolve(filename);
+
+            try {
+                InputStream inputStream = new FileInputStream(String.valueOf(path));
+                OutputStream outputStream = new FileOutputStream(String.valueOf(outputFile));
+                StreamEncryptor encryptor = new StreamEncryptorImpl();
+                encryptor.setKey(key);
+                encryptor.encrypt(inputStream, outputStream);
+                inputStream.close();
+                outputStream.close();
+            } catch (IOException | InvalidKeyException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        log.info("Encrypted chosen files.");
+    }
+
+    private void decryptFilesCallback(){
+        log.info("Decrypting chosen files...");
+
+        for(int i = 0; i < inputFilesModel.getSize(); i++){
+            Path path = inputFilesModel.get(i);
+            String filename = path.getFileName().toString();
+            filename = filename.replaceAll("\\.enc\\z", "");
+
+            Path outputFile = outputDirectory.resolve(filename);
+
+            try {
+                InputStream inputStream = new FileInputStream(String.valueOf(path));
+                OutputStream outputStream = new FileOutputStream(String.valueOf(outputFile));
+                StreamDecryptor encryptor = new StreamDecryptorImpl();
+                encryptor.setKey(key);
+                encryptor.decrypt(inputStream, outputStream);
+                inputStream.close();
+                outputStream.close();
+            } catch (InvalidKeyException| IOException| InvalidAlgorithmParameterException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        log.info("Decrypted chosen files.");
     }
 
     private void createThirdPanel(){

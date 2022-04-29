@@ -13,16 +13,19 @@ import java.security.NoSuchAlgorithmException;
 public class StreamDecryptorImpl implements StreamDecryptor {
     private static final String transformation = "AES/CBC/PKCS5Padding";
     private SecretKey key;
-    private Cipher cipher;
+    private final Cipher cipher;
 
-    public StreamDecryptorImpl() throws NoSuchPaddingException, NoSuchAlgorithmException {
-        cipher = Cipher.getInstance(transformation);
+    public StreamDecryptorImpl() {
+        try {
+            cipher = Cipher.getInstance(transformation);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
+            throw new RuntimeException("Could not instatiate Cipher object.");
+        }
     }
 
     @Override
     public void decrypt(InputStream inputStream, OutputStream outputStream) throws IOException,
-            InvalidAlgorithmParameterException,
-            InvalidKeyException {
+            InvalidAlgorithmParameterException, InvalidKeyException {
         byte[] buffer = new byte[16];
         inputStream.read(buffer);
         cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(buffer));
