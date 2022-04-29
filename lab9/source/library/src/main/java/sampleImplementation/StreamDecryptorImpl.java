@@ -11,7 +11,7 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 
 public class StreamDecryptorImpl implements StreamDecryptor {
-    private static final String transformation = "AES";
+    private static final String transformation = "AES/CBC/PKCS5Padding";
     private SecretKey key;
     private Cipher cipher;
 
@@ -22,18 +22,16 @@ public class StreamDecryptorImpl implements StreamDecryptor {
     @Override
     public void decrypt(InputStream inputStream, OutputStream outputStream) throws IOException,
             InvalidAlgorithmParameterException,
-            InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+            InvalidKeyException {
         byte[] buffer = new byte[16];
-        //inputStream.read(buffer);
-        cipher.init(Cipher.DECRYPT_MODE, key);
-        //cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(buffer));
-        //CipherInputStream cipherStream = new CipherInputStream(inputStream, cipher);
+        inputStream.read(buffer);
+        cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(buffer));
 
+        CipherInputStream cipherStream = new CipherInputStream(inputStream, cipher);
         buffer = new byte[1024];
-        for (int readBytes = inputStream.read(buffer); readBytes > -1; readBytes = inputStream.read(buffer)) {
-            outputStream.write(cipher.update(buffer, 0, readBytes));
+        for (int readBytes = cipherStream.read(buffer); readBytes > -1; readBytes = cipherStream.read(buffer)) {
+            outputStream.write(buffer, 0, readBytes);
         }
-        outputStream.write(cipher.doFinal());
     }
 
     @Override

@@ -19,7 +19,7 @@ public class TestClass {
     public static void main(String[] args) throws NoSuchPaddingException, NoSuchAlgorithmException, IOException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
         StreamEncryptor encryptor = new StreamEncryptorImpl();
         StreamDecryptor decryptor = new StreamDecryptorImpl();
-        InputStream inputStream = new FileInputStream("file.txt");
+        InputStream inputStream = new FileInputStream("file.docx");
         OutputStream outputStream = new FileOutputStream("file.docx.enc");
         Key key = KeyGenerator.getInstance("AES").generateKey();
         encryptor.setKey(key);
