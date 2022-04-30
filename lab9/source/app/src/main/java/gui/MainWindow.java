@@ -126,14 +126,7 @@ public class MainWindow extends JFrame {
     }
 
     private void chooseOutputDirCallback(){
-
-        /*javafx.stage.DirectoryChooser directoryChooser = new javafx.stage.DirectoryChooser();
-        directoryChooser.showDialog(new Stage());
-        FileDialog fileDialog = new FileDialog(this);
-        fileDialog.setVisible(true);
-        System.out.println(fileDialog.getDirectory());*/
         Path newPath = directoryChooser.chooseDirectory(this);
-        //Path newPath = null;
         if(newPath != null){
             outputDirectory = newPath;
             outputDirTextField.setText(outputDirectory.toAbsolutePath().toString());
