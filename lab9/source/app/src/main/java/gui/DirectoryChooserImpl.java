@@ -1,9 +1,11 @@
 package gui;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Arrays;
 
 public class DirectoryChooserImpl implements DirectoryChooser {
     private Path lastChoice;
@@ -17,9 +19,8 @@ public class DirectoryChooserImpl implements DirectoryChooser {
     public Path chooseDirectory(JFrame parent){
         JFileChooser chooser = lastChoice == null ? new JFileChooser() : new JFileChooser("" + lastChoice);
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        chooser.setAcceptAllFileFilterUsed(false);
+        chooser.setCurrentDirectory(new File(String.valueOf(Path.of(""))));
         chooser.showOpenDialog(parent);
-        chooser.setDialogTitle("Select directory.");
         File file = chooser.getSelectedFile();
         lastChoice =  file == null ? null : file.toPath();
         return lastChoice;

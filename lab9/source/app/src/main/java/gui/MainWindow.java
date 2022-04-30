@@ -103,33 +103,37 @@ public class MainWindow extends JFrame {
     }
 
     private void chooseFilesToEncryptCallback(){
-        JFileChooser chooser = new JFileChooser();
-        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        chooser.setMultiSelectionEnabled(true);
-        chooser.setAcceptAllFileFilterUsed(false);
-        chooser.showOpenDialog(this);
-        chooser.setDialogTitle("Select files to encrypt.");
-        File[] files = chooser.getSelectedFiles();
+
+        FileDialog fileDialog = new FileDialog(this);
+        fileDialog.setMultipleMode(true);
+        fileDialog.setVisible(true);
+        File[] files = fileDialog.getFiles();
+
         inputFilesModel.addAll(Arrays.stream(files)
                 .map(File::toPath).
                 collect(Collectors.toList()));
     }
 
     private void chooseKeyFile(){
-        JFileChooser chooser = fileWithKey == null ? new JFileChooser() : new JFileChooser(fileWithKey.getParent().toString());
-        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        chooser.setAcceptAllFileFilterUsed(false);
-        chooser.showOpenDialog(this);
-        chooser.setDialogTitle("Select key.");
-        File file = chooser.getSelectedFile();
-        if(file != null){
-            fileWithKey = file.toPath();
+        FileDialog fileDialog = new FileDialog(this, "Select key.");
+        fileDialog.setVisible(true);
+
+        String file =fileDialog.getFile();
+        if(file != null) {
+            fileWithKey = Path.of(file);
             keyFileTextField.setText("" + fileWithKey);
         }
     }
 
     private void chooseOutputDirCallback(){
+
+        /*javafx.stage.DirectoryChooser directoryChooser = new javafx.stage.DirectoryChooser();
+        directoryChooser.showDialog(new Stage());
+        FileDialog fileDialog = new FileDialog(this);
+        fileDialog.setVisible(true);
+        System.out.println(fileDialog.getDirectory());*/
         Path newPath = directoryChooser.chooseDirectory(this);
+        //Path newPath = null;
         if(newPath != null){
             outputDirectory = newPath;
             outputDirTextField.setText(outputDirectory.toAbsolutePath().toString());

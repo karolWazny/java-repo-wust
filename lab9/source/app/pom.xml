@@ -77,6 +77,24 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jarsigner-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>sign</id>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <keystore>../../javadev.jks</keystore>
+                    <alias>lab9-dev</alias>
+                    <storepass>changeit</storepass>
+                </configuration>
+            </plugin>
         </plugins>
 
     </build>
