@@ -1,5 +1,6 @@
 package gui;
 
+import api.Encryption;
 import api.StreamDecryptor;
 import api.StreamEncryptor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,8 @@ public class MainWindow extends JFrame {
     private JList<Path> inputFiles;
 
     private SecretKey key;
+
+    private final Encryption encryption = Encryption.getInstance();
 
     {
         try {

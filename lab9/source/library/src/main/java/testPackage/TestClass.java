@@ -5,10 +5,7 @@ import api.StreamEncryptor;
 import sampleImplementation.StreamDecryptorImpl;
 import sampleImplementation.StreamEncryptorImpl;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
+import javax.crypto.*;
 import java.io.*;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -21,12 +18,11 @@ public class TestClass {
         StreamDecryptor decryptor = new StreamDecryptorImpl();
         InputStream inputStream = new FileInputStream("file.docx");
         OutputStream outputStream = new FileOutputStream("file.docx.enc");
-        Key key = KeyGenerator.getInstance("AES").generateKey();
+        SecretKey key = KeyGenerator.getInstance("AES").generateKey();
         encryptor.setKey(key);
         encryptor.encrypt(inputStream, outputStream);
         inputStream.close();
         outputStream.close();
-
 
         inputStream = new FileInputStream("file.docx.enc");
         outputStream = new FileOutputStream("decrypted-file.docx");
