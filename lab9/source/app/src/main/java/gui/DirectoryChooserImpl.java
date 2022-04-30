@@ -1,11 +1,9 @@
 package gui;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Arrays;
 
 public class DirectoryChooserImpl implements DirectoryChooser {
     private Path lastChoice;
