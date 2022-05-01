@@ -10,4 +10,5 @@ import java.security.Key;
 public interface StreamDecryptor {
     void decrypt(InputStream inputStream, OutputStream outputStream) throws IOException, InvalidAlgorithmParameterException, InvalidKeyException;
     void setKey(Key key) throws InvalidKeyException;
+    String getAlgorithm();
 }

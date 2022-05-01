@@ -41,4 +41,9 @@ public class StreamDecryptorImpl implements StreamDecryptor {
     public void setKey(Key key) {
         this.key = (SecretKey) key;
     }
+
+    @Override
+    public String getAlgorithm() {
+        return "AES";
+    }
 }

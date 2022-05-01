@@ -9,4 +9,5 @@ import java.security.Key;
 public interface StreamEncryptor {
     void encrypt(InputStream inputStream, OutputStream outputStream) throws InvalidKeyException, IOException;
     void setKey(Key key) throws InvalidKeyException;
+    String getAlgorithm();
 }
