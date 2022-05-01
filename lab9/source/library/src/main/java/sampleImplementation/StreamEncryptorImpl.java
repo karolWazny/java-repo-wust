@@ -46,4 +46,9 @@ public class StreamEncryptorImpl implements StreamEncryptor {
     public String getAlgorithm() {
         return "AES";
     }
+
+    @Override
+    public String toString() {
+        return getAlgorithm();
+    }
 }

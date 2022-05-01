@@ -24,11 +24,11 @@ public abstract class Encryption {
 
     public abstract List<StreamDecryptor> availableStreamDecryptors();
     public abstract List<StreamEncryptor> availableStreamEncryptors();
-    public abstract void setKeystore(Path pathToKeystore, String password) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException;
+    public abstract void setKeystore(Path pathToKeystore, char[] password) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException;
     public abstract Enumeration<String> keysAliases() throws KeyStoreException;
-    public abstract Key retrieveKey(String alias, String keyPass) throws UnrecoverableEntryException, NoSuchAlgorithmException, KeyStoreException;
+    public abstract Key retrieveKey(String alias, char[] keyPass) throws UnrecoverableEntryException, NoSuchAlgorithmException, KeyStoreException;
 
-    public abstract SecretKey retrieveSecretKey(String alias, String keyPass) throws UnrecoverableEntryException,
+    public abstract SecretKey retrieveSecretKey(String alias, char[] keyPass) throws UnrecoverableEntryException,
             NoSuchAlgorithmException, KeyStoreException;
 
     public abstract SecretKey retrieveSecretKey(String alias) throws UnrecoverableEntryException,
@@ -54,11 +54,11 @@ class EncryptionImplementation extends Encryption{
     }
 
     @Override
-    public void setKeystore(Path pathToKeystore, String password) throws KeyStoreException,
+    public void setKeystore(Path pathToKeystore, char[] password) throws KeyStoreException,
             IOException, CertificateException, NoSuchAlgorithmException {
         keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
         FileInputStream inputStream = new FileInputStream(String.valueOf(pathToKeystore));
-        keyStore.load(inputStream, password.toCharArray());
+        keyStore.load(inputStream, password);
     }
 
     @Override
@@ -67,15 +67,15 @@ class EncryptionImplementation extends Encryption{
     }
 
     @Override
-    public Key retrieveKey(String alias, String keyPass) throws UnrecoverableEntryException, NoSuchAlgorithmException, KeyStoreException {
-        return keyStore.getKey(alias, keyPass.toCharArray());
+    public Key retrieveKey(String alias, char[] keyPass) throws UnrecoverableEntryException, NoSuchAlgorithmException, KeyStoreException {
+        return keyStore.getKey(alias, keyPass);
     }
 
     @Override
-    public SecretKey retrieveSecretKey(String alias, String keyPass) throws UnrecoverableEntryException,
+    public SecretKey retrieveSecretKey(String alias, char[] keyPass) throws UnrecoverableEntryException,
             NoSuchAlgorithmException, KeyStoreException {
         KeyStore.ProtectionParameter protectionParam
-                = new KeyStore.PasswordProtection(keyPass.toCharArray());
+                = new KeyStore.PasswordProtection(keyPass);
         KeyStore.SecretKeyEntry secretKeyEnt
                 = (KeyStore.SecretKeyEntry)keyStore.getEntry(alias, protectionParam);
         return secretKeyEnt.getSecretKey();

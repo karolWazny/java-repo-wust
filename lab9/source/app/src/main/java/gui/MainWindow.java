@@ -15,7 +15,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -48,6 +50,7 @@ public class MainWindow extends JFrame {
 
         createFirstPanel();
         createSecondPanel();
+        createThirdPanel();
 
         setLayout(new BoxLayout(this.getContentPane(), BoxLayout.LINE_AXIS));
 
@@ -96,6 +99,20 @@ public class MainWindow extends JFrame {
         changeOutputDirButt.addActionListener(action->chooseOutputDirCallback());
         panel.add(changeOutputDirButt);
 
+        panel.add(new JLabel("Keystore:"));
+        keyFileTextField = new JTextField();
+        keyFileTextField.setEditable(false);
+        panel.add(keyFileTextField);
+        JButton chooseKeyButton = new JButton("Choose keystore");
+        chooseKeyButton.addActionListener(action-> {
+            try {
+                this.chooseKeyStoreCallback();
+            } catch (CertificateException | KeyStoreException | IOException | NoSuchAlgorithmException e) {
+                log.error(e.toString());
+            }
+        });
+        panel.add(chooseKeyButton);
+
         add(panel);
     }
 
@@ -117,14 +134,22 @@ public class MainWindow extends JFrame {
                 collect(Collectors.toList()));
     }
 
-    private void chooseKeyFile(){
-        FileDialog fileDialog = new FileDialog(this, "Select key.");
+    private void chooseKeyStoreCallback() throws CertificateException, KeyStoreException, IOException, NoSuchAlgorithmException {
+        FileDialog fileDialog = new FileDialog(this, "Select keystore");
         fileDialog.setVisible(true);
 
-        String file =fileDialog.getFile();
+        String file = fileDialog.getFile();
+        char[] password;
         if(file != null) {
-            fileWithKey = Path.of(file);
-            keyFileTextField.setText("" + fileWithKey);
+            Path keystoreFile = Path.of(fileDialog.getDirectory() + file);
+            password = PasswordDialog.show();
+            try {
+                encryption.setKeystore(keystoreFile, password);
+                fileWithKey = keystoreFile;
+                keyFileTextField.setText("" + fileWithKey);
+            } finally {
+                Arrays.fill(password, '0');
+            }
         }
     }
 
@@ -138,32 +163,17 @@ public class MainWindow extends JFrame {
 
     private void createSecondPanel(){
         JPanel panel = new JPanel();
+        panel.add(new JLabel("Encrypt files"));
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
-        JComboBox<String> firstComboBox = new JComboBox<>(new String[]{
-                "AES", "RSA"
-        });
+        JComboBox<StreamEncryptor> firstComboBox = new JComboBox<>(encryption.availableStreamEncryptors()
+                .toArray(new StreamEncryptor[0]));
 
         panel.add(firstComboBox);
 
-        panel.add(new JLabel("File with key:"));
-        keyFileTextField = new JTextField();
-        keyFileTextField.setEditable(false);
-        panel.add(keyFileTextField);
-        JButton chooseKeyButton = new JButton("Choose key");
-        chooseKeyButton.addActionListener(action->this.chooseKeyFile());
-
-        JPanel buttons = new JPanel();
-        buttons.add(chooseKeyButton);
         JButton encryptButton = new JButton("Encrypt");
         encryptButton.addActionListener(action->encryptFilesCallback());
-        buttons.add(encryptButton);
-        JButton decryptButton = new JButton("Decrypt");
-        decryptButton.addActionListener(action->decryptFilesCallback());
-        buttons.add(decryptButton);
-        buttons.setLayout(new BoxLayout(buttons, BoxLayout.LINE_AXIS));
-
-        panel.add(buttons);
+        panel.add(encryptButton);
 
         add(panel);
     }
@@ -222,13 +232,16 @@ public class MainWindow extends JFrame {
 
     private void createThirdPanel(){
         JPanel panel = new JPanel();
+        panel.add(new JLabel("Decrypt files"));
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
-        JPanel buttons = new JPanel();
-        buttons.add(new JButton("Prev"));
-        buttons.add(new JButton("Next"));
-        buttons.setLayout(new BoxLayout(buttons, BoxLayout.LINE_AXIS));
-        panel.add(buttons);
+        JComboBox<StreamDecryptor> firstComboBox = new JComboBox<>(encryption.availableStreamDecryptors()
+                .toArray(new StreamDecryptor[0]));
+
+        panel.add(firstComboBox);
+        JButton decryptButton = new JButton("Decrypt");
+        decryptButton.addActionListener(action->decryptFilesCallback());
+        panel.add(decryptButton);
 
         add(panel);
     }

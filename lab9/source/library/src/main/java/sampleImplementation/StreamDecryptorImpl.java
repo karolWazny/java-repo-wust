@@ -46,4 +46,9 @@ public class StreamDecryptorImpl implements StreamDecryptor {
     public String getAlgorithm() {
         return "AES";
     }
+
+    @Override
+    public String toString() {
+        return getAlgorithm();
+    }
 }
