@@ -1,0 +1,36 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="pl/pwr/java/lab8/soap"
+           targetNamespace="pl/pwr/java/lab8/soap">
+
+    <xs:element name="getCountryRequest2">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="name" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getCountryResponse2">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="country" type="tns:country2"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="country2">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="population" type="xs:int"/>
+            <xs:element name="capital" type="xs:string"/>
+            <xs:element name="currency" type="tns:currency2"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="currency2">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="GBP"/>
+            <xs:enumeration value="EUR"/>
+            <xs:enumeration value="PLN"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>
