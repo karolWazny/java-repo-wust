@@ -85,7 +85,7 @@ class EncryptionImplementation extends Encryption{
     public SecretKey retrieveSecretKey(String alias) throws UnrecoverableEntryException,
             NoSuchAlgorithmException, KeyStoreException {
         KeyStore.ProtectionParameter protectionParam
-                = new KeyStore.PasswordProtection(null);
+                = new KeyStore.PasswordProtection("".toCharArray());
         KeyStore.SecretKeyEntry secretKeyEnt
                 = (KeyStore.SecretKeyEntry)keyStore.getEntry(alias, protectionParam);
         return secretKeyEnt.getSecretKey();

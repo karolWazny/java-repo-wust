@@ -4,8 +4,6 @@ import api.Encryption;
 import api.StreamDecryptor;
 import api.StreamEncryptor;
 import lombok.extern.slf4j.Slf4j;
-import sampleImplementation.StreamDecryptorImpl;
-import sampleImplementation.StreamEncryptorImpl;
 
 import javax.crypto.*;
 import javax.swing.*;
@@ -13,12 +11,10 @@ import java.awt.*;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
+import java.security.*;
 import java.security.cert.CertificateException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -32,9 +28,14 @@ public class MainWindow extends JFrame {
     private DefaultListModel<Path> inputFilesModel;
     private JList<Path> inputFiles;
 
+    private DefaultComboBoxModel<String> aliasesEncryptModel = new DefaultComboBoxModel<>();
+    private DefaultComboBoxModel<String> aliasesDecryptModel = new DefaultComboBoxModel<>();
+
     private SecretKey key;
 
     private final Encryption encryption = Encryption.getInstance();
+    private JComboBox<StreamEncryptor> encryptorComboBox;
+    private JComboBox<StreamDecryptor> decryptorJComboBox;
 
     {
         try {
@@ -147,6 +148,10 @@ public class MainWindow extends JFrame {
                 encryption.setKeystore(keystoreFile, password);
                 fileWithKey = keystoreFile;
                 keyFileTextField.setText("" + fileWithKey);
+                aliasesDecryptModel.removeAllElements();
+                aliasesDecryptModel.addAll(Collections.list(encryption.keysAliases()));
+                aliasesEncryptModel.removeAllElements();
+                aliasesEncryptModel.addAll(Collections.list(encryption.keysAliases()));
             } finally {
                 Arrays.fill(password, '0');
             }
@@ -166,10 +171,13 @@ public class MainWindow extends JFrame {
         panel.add(new JLabel("Encrypt files"));
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
-        JComboBox<StreamEncryptor> firstComboBox = new JComboBox<>(encryption.availableStreamEncryptors()
+        encryptorComboBox = new JComboBox<>(encryption.availableStreamEncryptors()
                 .toArray(new StreamEncryptor[0]));
 
-        panel.add(firstComboBox);
+        panel.add(encryptorComboBox);
+
+        JComboBox<String> aliasesBoxEncrypt = new JComboBox<>(aliasesEncryptModel);
+        panel.add(aliasesBoxEncrypt);
 
         JButton encryptButton = new JButton("Encrypt");
         encryptButton.addActionListener(action->encryptFilesCallback());
@@ -179,52 +187,73 @@ public class MainWindow extends JFrame {
     }
 
     private void encryptFilesCallback() {
-        log.info("Encrypting chosen files...");
+        log.info("Encrypting files...");
+        log.info("Chosen algorithm: " + encryptorComboBox.getSelectedItem());
 
-        for(int i = 0; i < inputFilesModel.getSize(); i++){
-            Path path = inputFilesModel.get(i);
-            String filename = path.getFileName().toString() + ".enc";
-            Path outputFile = outputDirectory.resolve(filename);
+        StreamEncryptor encryptor = (StreamEncryptor) encryptorComboBox.getSelectedItem();
+        String keyAlias = (String) aliasesEncryptModel.getSelectedItem();
+        SecretKey key;
 
+        try {
             try {
+                key = encryption.retrieveSecretKey(keyAlias);
+            } catch (UnrecoverableEntryException ignored) {
+                key = encryption.retrieveSecretKey(keyAlias, PasswordDialog.show());
+            }
+
+            encryptor.setKey(key);
+
+            for(Path path : inputFiles.getSelectedValuesList()) {
+                String filename = path.getFileName().toString() + ".enc";
+                Path outputFile = outputDirectory.resolve(filename);
                 InputStream inputStream = new FileInputStream(String.valueOf(path));
                 OutputStream outputStream = new FileOutputStream(String.valueOf(outputFile));
-                StreamEncryptor encryptor = new StreamEncryptorImpl();
-                encryptor.setKey(key);
+
                 encryptor.encrypt(inputStream, outputStream);
                 inputStream.close();
                 outputStream.close();
-            } catch (IOException | InvalidKeyException e) {
-                e.printStackTrace();
+
+                log.info("Encrypted file: " + outputFile);
             }
 
+            log.info("Encrypted chosen files.");
+        } catch (IOException | InvalidKeyException | KeyStoreException | NoSuchAlgorithmException | UnrecoverableEntryException e) {
+            log.info(e.toString());
+            e.printStackTrace();
         }
-
-        log.info("Encrypted chosen files.");
     }
 
     private void decryptFilesCallback(){
-        log.info("Decrypting chosen files...");
+        log.info("Decrypting files...");
+        log.info("Chosen algorithm: " + decryptorJComboBox.getSelectedItem());
 
-        for(int i = 0; i < inputFilesModel.getSize(); i++){
-            Path path = inputFilesModel.get(i);
-            String filename = path.getFileName().toString();
-            filename = filename.replaceAll("\\.enc\\z", "");
+        StreamDecryptor decryptor = (StreamDecryptor) decryptorJComboBox.getSelectedItem();
+        String keyAlias = (String) aliasesDecryptModel.getSelectedItem();
+        SecretKey key;
 
-            Path outputFile = outputDirectory.resolve(filename);
-
+        try {
             try {
+                key = encryption.retrieveSecretKey(keyAlias);
+            } catch (UnrecoverableEntryException ignored) {
+                key = encryption.retrieveSecretKey(keyAlias, PasswordDialog.show());
+            }
+            decryptor.setKey(key);
+
+            for(Path path : inputFiles.getSelectedValuesList()) {
+                String filename = path.getFileName().toString();
+                filename = filename.replaceAll("\\.enc\\z", "");
+
+                Path outputFile = outputDirectory.resolve(filename);
                 InputStream inputStream = new FileInputStream(String.valueOf(path));
                 OutputStream outputStream = new FileOutputStream(String.valueOf(outputFile));
-                StreamDecryptor encryptor = new StreamDecryptorImpl();
-                encryptor.setKey(key);
-                encryptor.decrypt(inputStream, outputStream);
+
+                decryptor.decrypt(inputStream, outputStream);
                 inputStream.close();
                 outputStream.close();
-            } catch (InvalidKeyException| IOException| InvalidAlgorithmParameterException e) {
-                e.printStackTrace();
+                log.info("Decrypted file: " + outputFile);
             }
-
+        } catch (InvalidKeyException | IOException | InvalidAlgorithmParameterException | KeyStoreException | NoSuchAlgorithmException | UnrecoverableEntryException e) {
+            e.printStackTrace();
         }
 
         log.info("Decrypted chosen files.");
@@ -235,10 +264,14 @@ public class MainWindow extends JFrame {
         panel.add(new JLabel("Decrypt files"));
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
-        JComboBox<StreamDecryptor> firstComboBox = new JComboBox<>(encryption.availableStreamDecryptors()
+        decryptorJComboBox = new JComboBox<>(encryption.availableStreamDecryptors()
                 .toArray(new StreamDecryptor[0]));
 
-        panel.add(firstComboBox);
+        panel.add(decryptorJComboBox);
+
+        JComboBox<String> aliasesBoxDecrypt = new JComboBox<>(aliasesDecryptModel);
+        panel.add(aliasesBoxDecrypt);
+
         JButton decryptButton = new JButton("Decrypt");
         decryptButton.addActionListener(action->decryptFilesCallback());
         panel.add(decryptButton);
