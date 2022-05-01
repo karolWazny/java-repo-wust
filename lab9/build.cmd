@@ -1,6 +1,6 @@
 @echo off
 set app_version=1.0-SNAPSHOT
-set lib_version=1.0-SNAPSHOT
+set lib_version=1.1-SNAPSHOT
 
 call mvn clean -f source
 call mvn package -f source

@@ -31,19 +31,9 @@ public class MainWindow extends JFrame {
     private DefaultComboBoxModel<String> aliasesEncryptModel = new DefaultComboBoxModel<>();
     private DefaultComboBoxModel<String> aliasesDecryptModel = new DefaultComboBoxModel<>();
 
-    private SecretKey key;
-
     private final Encryption encryption = Encryption.getInstance();
     private JComboBox<StreamEncryptor> encryptorComboBox;
     private JComboBox<StreamDecryptor> decryptorJComboBox;
-
-    {
-        try {
-            key = KeyGenerator.getInstance("AES").generateKey();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-    }
 
     public MainWindow() {
         super();

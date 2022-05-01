@@ -1,4 +1,4 @@
-package sampleImplementation;
+package aes;
 
 import api.StreamDecryptor;
 
@@ -10,12 +10,12 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 
-public class StreamDecryptorImpl implements StreamDecryptor {
+public class AESStreamDecryptor implements StreamDecryptor {
     private static final String transformation = "AES/CBC/PKCS5Padding";
     private SecretKey key;
     private final Cipher cipher;
 
-    public StreamDecryptorImpl() {
+    public AESStreamDecryptor() {
         try {
             cipher = Cipher.getInstance(transformation);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {

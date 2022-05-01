@@ -1,7 +1,9 @@
 package api;
 
-import sampleImplementation.StreamDecryptorImpl;
-import sampleImplementation.StreamEncryptorImpl;
+import aes.AESStreamDecryptor;
+import aes.AESStreamEncryptor;
+import rsa.RSAStreamDecryptor;
+import rsa.RSAStreamEncryptor;
 
 import javax.crypto.SecretKey;
 import java.io.FileInputStream;
@@ -38,19 +40,27 @@ public abstract class Encryption {
 }
 
 class EncryptionImplementation extends Encryption{
+    private final List<StreamEncryptor> streamEncryptors = new LinkedList<>();
     private KeyStore keyStore;
+    private List<StreamDecryptor> streamDecryptors = new LinkedList<>();
+
+    public EncryptionImplementation() {
+        streamDecryptors.add(new AESStreamDecryptor());
+        streamDecryptors.add(new RSAStreamDecryptor());
+
+        streamEncryptors.add(new AESStreamEncryptor());
+        streamEncryptors.add(new RSAStreamEncryptor());
+    }
+
     @Override
     public List<StreamDecryptor> availableStreamDecryptors() {
-        List<StreamDecryptor> output =  new LinkedList<>();
-        output.add(new StreamDecryptorImpl());
-        return output;
+        streamDecryptors.add(new AESStreamDecryptor());
+        return streamDecryptors;
     }
 
     @Override
     public List<StreamEncryptor> availableStreamEncryptors() {
-        List<StreamEncryptor> output =  new LinkedList<>();
-        output.add(new StreamEncryptorImpl());
-        return output;
+        return streamEncryptors;
     }
 
     @Override
