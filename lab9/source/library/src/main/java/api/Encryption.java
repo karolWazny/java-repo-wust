@@ -28,15 +28,8 @@ public abstract class Encryption {
     public abstract List<StreamEncryptor> availableStreamEncryptors();
     public abstract void setKeystore(Path pathToKeystore, char[] password) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException;
     public abstract Enumeration<String> keysAliases() throws KeyStoreException;
-    public abstract Key retrieveKey(String alias, char[] keyPass) throws UnrecoverableEntryException, NoSuchAlgorithmException, KeyStoreException;
 
-    public abstract SecretKey retrieveSecretKey(String alias, char[] keyPass) throws UnrecoverableEntryException,
-            NoSuchAlgorithmException, KeyStoreException;
-
-    public abstract SecretKey retrieveSecretKey(String alias) throws UnrecoverableEntryException,
-            NoSuchAlgorithmException, KeyStoreException;
-
-    public abstract Key retrieveKey(String alias) throws UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException;
+    public abstract <T> T retrieveKey(String alias, char[] keyPass, Class<T> keyType) throws UnrecoverableEntryException, NoSuchAlgorithmException, KeyStoreException;
 }
 
 class EncryptionImplementation extends Encryption{
@@ -54,7 +47,6 @@ class EncryptionImplementation extends Encryption{
 
     @Override
     public List<StreamDecryptor> availableStreamDecryptors() {
-        streamDecryptors.add(new AESStreamDecryptor());
         return streamDecryptors;
     }
 
@@ -77,34 +69,45 @@ class EncryptionImplementation extends Encryption{
     }
 
     @Override
-    public Key retrieveKey(String alias, char[] keyPass) throws UnrecoverableEntryException, NoSuchAlgorithmException, KeyStoreException {
+    public <T> T retrieveKey(String alias, char[] keyPass, Class<T> keyType)
+            throws UnrecoverableEntryException, NoSuchAlgorithmException, KeyStoreException {
+        switch(keyType.getName()){
+            case "javax.crypto.SecretKey":
+                return (T) retrieveSecretKey(alias, keyPass);
+            case "java.security.PrivateKey":
+                return (T) retrievePrivateKey(alias, keyPass);
+            case "java.security.PublicKey":
+                return (T) retrievePublicKey(alias);
+            case "java.security.Key":
+                return (T) retrieveKey(alias, keyPass);
+            default:
+                throw new RuntimeException("Unknown key type!");
+        }
+    }
+
+    private PublicKey retrievePublicKey(String alias) throws KeyStoreException {
+        return keyStore.getCertificate(alias).getPublicKey();
+    }
+
+    private PrivateKey retrievePrivateKey(String alias, char[] keyPass)
+            throws UnrecoverableEntryException, NoSuchAlgorithmException, KeyStoreException {
+        KeyStore.ProtectionParameter protectionParam
+                = new KeyStore.PasswordProtection(keyPass);
+        KeyStore.PrivateKeyEntry secretKeyEnt
+                = (KeyStore.PrivateKeyEntry)keyStore.getEntry(alias, protectionParam);
+        return secretKeyEnt.getPrivateKey();
+    }
+
+    private Key retrieveKey(String alias, char[] keyPass) throws UnrecoverableEntryException, NoSuchAlgorithmException, KeyStoreException {
         return keyStore.getKey(alias, keyPass);
     }
 
-    @Override
-    public SecretKey retrieveSecretKey(String alias, char[] keyPass) throws UnrecoverableEntryException,
+    private SecretKey retrieveSecretKey(String alias, char[] keyPass) throws UnrecoverableEntryException,
             NoSuchAlgorithmException, KeyStoreException {
         KeyStore.ProtectionParameter protectionParam
                 = new KeyStore.PasswordProtection(keyPass);
         KeyStore.SecretKeyEntry secretKeyEnt
                 = (KeyStore.SecretKeyEntry)keyStore.getEntry(alias, protectionParam);
         return secretKeyEnt.getSecretKey();
-    }
-
-    @Override
-    public SecretKey retrieveSecretKey(String alias) throws UnrecoverableEntryException,
-            NoSuchAlgorithmException, KeyStoreException {
-        KeyStore.ProtectionParameter protectionParam
-                = new KeyStore.PasswordProtection("".toCharArray());
-        KeyStore.SecretKeyEntry secretKeyEnt
-                = (KeyStore.SecretKeyEntry)keyStore.getEntry(alias, protectionParam);
-        return secretKeyEnt.getSecretKey();
-    }
-
-    @Override
-    public Key retrieveKey(String alias) throws UnrecoverableKeyException,
-            KeyStoreException,
-            NoSuchAlgorithmException {
-        return keyStore.getKey(alias, null);
     }
 }

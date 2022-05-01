@@ -5,7 +5,6 @@ import api.StreamDecryptor;
 import api.StreamEncryptor;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.crypto.*;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
@@ -182,33 +181,30 @@ public class MainWindow extends JFrame {
 
         StreamEncryptor encryptor = (StreamEncryptor) encryptorComboBox.getSelectedItem();
         String keyAlias = (String) aliasesEncryptModel.getSelectedItem();
-        SecretKey key;
+        Key key;
 
         try {
-            try {
-                key = encryption.retrieveSecretKey(keyAlias);
-            } catch (UnrecoverableEntryException ignored) {
-                key = encryption.retrieveSecretKey(keyAlias, PasswordDialog.show());
-            }
-
+            key = encryption.retrieveKey(keyAlias, PasswordDialog.show(), encryptor.keyType());
             encryptor.setKey(key);
+            key = null;
 
             for(Path path : inputFiles.getSelectedValuesList()) {
                 String filename = path.getFileName().toString() + ".enc";
                 Path outputFile = outputDirectory.resolve(filename);
-                InputStream inputStream = new FileInputStream(String.valueOf(path));
-                OutputStream outputStream = new FileOutputStream(String.valueOf(outputFile));
 
-                encryptor.encrypt(inputStream, outputStream);
-                inputStream.close();
-                outputStream.close();
+                try (InputStream inputStream = new FileInputStream(String.valueOf(path));
+                     OutputStream outputStream = new FileOutputStream(String.valueOf(outputFile))) {
+                    encryptor.encrypt(inputStream, outputStream);
+                }
 
                 log.info("Encrypted file: " + outputFile);
             }
 
             log.info("Encrypted chosen files.");
-        } catch (IOException | InvalidKeyException | KeyStoreException | NoSuchAlgorithmException | UnrecoverableEntryException e) {
+        } catch (IOException | InvalidKeyException e) {
             log.info(e.toString());
+            e.printStackTrace();
+        } catch (UnrecoverableEntryException | NoSuchAlgorithmException | KeyStoreException e) {
             e.printStackTrace();
         }
     }
@@ -219,30 +215,26 @@ public class MainWindow extends JFrame {
 
         StreamDecryptor decryptor = (StreamDecryptor) decryptorJComboBox.getSelectedItem();
         String keyAlias = (String) aliasesDecryptModel.getSelectedItem();
-        SecretKey key;
+        Key key;
 
         try {
-            try {
-                key = encryption.retrieveSecretKey(keyAlias);
-            } catch (UnrecoverableEntryException ignored) {
-                key = encryption.retrieveSecretKey(keyAlias, PasswordDialog.show());
-            }
+            key = encryption.retrieveKey(keyAlias, PasswordDialog.show(), decryptor.keyType());
             decryptor.setKey(key);
+            key = null;
 
             for(Path path : inputFiles.getSelectedValuesList()) {
                 String filename = path.getFileName().toString();
                 filename = filename.replaceAll("\\.enc\\z", "");
 
                 Path outputFile = outputDirectory.resolve(filename);
-                InputStream inputStream = new FileInputStream(String.valueOf(path));
-                OutputStream outputStream = new FileOutputStream(String.valueOf(outputFile));
 
-                decryptor.decrypt(inputStream, outputStream);
-                inputStream.close();
-                outputStream.close();
+                try (InputStream inputStream = new FileInputStream(String.valueOf(path));
+                     OutputStream outputStream = new FileOutputStream(String.valueOf(outputFile))) {
+                    decryptor.decrypt(inputStream, outputStream);
+                }
                 log.info("Decrypted file: " + outputFile);
             }
-        } catch (InvalidKeyException | IOException | InvalidAlgorithmParameterException | KeyStoreException | NoSuchAlgorithmException | UnrecoverableEntryException e) {
+        } catch (InvalidKeyException | IOException | InvalidAlgorithmParameterException | UnrecoverableEntryException | NoSuchAlgorithmException | KeyStoreException e) {
             e.printStackTrace();
         }
 

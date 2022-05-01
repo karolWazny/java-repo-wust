@@ -3,18 +3,15 @@ package rsa;
 import api.StreamDecryptor;
 
 import javax.crypto.*;
-import javax.crypto.spec.IvParameterSpec;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
+import java.security.*;
 
 public class RSAStreamDecryptor implements StreamDecryptor {
     private final Cipher cipher;
     private static final String transformation = "RSA/ECB/PKCS1Padding";
+    private static final Class<PrivateKey> keyType = PrivateKey.class;
 
     public RSAStreamDecryptor() {
         try {
@@ -30,7 +27,6 @@ public class RSAStreamDecryptor implements StreamDecryptor {
         for (int readBytes = inputStream.read(buffer); readBytes > -1; readBytes = inputStream.read(buffer)) {
             try {
                 byte[] processed = cipher.doFinal(buffer);
-                System.out.println("" + processed.length);
                 outputStream.write(processed, 0, processed.length);
             } catch (IllegalBlockSizeException | BadPaddingException e) {
                 e.printStackTrace();
@@ -42,6 +38,11 @@ public class RSAStreamDecryptor implements StreamDecryptor {
     @Override
     public void setKey(Key key) throws InvalidKeyException {
         cipher.init(Cipher.DECRYPT_MODE, key);
+    }
+
+    @Override
+    public Class<? extends Key> keyType() {
+        return keyType;
     }
 
     @Override

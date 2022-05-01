@@ -28,5 +28,7 @@ public class TestClass {
         outputStream = new FileOutputStream("decrypted-file.docx");
         decryptor.setKey(keyPair.getPrivate());
         decryptor.decrypt(inputStream, outputStream);
+
+        System.out.println(SecretKey.class.getName());
     }
 }

@@ -6,8 +6,6 @@ import java.io.OutputStream;
 import java.security.InvalidKeyException;
 import java.security.Key;
 
-public interface StreamEncryptor {
+public interface StreamEncryptor extends CryptographicDevice {
     void encrypt(InputStream inputStream, OutputStream outputStream) throws InvalidKeyException, IOException;
-    void setKey(Key key) throws InvalidKeyException;
-    String getAlgorithm();
 }

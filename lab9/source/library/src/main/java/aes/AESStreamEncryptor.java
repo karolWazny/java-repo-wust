@@ -14,6 +14,7 @@ public class AESStreamEncryptor implements StreamEncryptor {
     private static final String transformation = "AES/CBC/PKCS5Padding";
     private SecretKey key;
     private final Cipher cipher;
+    private final static Class<SecretKey> keyType = SecretKey.class;
 
     public AESStreamEncryptor(){
         try {
@@ -40,6 +41,11 @@ public class AESStreamEncryptor implements StreamEncryptor {
     @Override
     public void setKey(Key key) {
         this.key = (SecretKey) key;
+    }
+
+    @Override
+    public Class<? extends Key> keyType() {
+        return keyType;
     }
 
     @Override

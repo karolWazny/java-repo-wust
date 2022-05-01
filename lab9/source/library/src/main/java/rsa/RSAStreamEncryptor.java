@@ -9,10 +9,12 @@ import java.io.OutputStream;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
 
 public class RSAStreamEncryptor implements StreamEncryptor {
     private final Cipher cipher;
     private static final String transformation = "RSA/ECB/PKCS1Padding";
+    private static final Class<PublicKey> keyType = PublicKey.class;
 
     public RSAStreamEncryptor() {
         try {
@@ -41,10 +43,11 @@ public class RSAStreamEncryptor implements StreamEncryptor {
     @Override
     public void setKey(Key key) throws InvalidKeyException {
         cipher.init(Cipher.ENCRYPT_MODE, key);
-        System.out.println(cipher.getAlgorithm());
-        System.out.println("" + cipher.getBlockSize());
-        System.out.println(cipher.getParameters());
-        //System.out.println(cipher.getAlgorithm());
+    }
+
+    @Override
+    public Class<? extends Key> keyType() {
+        return keyType;
     }
 
     @Override

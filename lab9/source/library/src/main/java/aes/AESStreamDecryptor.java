@@ -5,15 +5,13 @@ import api.StreamDecryptor;
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
 import java.io.*;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
+import java.security.*;
 
 public class AESStreamDecryptor implements StreamDecryptor {
     private static final String transformation = "AES/CBC/PKCS5Padding";
     private SecretKey key;
     private final Cipher cipher;
+    private final static Class<SecretKey> keyType = SecretKey.class;
 
     public AESStreamDecryptor() {
         try {
@@ -40,6 +38,11 @@ public class AESStreamDecryptor implements StreamDecryptor {
     @Override
     public void setKey(Key key) {
         this.key = (SecretKey) key;
+    }
+
+    @Override
+    public Class<? extends Key> keyType() {
+        return keyType;
     }
 
     @Override
