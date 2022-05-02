@@ -2,7 +2,7 @@ package pl.edu.pwr.java.lab8.model.mapper.soap;
 
 import pl.edu.pwr.java.lab8.model.entity.Event;
 import pl.edu.pwr.java.lab8.model.entity.Person;
-import pl.pwr.java.lab8.soap.payments.Payment;
+import pl.pwr.java.lab8.soap.Payment;
 
 public class PaymentMapper {
     public static Payment map(pl.edu.pwr.java.lab8.model.entity.Payment payment){

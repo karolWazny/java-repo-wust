@@ -8,7 +8,7 @@ import pl.edu.pwr.java.lab8.model.entity.Installment;
 @Component
 @RequiredArgsConstructor
 public class InstallmentMapper {
-    public static Installment map(pl.pwr.java.lab8.soap.installments.Installment installment){
+    public static Installment map(pl.pwr.java.lab8.soap.Installment installment){
         Installment output = new Installment();
         output.setId(installment.getId());
         output.setInstallmentNumber(installment.getInstallmentNumber());
@@ -20,8 +20,8 @@ public class InstallmentMapper {
         return output;
     }
 
-    public static pl.pwr.java.lab8.soap.installments.Installment map(Installment installment){
-        pl.pwr.java.lab8.soap.installments.Installment output = new pl.pwr.java.lab8.soap.installments.Installment();
+    public static pl.pwr.java.lab8.soap.Installment map(Installment installment){
+        pl.pwr.java.lab8.soap.Installment output = new pl.pwr.java.lab8.soap.Installment();
         output.setAmount(installment.getAmount());
         output.setId(installment.getId());
         output.setInstallmentNumber(installment.getInstallmentNumber());

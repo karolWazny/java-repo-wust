@@ -8,14 +8,14 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 import pl.edu.pwr.java.lab8.model.entity.Event;
 import pl.edu.pwr.java.lab8.model.mapper.soap.EventMapper;
 import pl.edu.pwr.java.lab8.service.EventService;
-import pl.pwr.java.lab8.soap.events.*;
+import pl.pwr.java.lab8.soap.*;
 
 import java.util.stream.Collectors;
 
 @Endpoint
 @RequiredArgsConstructor
 public class EventsEndpoint {
-    public final static String NAMESPACE_URI = "pl/pwr/java/lab8/soap/events";
+    public final static String NAMESPACE_URI = "pl/pwr/java/lab8/soap";
 
     private final EventService eventService;
 

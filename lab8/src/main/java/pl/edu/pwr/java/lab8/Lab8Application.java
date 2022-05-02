@@ -16,6 +16,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/*
+* WSDL: http://localhost:9123/soap/soap.wsdl
+*/
+
 @Slf4j
 @SpringBootApplication
 @EnableScheduling

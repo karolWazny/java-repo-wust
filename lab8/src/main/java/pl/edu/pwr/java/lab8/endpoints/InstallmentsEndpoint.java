@@ -7,14 +7,14 @@ import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 import pl.edu.pwr.java.lab8.model.mapper.soap.InstallmentMapper;
 import pl.edu.pwr.java.lab8.service.InstallmentService;
-import pl.pwr.java.lab8.soap.installments.*;
+import pl.pwr.java.lab8.soap.*;
 
 import java.util.stream.Collectors;
 
 @Endpoint
 @RequiredArgsConstructor
 public class InstallmentsEndpoint {
-    public final static String NAMESPACE_URI = "pl/pwr/java/lab8/soap/installments";
+    public final static String NAMESPACE_URI = "pl/pwr/java/lab8/soap";
 
     private final InstallmentService installmentService;
 

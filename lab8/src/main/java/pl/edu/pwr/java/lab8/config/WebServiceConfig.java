@@ -24,17 +24,17 @@ public class WebServiceConfig {
     }
 
     @Bean(name = "soap")
-    public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema eventsSchema) {
+    public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema soapSchema) {
         DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
         wsdl11Definition.setPortTypeName("SoapPort");
         wsdl11Definition.setLocationUri("/soap");
         wsdl11Definition.setTargetNamespace(EventsEndpoint.NAMESPACE_URI);
-        wsdl11Definition.setSchema(eventsSchema);
+        wsdl11Definition.setSchema(soapSchema);
         return wsdl11Definition;
     }
 
     @Bean
-    public XsdSchema eventsSchema() {
-        return new SimpleXsdSchema(new ClassPathResource("events.xsd"));
+    public XsdSchema soapSchema() {
+        return new SimpleXsdSchema(new ClassPathResource("soap.xsd"));
     }
 }

@@ -91,10 +91,7 @@
                 </executions>
                 <configuration>
                     <sources>
-                        <source>${project.basedir}/src/main/resources/events.xsd</source>
-                        <source>${project.basedir}/src/main/resources/installments.xsd</source>
-                        <source>${project.basedir}/src/main/resources/payments.xsd</source>
-                        <source>${project.basedir}/src/main/resources/people.xsd</source>
+                        <source>${project.basedir}/src/main/resources/soap.xsd</source>
                     </sources>
                 </configuration>
             </plugin>

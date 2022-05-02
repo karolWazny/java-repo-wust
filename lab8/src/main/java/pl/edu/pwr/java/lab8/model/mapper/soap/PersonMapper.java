@@ -1,6 +1,6 @@
 package pl.edu.pwr.java.lab8.model.mapper.soap;
 
-import pl.pwr.java.lab8.soap.people.Person;
+import pl.pwr.java.lab8.soap.Person;
 
 public class PersonMapper {
     public static Person map(pl.edu.pwr.java.lab8.model.entity.Person person){
