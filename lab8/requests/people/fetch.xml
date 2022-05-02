@@ -1,0 +1,9 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:gs="pl/pwr/java/lab8/soap/people">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <gs:fetchPeopleRequest>
+            <page>0</page>
+        </gs:fetchPeopleRequest>
+    </soapenv:Body>
+</soapenv:Envelope>

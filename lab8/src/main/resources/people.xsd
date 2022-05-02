@@ -19,7 +19,7 @@
     <xs:element name="fetchPeopleResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="person" type="tns:person" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="people" type="tns:person" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -27,7 +27,15 @@
     <xs:element name="createPersonRequest">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="event" type="tns:person"/>
+                <xs:element name="person" type="tns:person"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="createPersonResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="person" type="tns:person"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
