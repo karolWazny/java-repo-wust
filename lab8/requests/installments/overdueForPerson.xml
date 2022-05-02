@@ -1,0 +1,9 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:gs="pl/pwr/java/lab8/soap/installments">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <gs:fetchOverdueInstallmentsForPersonRequest>
+            <personId>0</personId>
+        </gs:fetchOverdueInstallmentsForPersonRequest>
+    </soapenv:Body>
+</soapenv:Envelope>

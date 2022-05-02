@@ -6,7 +6,7 @@ import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 import pl.edu.pwr.java.lab8.model.entity.Event;
-import pl.edu.pwr.java.lab8.model.mapper.EventMapper;
+import pl.edu.pwr.java.lab8.model.mapper.soap.EventMapper;
 import pl.edu.pwr.java.lab8.service.EventService;
 import pl.pwr.java.lab8.soap.events.*;
 
@@ -57,7 +57,6 @@ public class EventEndpoint {
     public CreateEventResponse fetchEvents(@RequestPayload CreateEventRequest request) {
         CreateEventResponse response = new CreateEventResponse();
         Event event = EventMapper.map(request.getEvent());
-        event.setId(null);
         event = eventService.createEvent(event);
         response.setEvent(EventMapper.map(event));
         return response;

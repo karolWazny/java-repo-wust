@@ -19,11 +19,12 @@ public class InstallmentServiceImpl implements InstallmentService {
     private final InstallmentRepository installmentRepository;
 
     @Override
-    public void createInstallment(Installment installment) {
+    public Installment createInstallment(Installment installment) {
         Integer installmentNumber = installmentRepository.countAllByEventId(installment.getEvent().getId()) + 1;
         log.info("number of installments for this event: " + (installmentNumber - 1));
+        installment.setId(null);
         installment.setInstallmentNumber(installmentNumber);
-        installmentRepository.save(installment);
+        return installmentRepository.save(installment);
     }
 
     @Override
