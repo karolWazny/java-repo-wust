@@ -26,7 +26,7 @@
     <xs:element name="fetchEventsResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="event" type="tns:event" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="events" type="tns:event" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

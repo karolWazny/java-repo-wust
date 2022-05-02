@@ -30,7 +30,7 @@ public class Lab8Application {
     }
 
     @Scheduled(cron = "${cron.expression}")
-    @Scheduled(initialDelay = 1000 * 2, fixedDelay=Long.MAX_VALUE)
+    //@Scheduled(initialDelay = 1000 * 2, fixedDelay=Long.MAX_VALUE)
     private void checkPendingAndOverdue(){
         log.info("Checking pending installments...");
         checkPendingInstallments();
