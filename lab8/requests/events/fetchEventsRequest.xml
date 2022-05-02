@@ -1,0 +1,9 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+				  xmlns:gs="pl/pwr/java/lab8/soap">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <gs:fetchEventsRequest>
+         <gs:page>0</gs:page>
+      </gs:fetchEventsRequest>
+   </soapenv:Body>
+</soapenv:Envelope>
