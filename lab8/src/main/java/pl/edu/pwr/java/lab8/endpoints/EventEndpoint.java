@@ -5,15 +5,11 @@ import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
+import pl.edu.pwr.java.lab8.model.entity.Event;
+import pl.edu.pwr.java.lab8.model.mapper.EventMapper;
 import pl.edu.pwr.java.lab8.service.EventService;
-import pl.pwr.java.lab8.soap.events.Event;
-import pl.pwr.java.lab8.soap.events.FetchEventsRequest;
-import pl.pwr.java.lab8.soap.events.FetchEventsResponse;
+import pl.pwr.java.lab8.soap.events.*;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-import java.util.GregorianCalendar;
 import java.util.stream.Collectors;
 
 @Endpoint
@@ -29,22 +25,41 @@ public class EventEndpoint {
         FetchEventsResponse response = new FetchEventsResponse();
         response.getEvents().addAll(eventService.fetchEvents(request.getPage())
                 .stream()
-                .map(event -> {
-                    Event output = new Event();
-                    output.setId(event.getId());
-                    GregorianCalendar c = new GregorianCalendar();
-                    c.setTime(event.getDate());
-                    try {
-                        XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
-                        output.setDate(xmlDate);
-                    } catch (DatatypeConfigurationException e) {
-                        e.printStackTrace();
-                    }
-                    output.setName(event.getName());
-                    output.setPlace(event.getPlace());
-                    return output;
-                })
+                .map(EventMapper::map)
                 .collect(Collectors.toList()));
+        return response;
+    }
+
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "fetchFutureEventsRequest")
+    @ResponsePayload
+    public FetchEventsResponse fetchEvents(@RequestPayload FetchFutureEventsRequest request) {
+        FetchEventsResponse response = new FetchEventsResponse();
+        response.getEvents().addAll(eventService.fetchFutureEvents()
+                .stream()
+                .map(EventMapper::map)
+                .collect(Collectors.toList()));
+        return response;
+    }
+
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "fetchAllEventsRequest")
+    @ResponsePayload
+    public FetchEventsResponse fetchEvents(@RequestPayload FetchAllEventsRequest request) {
+        FetchEventsResponse response = new FetchEventsResponse();
+        response.getEvents().addAll(eventService.fetchAllEvents()
+                .stream()
+                .map(EventMapper::map)
+                .collect(Collectors.toList()));
+        return response;
+    }
+
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "createEventRequest")
+    @ResponsePayload
+    public CreateEventResponse fetchEvents(@RequestPayload CreateEventRequest request) {
+        CreateEventResponse response = new CreateEventResponse();
+        Event event = EventMapper.map(request.getEvent());
+        event.setId(null);
+        event = eventService.createEvent(event);
+        response.setEvent(EventMapper.map(event));
         return response;
     }
 }

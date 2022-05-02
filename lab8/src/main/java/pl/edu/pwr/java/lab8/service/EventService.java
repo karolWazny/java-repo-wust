@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface EventService {
     List<Event> fetchEvents(int page);
-    void createEvent(Event event);
+    Event createEvent(Event event);
     List<Event> fetchFutureEvents();
     List<Event> fetchAllEvents();
 }
