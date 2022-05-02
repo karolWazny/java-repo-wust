@@ -1,0 +1,16 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:gs="pl/pwr/java/lab8/soap/payments">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <gs:createPaymentRequest>
+            <payment>
+                <id>-1</id>
+                <datePaid>2022-05-02+07:00</datePaid>
+                <amount>100</amount>
+                <personId>2</personId>
+                <eventId>3</eventId>
+                <installmentNumber>1</installmentNumber>
+            </payment>
+        </gs:createPaymentRequest>
+    </soapenv:Body>
+</soapenv:Envelope>

@@ -14,7 +14,7 @@
     <xs:element name="fetchPaymentsForEventRequest">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="personId" type="xs:long"/>
+                <xs:element name="eventId" type="xs:long"/>
                 <xs:element name="page" type="xs:int"/>
             </xs:sequence>
         </xs:complexType>
@@ -28,10 +28,18 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="createPaymentResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="payment" type="tns:payment"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
     <xs:element name="fetchPaymentsResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="payment" type="tns:payment" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="payments" type="tns:payment" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -40,10 +48,10 @@
         <xs:sequence>
             <xs:element name="id" type="xs:long"/>
             <xs:element name="datePaid" type="xs:date"/>
-            <xs:element name="amount" type="xs:integer"/>
+            <xs:element name="amount" type="xs:int"/>
             <xs:element name="personId" type="xs:long"/>
             <xs:element name="eventId" type="xs:long"/>
-            <xs:element name="installmentNumber" type="xs:integer"/>
+            <xs:element name="installmentNumber" type="xs:int"/>
         </xs:sequence>
     </xs:complexType>
 </xs:schema>

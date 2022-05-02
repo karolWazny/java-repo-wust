@@ -15,9 +15,9 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
 
     @Override
-    public void createPayment(Payment payment) {
+    public Payment createPayment(Payment payment) {
         payment.setId(null);
-        paymentRepository.save(payment);
+        return paymentRepository.save(payment);
     }
 
     @Override
