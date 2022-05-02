@@ -1,0 +1,63 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="pl/pwr/java/lab8/soap/installments"
+           targetNamespace="pl/pwr/java/lab8/soap/installments">
+
+    <xs:element name="fetchUnpaidInstallmentsForPersonRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="personId" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="fetchPendingInstallmentsForPersonRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="personId" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="fetchOverdueInstallmentsForPersonRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="personId" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="fetchUnpaidInstallmentsForEventRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="personId" type="xs:long"/>
+                <xs:element name="page" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="createInstallmentRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="installment" type="tns:installment"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="fetchInstallmentsResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="installment" type="tns:installment" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="installment">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="eventId" type="xs:long"/>
+            <xs:element name="installmentNumber" type="xs:integer"/>
+            <xs:element name="dueDate" type="xs:date"/>
+            <xs:element name="amount" type="xs:integer"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
