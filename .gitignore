@@ -37,3 +37,7 @@ lab9/source/library/.idea/
 lab9/source/app/target/
 lab9/release/lombok*
 lab9/release/slf4j*
+lab10/source/library/target/
+lab10/source/library/.idea/
+lab10/source/app/.idea/
+lab10/source/app/target/
