@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="standard-deviation-implementation:jar">
+    <output-path>$PROJECT_DIR$/../release/standard</output-path>
+    <root id="archive" name="standard-deviation-implementation.jar">
+      <element id="module-output" name="standard-deviation-implementation" />
+    </root>
+  </artifact>
+</component>
