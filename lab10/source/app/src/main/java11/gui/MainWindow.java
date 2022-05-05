@@ -119,32 +119,30 @@ public class MainWindow extends JFrame {
         fileDialog.setVisible(true);
         File[] files = fileDialog.getFiles();
 
-        for(File file : files){
-            inputFilesModel.addElement(file.toPath());
-        }
+        inputFilesModel.addAll(Arrays.stream(files)
+                .map(File::toPath).
+                collect(Collectors.toList()));
     }
 
-    private void chooseKeyStoreCallback() throws CertificateException, KeyStoreException, IOException, NoSuchAlgorithmException {
+    private void chooseKeyStoreCallback()
+            throws CertificateException, KeyStoreException,
+            IOException, NoSuchAlgorithmException {
         FileDialog fileDialog = new FileDialog(this, "Select keystore");
         fileDialog.setVisible(true);
 
         String file = fileDialog.getFile();
         char[] password;
         if(file != null) {
-            Path keystoreFile = Paths.get(fileDialog.getDirectory() + file);
+            Path keystoreFile = Path.of(fileDialog.getDirectory() + file);
             password = PasswordDialog.show();
             try {
                 encryption.setKeystore(keystoreFile, password);
                 fileWithKey = keystoreFile;
                 keyFileTextField.setText("" + fileWithKey);
                 aliasesDecryptModel.removeAllElements();
-                for(String alias : Collections.list(encryption.keysAliases())){
-                    aliasesDecryptModel.addElement(alias);
-                }
+                aliasesDecryptModel.addAll(Collections.list(encryption.keysAliases()));
                 aliasesEncryptModel.removeAllElements();
-                for(String alias : Collections.list(encryption.keysAliases())){
-                    aliasesEncryptModel.addElement(alias);
-                }
+                aliasesEncryptModel.addAll(Collections.list(encryption.keysAliases()));
             } finally {
                 Arrays.fill(password, '0');
             }
