@@ -1,0 +1,6 @@
+lib\AnalysisServiceLoader.class
+gui\MainWindow.class
+lib\FileFormatException.class
+main\App.class
+lib\DataFileChooser.class
+lib\CSVDataLoader.class

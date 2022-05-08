@@ -1,0 +1,6 @@
+gui\DirectoryChooser.class
+gui\DirectoryChooserImpl.class
+gui\MainWindow.class
+gui\PasswordDialog.class
+main\App.class
+gui\DataFileChooser.class

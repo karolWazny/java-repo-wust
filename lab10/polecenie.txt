@@ -1,0 +1,5 @@
+Utworzyć wielowydaniowe archiwum JAR z aplikacji z lab 9.
+Uwzględnić wydania javy od 8 do 11, dla każdej wersji dodać coś charakterystycznego dla tej wersji javy.
+For future reference:
+http://tomasz.kubik.staff.iiar.pwr.wroc.pl/dydaktyka/Java/WielowydaniowyJAR.pdf
+http://tomasz.kubik.staff.iiar.pwr.wroc.pl/dydaktyka/Java/index.html (w wykładzie 3 dla 2021)
