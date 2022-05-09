@@ -1,0 +1,10 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:gs="pl/pwr/java/lab8/soap">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <gs:fetchPaymentsForPersonRequest>
+            <personId>0</personId>
+            <page>0</page>
+        </gs:fetchPaymentsForPersonRequest>
+    </soapenv:Body>
+</soapenv:Envelope>

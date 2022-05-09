@@ -1,7 +1,0 @@
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-                  xmlns:gs="pl/pwr/java/lab8/soap">
-    <soapenv:Header/>
-    <soapenv:Body>
-        <gs:fetchFutureEventsRequest/>
-    </soapenv:Body>
-</soapenv:Envelope>

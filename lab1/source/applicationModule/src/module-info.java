@@ -1,3 +1,0 @@
-module applicationModule {
-    requires libraryModule;
-}

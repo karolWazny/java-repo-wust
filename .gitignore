@@ -37,3 +37,13 @@ lab9/source/library/.idea/
 lab9/source/app/target/
 lab9/release/lombok*
 lab9/release/slf4j*
+<<<<<<< HEAD
+lab6/.idea/
+lab6/billboard/target/
+lab6/client/target/
+=======
+lab10/source/library/target/
+lab10/source/library/.idea/
+lab10/source/app/.idea/
+lab10/source/app/target/
+>>>>>>> 145ce14213d61a66bc5ccb1b7d8a0d50e468a784

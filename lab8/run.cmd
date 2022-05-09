@@ -1,1 +1,0 @@
-java -jar release/lab8.jar

@@ -1,1 +1,0 @@
-java -p release/standard --add-modules ALL-MODULE-PATH -jar release/standard/main-1.0-SNAPSHOT.jar

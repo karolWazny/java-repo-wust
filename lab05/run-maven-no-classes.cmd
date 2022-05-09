@@ -1,0 +1,1 @@
+java -jar release/standard/main-1.0-SNAPSHOT.jar

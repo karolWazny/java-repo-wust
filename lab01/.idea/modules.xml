@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/source/applicationModule/applicationModule.iml" filepath="$PROJECT_DIR$/source/applicationModule/applicationModule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/source/libraryModule/libraryModule.iml" filepath="$PROJECT_DIR$/source/libraryModule/libraryModule.iml" />
+    </modules>
+  </component>
+</project>

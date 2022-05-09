@@ -1,0 +1,1 @@
+release\build\bin\java.exe --module applicationModule/main.App

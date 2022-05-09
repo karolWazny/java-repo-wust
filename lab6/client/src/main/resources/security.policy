@@ -1,5 +1,0 @@
-grant {
-    permission java.net.SocketPermission "*:1024-", "connect, listen, accept, resolve";
-    permission java.io.FilePermission "src/main/resources/keystore", "read";
-    permission java.lang.RuntimePermission "setFactory";
-};

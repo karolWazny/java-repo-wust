@@ -1,0 +1,3 @@
+module applicationModule {
+    requires libraryModule;
+}
