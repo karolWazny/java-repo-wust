@@ -36,7 +36,7 @@ public class MainWindow extends JFrame {
 
     public MainWindow() {
         super();
-        setTitle("Szyfrator 2000");
+        setTitle("Szyfrator 2000 - Java 8");
 
         createFirstPanel();
         createSecondPanel();

@@ -1,5 +1,7 @@
 [Setup]
 AppName=Szyfrator2000
+AppVersion=1.0.0
+DefaultDirName=szyfrator
 
 [Files]
 Source: "library-2.0-SNAPSHOT.jar"; DestDir: "{app}"
