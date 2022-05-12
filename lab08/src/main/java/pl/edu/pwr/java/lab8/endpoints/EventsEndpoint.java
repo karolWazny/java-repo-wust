@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Endpoint
 @RequiredArgsConstructor
 public class EventsEndpoint {
-    public final static String NAMESPACE_URI = "pl/pwr/java/lab8/soap";
+    public static final String NAMESPACE_URI = "pl/pwr/java/lab8/soap";
 
     private final EventService eventService;
 
