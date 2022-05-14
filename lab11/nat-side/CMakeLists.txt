@@ -11,4 +11,4 @@ endif(WIN32)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_library(native SHARED library.cpp pl_edu_pwr_java_lab11_NativeSortingMachine.cpp)
+add_library(native SHARED pl_edu_pwr_java_lab11_NativeSortingMachine.cpp SortingMachine.cpp)

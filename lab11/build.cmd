@@ -1,4 +1,11 @@
 call mvn clean -f j-side
 call mvn package -f j-side
 
-call copy-files.cmd
+cd nat-side
+REM call build.cmd
+cd ..
+
+rm -rf release
+mkdir release
+copy nat-side\Release\native.dll release
+copy j-side\target\j-side-1.0-SNAPSHOT.jar release

@@ -1,6 +1,8 @@
 package pl.edu.pwr.java.lab11;
 
 import java.awt.*;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class NativeSortingMachine {
 
@@ -66,7 +68,13 @@ public class NativeSortingMachine {
     }
 
     public static void main(String[] args){
-        //new NativeSortingMachine().sort03();
-        new NativeSortingMachine().showDialog();
+        Double[] input = {3.14, 2.18, 5.12, 3.3333, 2.79};
+        NativeSortingMachine machine = new NativeSortingMachine();
+        machine.setOrder(NativeSortingMachine.ASCENDING);
+        Double[] resultAscending = machine.sort02(input);
+        machine.setOrder(NativeSortingMachine.DESCENDING);
+        Double[] resultDescending = machine.sort02(input);
+        System.out.println("Ascending: " + Arrays.stream(resultAscending).collect(Collectors.toList()));
+        System.out.println("Descending: " + Arrays.stream(resultDescending).collect(Collectors.toList()));
     }
 }
