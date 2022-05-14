@@ -22,7 +22,6 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <addLibraryPath>true</addLibraryPath>
                             <mainClass>pl.edu.pwr.java.lab11.NativeSortingMachine</mainClass>
                         </manifest>
                     </archive>

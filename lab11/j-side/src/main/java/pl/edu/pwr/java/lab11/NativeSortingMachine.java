@@ -1,5 +1,7 @@
 package pl.edu.pwr.java.lab11;
 
+import java.awt.*;
+
 public class NativeSortingMachine {
 
     static {
@@ -51,7 +53,20 @@ public class NativeSortingMachine {
         this.input = input;
     }
 
+    public void showDialog(){
+        Frame f= new Frame();
+        Dialog d = new Dialog(f , "Dialog Example", true);
+        d.setLayout( new FlowLayout() );
+        Button b = new Button ("OK");
+        b.addActionListener (e -> d.setVisible(false));
+        d.add( new Label ("Click button to continue."));
+        d.add(b);
+        d.setSize(300,300);
+        d.setVisible(true);
+    }
+
     public static void main(String[] args){
-        new NativeSortingMachine().sort03();
+        //new NativeSortingMachine().sort03();
+        new NativeSortingMachine().showDialog();
     }
 }

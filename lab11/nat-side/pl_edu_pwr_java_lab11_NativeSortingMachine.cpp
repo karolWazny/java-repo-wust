@@ -16,8 +16,9 @@ JNIEXPORT jobjectArray JNICALL Java_pl_edu_pwr_java_lab11_NativeSortingMachine_s
  * Signature: ([Ljava/lang/Double;)[Ljava/lang/Double;
  */
 JNIEXPORT jobjectArray JNICALL Java_pl_edu_pwr_java_lab11_NativeSortingMachine_sort02
-        (JNIEnv *, jobject, jobjectArray){
+        (JNIEnv *env, jobject obj, jobjectArray){
     std::cout << "Hello there from method sort03\n";
+
     return nullptr;
 };
 
@@ -27,6 +28,13 @@ JNIEXPORT jobjectArray JNICALL Java_pl_edu_pwr_java_lab11_NativeSortingMachine_s
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_pl_edu_pwr_java_lab11_NativeSortingMachine_sort03
-(JNIEnv *, jobject){
+(JNIEnv *env, jobject obj){
     std::cout << "Hello there from method sort03\n";
+    jclass cls = env->GetObjectClass(obj);
+    jmethodID mid = env->GetMethodID(cls, "showDialog","()V");
+    if (mid != nullptr) {
+        env->CallVoidMethod(obj, mid);
+    } else {
+        std::cout << "Not found the method!\n";
+    }
 };
