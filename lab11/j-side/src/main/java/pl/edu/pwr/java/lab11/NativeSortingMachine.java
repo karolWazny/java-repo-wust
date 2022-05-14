@@ -1,6 +1,11 @@
 package pl.edu.pwr.java.lab11;
 
 public class NativeSortingMachine {
+
+    static {
+        System.loadLibrary("native");
+    }
+
     private Double[] input = new Double[0];
     private Double[] result;
     private Boolean order;
@@ -44,5 +49,9 @@ public class NativeSortingMachine {
 
     public void setInput(Double[] input) {
         this.input = input;
+    }
+
+    public static void main(String[] args){
+        new NativeSortingMachine().sort03();
     }
 }
