@@ -10,7 +10,7 @@
  * Method:    sort01
  * Signature: ([Ljava/lang/Double;Ljava/lang/Boolean;)[Ljava/lang/Double;
  */
-JNIEXPORT jobjectArray JNICALL Java_pl_edu_pwr_java_lab11_NativeSortingMachine_sort01
+JNIEXPORT jobjectArray JNICALL Java_pl_edu_pwr_java_lab11_NativeSortingMachine_sort___3Ljava_lang_Double_2Ljava_lang_Boolean_2
         (JNIEnv *env, jobject obj, jobjectArray inputArray, jobject order){
     SortingMachine machine;
     return machine.sort(env, obj, inputArray, order);
@@ -21,7 +21,7 @@ JNIEXPORT jobjectArray JNICALL Java_pl_edu_pwr_java_lab11_NativeSortingMachine_s
  * Method:    sort02
  * Signature: ([Ljava/lang/Double;)[Ljava/lang/Double;
  */
-JNIEXPORT jobjectArray JNICALL Java_pl_edu_pwr_java_lab11_NativeSortingMachine_sort02
+JNIEXPORT jobjectArray JNICALL Java_pl_edu_pwr_java_lab11_NativeSortingMachine_sort___3Ljava_lang_Double_2
         (JNIEnv *env, jobject obj, jobjectArray inputArray){
     SortingMachine machine;
     return machine.sort(env, obj, inputArray);
@@ -32,7 +32,7 @@ JNIEXPORT jobjectArray JNICALL Java_pl_edu_pwr_java_lab11_NativeSortingMachine_s
  * Method:    sort03
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_pl_edu_pwr_java_lab11_NativeSortingMachine_sort03
+JNIEXPORT void JNICALL Java_pl_edu_pwr_java_lab11_NativeSortingMachine_getUserInputAndSort
 (JNIEnv *env, jobject obj){
     std::cout << "Hello there from method sort03\n";
     jclass cls = env->GetObjectClass(obj);

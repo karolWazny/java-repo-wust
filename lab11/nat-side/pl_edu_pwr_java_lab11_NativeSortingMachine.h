@@ -9,26 +9,26 @@ extern "C" {
 #endif
 /*
  * Class:     pl_edu_pwr_java_lab11_NativeSortingMachine
- * Method:    sort01
+ * Method:    sort
  * Signature: ([Ljava/lang/Double;Ljava/lang/Boolean;)[Ljava/lang/Double;
  */
-JNIEXPORT jobjectArray JNICALL Java_pl_edu_pwr_java_lab11_NativeSortingMachine_sort01
+JNIEXPORT jobjectArray JNICALL Java_pl_edu_pwr_java_lab11_NativeSortingMachine_sort___3Ljava_lang_Double_2Ljava_lang_Boolean_2
   (JNIEnv *, jobject, jobjectArray, jobject);
 
 /*
  * Class:     pl_edu_pwr_java_lab11_NativeSortingMachine
- * Method:    sort02
+ * Method:    sort
  * Signature: ([Ljava/lang/Double;)[Ljava/lang/Double;
  */
-JNIEXPORT jobjectArray JNICALL Java_pl_edu_pwr_java_lab11_NativeSortingMachine_sort02
+JNIEXPORT jobjectArray JNICALL Java_pl_edu_pwr_java_lab11_NativeSortingMachine_sort___3Ljava_lang_Double_2
   (JNIEnv *, jobject, jobjectArray);
 
 /*
  * Class:     pl_edu_pwr_java_lab11_NativeSortingMachine
- * Method:    sort03
+ * Method:    getUserInputAndSort
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_pl_edu_pwr_java_lab11_NativeSortingMachine_sort03
+JNIEXPORT void JNICALL Java_pl_edu_pwr_java_lab11_NativeSortingMachine_getUserInputAndSort
   (JNIEnv *, jobject);
 
 #ifdef __cplusplus
