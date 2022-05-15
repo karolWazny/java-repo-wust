@@ -47,3 +47,20 @@ lab10/source/library/.idea/
 lab10/source/app/.idea/
 lab10/source/app/target/
 >>>>>>> 145ce14213d61a66bc5ccb1b7d8a0d50e468a784
+lab11/j-side/.idea/
+lab11/j-side/target/
+lab11/nat-side/.idea/
+lab11/nat-side/cmake-build-debug/
+lab11/nat-side/cmake-build-debug-visual-studio/
+lab11/nat-side/cmake-build-release/
+lab11/nat-side/cmake-build-release-visual-studio/
+*.log
+lab11/nat-side/CMakeFiles/
+lab11/nat-side/x64/
+lab11/nat-side/Release/
+lab11/nat-side/native.dir/
+*.vcxproj
+*.filters
+lab11/nat-side/cmake_install.cmake
+lab11/nat-side/CMakeCache.txt
+*.sln
