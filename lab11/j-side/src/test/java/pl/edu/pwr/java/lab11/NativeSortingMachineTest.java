@@ -1,14 +1,12 @@
 package pl.edu.pwr.java.lab11;
 
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+@Tag("native-sorting")
 public class NativeSortingMachineTest {
     private static Double[] values;
     private static Double[] ascending = new Double[0];

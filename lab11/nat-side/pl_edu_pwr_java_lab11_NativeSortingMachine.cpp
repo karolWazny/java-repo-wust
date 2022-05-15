@@ -34,12 +34,36 @@ JNIEXPORT jobjectArray JNICALL Java_pl_edu_pwr_java_lab11_NativeSortingMachine_s
  */
 JNIEXPORT void JNICALL Java_pl_edu_pwr_java_lab11_NativeSortingMachine_getUserInputAndSort
 (JNIEnv *env, jobject obj){
-    std::cout << "Hello there from method sort03\n";
-    jclass cls = env->GetObjectClass(obj);
-    jmethodID mid = env->GetMethodID(cls, "showDialog","()V");
-    if (mid != nullptr) {
-        env->CallVoidMethod(obj, mid);
-    } else {
-        std::cout << "Not found the method!\n";
-    }
+    jclass dialogService_class = env->FindClass("pl/edu/pwr/java/lab11/inputservice/UserInputService");
+    jmethodID dialogService_getInstance =
+            env->GetStaticMethodID(dialogService_class,"getInstance",
+                                   "()Lpl/edu/pwr/java/lab11/inputservice/UserInputService;");
+    jobject dialogServiceInstance = env->CallStaticObjectMethod(dialogService_class, dialogService_getInstance);
+    jmethodID dialogService_getInput =
+            env->GetMethodID(dialogService_class, "getInput",
+                             "()Lpl/edu/pwr/java/lab11/inputservice/UserInputService$Data;");
+    jobject userInputObject = env->CallObjectMethod(dialogServiceInstance, dialogService_getInput);
+    env->DeleteLocalRef(dialogServiceInstance);
+    jclass dialogServiceData_class = env->GetObjectClass(userInputObject);
+
+    jfieldID inputDataValues_field = env->GetFieldID(dialogServiceData_class,"values", "[Ljava/lang/Double;");
+    auto inputDataValues = static_cast<jobjectArray>(env->GetObjectField(userInputObject, inputDataValues_field));
+
+    jfieldID inputDataOrder_field = env->GetFieldID(dialogServiceData_class, "order", "Lpl/edu/pwr/java/lab11/Order;");
+    jobject order_object = env->GetObjectField(userInputObject, inputDataOrder_field);
+
+    env->DeleteLocalRef(userInputObject);
+
+    jclass nativeSortingMachine_class = env->GetObjectClass(obj);
+    jmethodID sortingMachine_booleanFromOrderObject_method =
+            env->GetMethodID(nativeSortingMachine_class, "setOrder", "(Lpl/edu/pwr/java/lab11/Order;)V");
+    env->CallVoidMethod(obj, sortingMachine_booleanFromOrderObject_method, order_object);
+    env->DeleteLocalRef(order_object);
+
+    jfieldID nativeSortingMachine_input_field = env->GetFieldID(nativeSortingMachine_class, "input", "[Ljava/lang/Double;");
+    env->SetObjectField(obj, nativeSortingMachine_input_field, inputDataValues);
+    env->DeleteLocalRef(inputDataValues);
+
+    jmethodID nativeSortingMachine_sort_method = env->GetMethodID(nativeSortingMachine_class, "sort", "()V");
+    env->CallVoidMethod(obj, nativeSortingMachine_sort_method);
 };
