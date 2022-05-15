@@ -2,7 +2,7 @@ call mvn clean -f j-side
 call mvn package -f j-side
 
 cd nat-side
-REM call build.cmd
+call build.cmd
 cd ..
 
 rm -rf release

@@ -20,8 +20,10 @@ public class DialogInputService extends UserInputService {
         myPanel.add(orderBox);
 
         int result = JOptionPane.showConfirmDialog(null, myPanel,
-                "Please enter password", JOptionPane.OK_CANCEL_OPTION);
-        Data output = null;
+                "Please enter values", JOptionPane.OK_CANCEL_OPTION);
+        Data output = new Data();
+        output.order = Order.ASCENDING;
+        output.values = new Double[0];
         if (result == JOptionPane.OK_OPTION) {
             try{
                 output = new Data();
