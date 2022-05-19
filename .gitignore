@@ -64,3 +64,5 @@ lab11/nat-side/native.dir/
 lab11/nat-side/cmake_install.cmake
 lab11/nat-side/CMakeCache.txt
 *.sln
+lab12/source/cell-inator/target/
+lab12/source/cell-inator/.idea/
