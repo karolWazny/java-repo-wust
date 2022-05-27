@@ -17,15 +17,19 @@ public class MapPanel extends JPanel implements MouseListener {
     private final double minX = 10;
     private final double minY = 10;
 
-    private double maxX;
-    private double maxY = 390;
+    private final Double cellSize = 40.0;
+
+    private final double maxX;
+    private final double maxY;
+    private final int width;
+    private final int height;
 
     public MapPanel(Engine engine) {
-        int height = engine.getMap().getHeight();
-        int width = engine.getMap().getWidth();
+        height = engine.getMap().getHeight();
+        width = engine.getMap().getWidth();
 
-        maxY = 10 + 40 * height;
-        maxX = 10 + 40 * width;
+        maxY = minY + cellSize * height;
+        maxX = minX + cellSize * width;
 
 
         setPreferredSize(new Dimension((int) (10 + maxX), (int) (10 + maxY)));
@@ -52,10 +56,13 @@ public class MapPanel extends JPanel implements MouseListener {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
+        paintCells(g2d);
         paintGrid(g2d);
     }
 
     private void paintGrid(Graphics2D g){
+        g.setColor(Color.LIGHT_GRAY);
+        g.setStroke(new BasicStroke(2));
         gridXPoints
                 .forEach(element ->{
                     Line2D line2D = new Line2D.Double(element, minY, element, maxY);
@@ -65,6 +72,20 @@ public class MapPanel extends JPanel implements MouseListener {
                 .forEach(element ->{
                     Line2D line2D = new Line2D.Double(minX, element, maxX, element);
                     g.draw(line2D);
+                });
+    }
+
+    private void paintCells(Graphics2D g){
+        IntStream.range(0, width)
+                .forEach(x-> {
+                    IntStream.range(0, height)
+                            .forEach(y->{
+                                g.setColor(Color.CYAN);
+                                g.fillRect(gridXPoints.get(x).intValue(),
+                                        gridYPoints.get(y).intValue(),
+                                        cellSize.intValue(),
+                                        cellSize.intValue());
+                            });
                 });
     }
 
