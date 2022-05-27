@@ -19,6 +19,12 @@ public class MapFrame extends JFrame {
         buttons.setLayout(new BoxLayout(buttons, BoxLayout.PAGE_AXIS));
         buttons.add(new JButton("Start"));
         buttons.add(new JButton("Stop"));
+        JButton stepButton = new JButton("Step");
+        stepButton.addActionListener(action->{
+            engine.step();
+            repaint();
+        });
+        buttons.add(stepButton);
         buttons.add(new JButton("Save"));
         add(buttons);
 

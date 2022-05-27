@@ -1,12 +1,15 @@
 package gui;
 
 import engine.Engine;
+import engine.Map;
+import engine.Position;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Line2D;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -24,9 +27,14 @@ public class MapPanel extends JPanel implements MouseListener {
     private final int width;
     private final int height;
 
+    private final Engine engine;
+    private final Map map;
+
     public MapPanel(Engine engine) {
-        height = engine.getMap().getHeight();
-        width = engine.getMap().getWidth();
+        this.engine = engine;
+        this.map = engine.getMap();
+        height = this.map.getHeight();
+        width = this.map.getWidth();
 
         maxY = minY + cellSize * height;
         maxX = minX + cellSize * width;
@@ -80,7 +88,7 @@ public class MapPanel extends JPanel implements MouseListener {
                 .forEach(x-> {
                     IntStream.range(0, height)
                             .forEach(y->{
-                                g.setColor(Color.CYAN);
+                                g.setColor(engine.colorOnPosition(new Position(x, y)));
                                 g.fillRect(gridXPoints.get(x).intValue(),
                                         gridYPoints.get(y).intValue(),
                                         cellSize.intValue(),
@@ -91,8 +99,21 @@ public class MapPanel extends JPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if(e.getButton() == MouseEvent.BUTTON1)
-            System.out.println(e.getX() + " " + e.getY());
+        try{
+            if(e.getButton() == MouseEvent.BUTTON1) {
+                Position position = Objects.requireNonNull(positionFromClick(e));
+                engine.changeStateOnPosition(position);
+                repaint();
+            }
+        } catch (NullPointerException ignored){}
+    }
+
+    private Position positionFromClick(MouseEvent e){
+        if(e.getY() <= minY || e.getY() >= maxY || e.getX() <= minX || e.getX() >= maxX){
+            return null;
+        } else {
+            return new Position((int) ((e.getX() - minX) / cellSize), (int) ((e.getY() - minY) / cellSize));
+        }
     }
 
     @Override
