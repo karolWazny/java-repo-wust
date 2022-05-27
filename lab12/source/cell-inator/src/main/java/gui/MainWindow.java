@@ -40,7 +40,9 @@ public class MainWindow extends JFrame {
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
         panel.add(new JLabel("Current script:"));
-        panel.add(new JTextField());
+        JTextField currentScriptField = new JTextField();
+        currentScriptField.setEditable(false);
+        panel.add(currentScriptField);
 
         panel.add(new JLabel("Scripts"));
 
@@ -48,6 +50,7 @@ public class MainWindow extends JFrame {
                 Paths.get("piwo.js"),
                 Paths.get("dupa.js"),
         });
+        paths.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         panel.add(new JScrollPane(paths));
 
         JPanel buttons = new JPanel();
@@ -72,16 +75,26 @@ public class MainWindow extends JFrame {
         panel.add(comboBox);
 
         JPanel loadPanel = new JPanel();
-        loadPanel.setLayout(new BoxLayout(loadPanel, BoxLayout.PAGE_AXIS));
-        loadPanel.add(new JLabel("Loaded map:"));
-        loadPanel.add(new JTextField());
-        loadPanel.add(new JLabel("Engine type:"));
-        loadPanel.add(new JTextField());
-        loadPanel.add(new JLabel("Height:"));
-        loadPanel.add(new JTextField());
-        loadPanel.add(new JLabel("Width:"));
-        loadPanel.add(new JTextField());
-        loadPanel.add(new JButton("Load from file"));
+        {
+            loadPanel.setLayout(new BoxLayout(loadPanel, BoxLayout.PAGE_AXIS));
+            loadPanel.add(new JLabel("Loaded map:"));
+            JTextField mapField = new JTextField();
+            mapField.setEditable(false);
+            loadPanel.add(mapField);
+            loadPanel.add(new JLabel("Engine type:"));
+            JTextField engineField = new JTextField();
+            engineField.setEditable(false);
+            loadPanel.add(engineField);
+            loadPanel.add(new JLabel("Height:"));
+            JTextField heightField = new JTextField();
+            heightField.setEditable(false);
+            loadPanel.add(heightField);
+            loadPanel.add(new JLabel("Width:"));
+            JTextField widthField = new JTextField();
+            widthField.setEditable(false);
+            loadPanel.add(widthField);
+            loadPanel.add(new JButton("Load from file"));
+        }
 
         panel.add(loadPanel);
 
