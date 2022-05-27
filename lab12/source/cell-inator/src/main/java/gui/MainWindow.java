@@ -1,6 +1,7 @@
 package gui;
 
 import engine.Engine;
+import engine.Map;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,8 +33,6 @@ public class MainWindow extends JFrame {
     private void createFirstPanel(){
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-
-        panel.add(new MapPanel());
 
         add(panel);
     }
@@ -123,7 +122,7 @@ public class MainWindow extends JFrame {
 
         JButton startButton = new JButton("Start");
         startButton.addActionListener(action -> {
-            new MapFrame(new Engine());
+            new MapFrame(new Engine(new Map(10, 15)));
         });
         panel.add(startButton);
 

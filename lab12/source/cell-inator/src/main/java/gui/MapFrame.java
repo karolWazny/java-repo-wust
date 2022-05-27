@@ -3,7 +3,6 @@ package gui;
 import engine.Engine;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class MapFrame extends JFrame {
     public MapFrame(Engine engine) {
@@ -14,12 +13,18 @@ public class MapFrame extends JFrame {
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        add(new MapPanel());
+        add(new MapPanel(engine));
+        add(new JSeparator());
+        JPanel buttons = new JPanel();
+        buttons.setLayout(new BoxLayout(buttons, BoxLayout.PAGE_AXIS));
+        buttons.add(new JButton("Start"));
+        buttons.add(new JButton("Stop"));
+        buttons.add(new JButton("Save"));
+        add(buttons);
 
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-        setResizable(true);
-        setMinimumSize(new Dimension(850, 220));
+        setResizable(false);
     }
 }
