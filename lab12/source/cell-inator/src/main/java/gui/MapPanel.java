@@ -15,7 +15,7 @@ public class MapPanel extends JPanel implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         if(e.getButton() == MouseEvent.BUTTON1)
-            System.out.println("Mouse clicked");
+            System.out.println(e.getX() + " " + e.getY());
     }
 
     @Override
