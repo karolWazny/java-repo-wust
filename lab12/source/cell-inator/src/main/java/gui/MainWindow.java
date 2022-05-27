@@ -1,9 +1,12 @@
 package gui;
 
+import engine.Engine;
+
 import javax.swing.*;
 import java.awt.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 public class MainWindow extends JFrame {
 
@@ -62,7 +65,6 @@ public class MainWindow extends JFrame {
         add(panel);
     }
 
-
     private void createThirdPanel(){
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
@@ -108,7 +110,7 @@ public class MainWindow extends JFrame {
         panel.add(createPanel);
 
         comboBox.addActionListener(event->{
-            if(comboBox.getSelectedItem().equals("Create")){
+            if(Objects.equals(comboBox.getSelectedItem(), "Create")){
                 createPanel.setVisible(true);
                 loadPanel.setVisible(false);
             } else {
@@ -119,7 +121,11 @@ public class MainWindow extends JFrame {
 
         comboBox.setSelectedIndex(0);
 
-        panel.add(new JButton("Start"));
+        JButton startButton = new JButton("Start");
+        startButton.addActionListener(action -> {
+            new MapFrame(new Engine());
+        });
+        panel.add(startButton);
 
         add(panel);
     }
