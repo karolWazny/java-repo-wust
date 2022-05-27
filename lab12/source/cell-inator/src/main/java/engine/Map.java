@@ -18,20 +18,14 @@ public class Map {
     }
 
     public int[][] getNeighbourhood(Position position){
-        int[][] result = IntStream.range(-1, 2)
+        return IntStream.range(-1, 2)
                 .mapToObj(i -> IntStream.range(-1,2)
                         .map(j->{
                             int x = position.x + j >= 0 ? (position.x + j < width ? position.x + j : 0) : width - 1;
                             int y = position.y + i >= 0 ? (position.y + i < height ? position.y + i : 0) : height - 1;
-                            if(x < 0 || y < 0) {
-                                System.out.println(position.x + " " + position.y);
-                                System.out.println(x + " " + y);
-                                System.out.println(i + " " + j);
-                            }
                             return cells[y][x];
                         }).toArray())
                 .toArray(int[][]::new);
-        return result;
     }
 
     public void setState(Position position, int state){

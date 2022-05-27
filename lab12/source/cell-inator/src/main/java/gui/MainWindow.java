@@ -5,11 +5,15 @@ import engine.Map;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class MainWindow extends JFrame {
+    private Path chosenScript;
 
     public MainWindow() {
         super();
@@ -38,6 +42,7 @@ public class MainWindow extends JFrame {
     }
 
     private void createSecondPanel(){
+        System.out.println(Paths.get("").toAbsolutePath());
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
@@ -48,17 +53,34 @@ public class MainWindow extends JFrame {
 
         panel.add(new JLabel("Scripts"));
 
-        JList<Path> paths = new JList<>(new Path[]{
-                Paths.get("piwo.js"),
-                Paths.get("dupa.js"),
-        });
+        JList<Path> paths = null;
+        try {
+            paths = new JList<>(Files.walk(Paths.get(""), Integer.MAX_VALUE)
+                    .filter(path -> path.getFileName().toString().endsWith(".js"))
+                    .collect(Collectors.toList())
+                    .toArray(Path[]::new));
+        } catch (IOException e) {
+            e.printStackTrace();
+            paths = new JList<>();
+        }
         paths.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         panel.add(new JScrollPane(paths));
 
         JPanel buttons = new JPanel();
         buttons.setLayout(new BoxLayout(buttons, BoxLayout.LINE_AXIS));
         buttons.add(new JButton("Find more"));
-        buttons.add(new JButton("Use chosen"));
+        JButton useChosenButton = new JButton("Use chosen");
+        JList<Path> finalPaths = paths;
+        useChosenButton.addActionListener(action->{
+            try{
+                this.chosenScript = Objects.requireNonNull(finalPaths.getSelectedValue());
+                currentScriptField.setText("" + this.chosenScript);
+            } catch (NullPointerException ignored){
+
+            }
+
+        });
+        buttons.add(useChosenButton);
         panel.add(buttons);
 
         add(panel);
@@ -102,9 +124,11 @@ public class MainWindow extends JFrame {
         JPanel createPanel = new JPanel();
         createPanel.setLayout(new BoxLayout(createPanel, BoxLayout.PAGE_AXIS));
         createPanel.add(new JLabel("Height:"));
-        createPanel.add(new JTextField());
+        JTextField heightField = new JTextField();
+        createPanel.add(heightField);
         createPanel.add(new JLabel("Width:"));
-        createPanel.add(new JTextField());
+        JTextField widthField = new JTextField();
+        createPanel.add(widthField);
 
         panel.add(createPanel);
 
@@ -122,7 +146,9 @@ public class MainWindow extends JFrame {
 
         JButton startButton = new JButton("Start");
         startButton.addActionListener(action -> {
-            new MapFrame(new Engine(new Map(10, 15)));
+            int height = Integer.parseInt(heightField.getText().trim());
+            int width = Integer.parseInt(widthField.getText().trim());
+            new MapFrame(new Engine(new Map(height, width)));
         });
         panel.add(startButton);
 
