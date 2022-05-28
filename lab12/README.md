@@ -10,6 +10,19 @@
 
 4. Aby użyć skryptu, należy go wybrać z listy i kliknąć przycisk "Use chosen"
     1. Wybrany skrypt znajduje się w polu na górze.
+
+![Screenshot](lab12/pics/Obraz2.png)
+
+
 5. Wciśnięcie przycisku "Start" otwiera okno z automatem.
+
+![Screenshot](lab12/pics/Obraz3.png)
+
+
 6. Klikając na komórkę zmieniamy jej stan; w ten sposób ustawiamy stan początkowy.
 7. Aby wystartować automat należy kliknąć "Start".
+
+![Screenshot](lab12/pics/Obraz4.png)
+
+![Screenshot](lab12/pics/Obraz5.png)
+
