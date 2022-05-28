@@ -65,3 +65,7 @@ Stan komórki i sąsiadów jest przekazywany jako jednowymiarowa tablica liczb i
                 return "0xFFFFFF";
             }
         }
+
+Skrypt można dodać do programu korzystając z przycisku "Find more" - naciśnięcie go otwiera dialog z wyborem pliku do dodania.
+
+Skrypt jest ładowany z pliku w momencie naciśnięcia przycisku "Start", zatem nie ma potrzeby go przeładowywać, jeżeli zawartość pliku się zmieniła - wystarczy zamknąć okno z symulacją i otworzyć je ponownie, aby wczytać zmiany.
