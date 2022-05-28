@@ -26,3 +26,41 @@
 
 ![Screenshot](lab12/pics/Obraz5.png)
 
+## Dodawanie nowych automatów
+
+Automat jest implementowany jako plik z rozszerzeniem .js nazwany zgodnie z nazwą automatu.
+
+Skrypt musi zawierać implementacje następujących metod:
+
+1. Metoda zwracająca nazwę silnika.
+
+    function engineName(){
+        return "The Game of Life";
+    }
+    
+2. Metoda wyznaczająca kolejny stan dla danej komórki w oparciu o jej stan i stan jej sąsiadów.
+
+Stan komórki i sąsiadów jest przekazywany jako jednowymiarowa tablica liczb indeksowana jak poniżej (indeks 4 to rozważana komórka).
+
+    function evaluateState(neighbourhood){
+        // [0][1][2]
+        // [3][4][5]
+        // [6][7][8]
+        return 0;
+    }
+    
+3. Metoda porządkująca stany, pozwalająca przeklikać się i ustawić porządany stan komórki.
+
+    function cycleThroughStates(state){
+        return (state + 1) % 2;
+    }
+    
+4. Metoda mapująca stan komórki na kolor.
+
+    function colorForState(state){
+        if(state === 1){
+            return "0x000000";
+        } else {
+            return "0xFFFFFF";
+        }
+    }
