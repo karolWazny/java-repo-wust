@@ -21,7 +21,16 @@ public class Persistence {
         serializer.write(entity, result);
     }
 
-    public Map read(Path path){
-        throw new UnsupportedOperationException();
+    public Map read(Path path) throws Exception {
+        Serializer serializer = new Persister();
+        File source = path.toFile();
+
+        MapEntity entity = serializer.read(MapEntity.class, source);
+        return Map.builder()
+                .cells(entity.getCells())
+                .width(entity.getWidth())
+                .height(entity.getHeight())
+                .engineName(entity.getEngineName())
+                .build();
     }
 }

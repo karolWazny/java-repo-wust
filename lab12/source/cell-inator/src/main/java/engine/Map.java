@@ -1,5 +1,6 @@
 package engine;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 import java.util.Arrays;
@@ -7,6 +8,7 @@ import java.util.Objects;
 import java.util.stream.IntStream;
 
 @Builder
+@AllArgsConstructor
 public class Map {
     private int[][] cells;
     private final int height;

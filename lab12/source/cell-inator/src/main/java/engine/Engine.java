@@ -1,19 +1,17 @@
 package engine;
 
+import lombok.NonNull;
+
 import javax.script.Invocable;
 import javax.script.ScriptException;
 import java.awt.*;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Engine {
-    private Map map;
-    private Invocable invocable;
+    private final Map map;
+    private final Invocable invocable;
 
-    public Engine(Invocable invocable, Map map) {
+    public Engine(@NonNull Invocable invocable, @NonNull Map map) {
         this.invocable = invocable;
         this.map = map;
     }
@@ -54,7 +52,6 @@ public class Engine {
                             .forEach(j -> {
                                 cells[i * 3 + j] = neighbourhood[i][j];
                             }));
-            //System.out.println(Arrays.stream(cells).boxed().collect(Collectors.toList()));
             return (int) invocable.invokeFunction("evaluateState", (Object) cells);
         } catch (ScriptException | NoSuchMethodException e) {
             e.printStackTrace();
@@ -81,7 +78,6 @@ public class Engine {
         int currentState = map.getState(position);
         map.setState(position, nextState(currentState));
     }
-
 
     public Color colorOnPosition(Position position){
         return colorForState(map.getState(position));

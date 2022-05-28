@@ -2,6 +2,7 @@ package gui;
 
 import engine.Engine;
 import engine.Map;
+import persistence.Persistence;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 public class MainWindow extends JFrame {
     private Path chosenScript;
     private final ScriptEngineManager engineManager = new ScriptEngineManager();
+    private Map loadedMap = null;
 
     private Path lastLocation = Paths.get("").toAbsolutePath();
 
@@ -147,7 +149,27 @@ public class MainWindow extends JFrame {
             JTextField widthField = new JTextField();
             widthField.setEditable(false);
             loadPanel.add(widthField);
-            loadPanel.add(new JButton("Load from file"));
+            JButton loadButton = new JButton("Load from file");
+            loadButton.addActionListener(action->{
+                Persistence persistence = new Persistence();
+                JFileChooser chooser = new JFileChooser();
+                chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                chooser.setCurrentDirectory(lastLocation.toFile());
+                chooser.showOpenDialog(this);
+                try {
+                    Path path = chooser.getSelectedFile().toPath();
+                    loadedMap = Objects.requireNonNull(persistence.read(path));
+                    mapField.setText(path.toString());
+                    engineField.setText(loadedMap.getEngineName());
+                    heightField.setText("" + loadedMap.getHeight());
+                    widthField.setText("" + loadedMap.getWidth());
+                } catch (NullPointerException ignored){
+
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            });
+            loadPanel.add(loadButton);
         }
 
         panel.add(loadPanel);
@@ -177,12 +199,18 @@ public class MainWindow extends JFrame {
 
         JButton startButton = new JButton("Start");
         startButton.addActionListener(action -> {
-            int height = Integer.parseInt(heightField.getText().trim());
-            int width = Integer.parseInt(widthField.getText().trim());
+            Map map = null;
+            if(Objects.equals(comboBox.getSelectedItem(), "Create")){
+                int height = Integer.parseInt(heightField.getText().trim());
+                int width = Integer.parseInt(widthField.getText().trim());
+                map = new Map(height, width, chosenScript.getFileName().toString());
+            } else {
+                map = loadedMap;
+            }
             try {
-                new MapFrame(new Engine(getJSMachine(), new Map(height, width, chosenScript.getFileName().toString())));
+                new MapFrame(new Engine(getJSMachine(), map));
             } catch (FileNotFoundException | NullPointerException | ScriptException ignored){
-                ignored.printStackTrace();
+                //ignored.printStackTrace();
             }
         });
         panel.add(startButton);
