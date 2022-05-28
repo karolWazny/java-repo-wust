@@ -34,6 +34,7 @@ Skrypt musi zawierać implementacje następujących metod:
 
 1. Metoda zwracająca nazwę silnika.
 
+
     function engineName(){
         return "The Game of Life";
     }
@@ -51,11 +52,13 @@ Stan komórki i sąsiadów jest przekazywany jako jednowymiarowa tablica liczb i
     
 3. Metoda porządkująca stany, pozwalająca przeklikać się i ustawić porządany stan komórki.
 
+
     function cycleThroughStates(state){
         return (state + 1) % 2;
     }
     
 4. Metoda mapująca stan komórki na kolor.
+
 
     function colorForState(state){
         if(state === 1){
