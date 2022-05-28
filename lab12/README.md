@@ -42,12 +42,12 @@ Skrypt musi zawierać implementacje następujących metod:
 
 Stan komórki i sąsiadów jest przekazywany jako jednowymiarowa tablica liczb indeksowana jak poniżej (indeks 4 to rozważana komórka).
 
-    function evaluateState(neighbourhood){
-        // [0][1][2]
-        // [3][4][5]
-        // [6][7][8]
-        return 0;
-    }
+        function evaluateState(neighbourhood){
+            // [0][1][2]
+            // [3][4][5]
+            // [6][7][8]
+            return 0;
+        }
 
 
 3. Metoda porządkująca stany, pozwalająca przeklikać się i ustawić porządany stan komórki.
