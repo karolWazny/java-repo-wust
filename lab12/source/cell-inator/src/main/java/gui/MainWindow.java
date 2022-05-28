@@ -9,19 +9,19 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.swing.*;
 import java.awt.*;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MainWindow extends JFrame {
     private Path chosenScript;
     private final ScriptEngineManager engineManager = new ScriptEngineManager();
+
+    private Path lastLocation = Paths.get("").toAbsolutePath();
 
     public MainWindow() {
         super();
@@ -60,12 +60,10 @@ public class MainWindow extends JFrame {
 
         panel.add(new JLabel("Scripts"));
 
-        JList<Path> paths = null;
+        DefaultListModel<Path> listModel = new DefaultListModel<>();
+        JList<Path> paths = new JList<>(listModel);
         try {
-            paths = new JList<>(Files.walk(Paths.get(""), Integer.MAX_VALUE)
-                    .filter(path -> path.getFileName().toString().endsWith(".js"))
-                    .collect(Collectors.toList())
-                    .toArray(Path[]::new));
+            listModel.addAll(scriptsInDirectory(this.lastLocation));
         } catch (IOException e) {
             e.printStackTrace();
             paths = new JList<>();
@@ -75,7 +73,26 @@ public class MainWindow extends JFrame {
 
         JPanel buttons = new JPanel();
         buttons.setLayout(new BoxLayout(buttons, BoxLayout.LINE_AXIS));
-        buttons.add(new JButton("Find more"));
+        JButton findScriptsButton = new JButton("Find more");
+        findScriptsButton.addActionListener(action->{
+            JFileChooser chooser = new JFileChooser();
+            chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+            chooser.setCurrentDirectory(lastLocation.toFile());
+            chooser.showOpenDialog(this);
+            try {
+                File chosen = Objects.requireNonNull(chooser.getSelectedFile());
+                if(chosen.isDirectory()){
+                    lastLocation = chosen.toPath();
+                    listModel.addAll(scriptsInDirectory(lastLocation));
+                } else {
+                    lastLocation = chosen.toPath();
+                    listModel.addElement(lastLocation);
+                }
+            } catch (NullPointerException | IOException e){
+                e.printStackTrace();
+            }
+        });
+        buttons.add(findScriptsButton);
         JButton useChosenButton = new JButton("Use chosen");
         JList<Path> finalPaths = paths;
         useChosenButton.addActionListener(action->{
@@ -91,6 +108,12 @@ public class MainWindow extends JFrame {
         panel.add(buttons);
 
         add(panel);
+    }
+
+    private List<Path> scriptsInDirectory(Path directory) throws IOException {
+        return Files.walk(Paths.get(""), Integer.MAX_VALUE)
+                .filter(path -> path.getFileName().toString().endsWith(".js"))
+                .collect(Collectors.toList());
     }
 
     private void createThirdPanel(){
