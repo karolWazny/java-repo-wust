@@ -3,9 +3,16 @@ package gui;
 import engine.Engine;
 import engine.Map;
 
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,6 +21,7 @@ import java.util.stream.Collectors;
 
 public class MainWindow extends JFrame {
     private Path chosenScript;
+    private final ScriptEngineManager engineManager = new ScriptEngineManager();
 
     public MainWindow() {
         super();
@@ -42,7 +50,6 @@ public class MainWindow extends JFrame {
     }
 
     private void createSecondPanel(){
-        System.out.println(Paths.get("").toAbsolutePath());
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
@@ -124,10 +131,10 @@ public class MainWindow extends JFrame {
         JPanel createPanel = new JPanel();
         createPanel.setLayout(new BoxLayout(createPanel, BoxLayout.PAGE_AXIS));
         createPanel.add(new JLabel("Height:"));
-        JTextField heightField = new JTextField();
+        JTextField heightField = new JTextField("30");
         createPanel.add(heightField);
         createPanel.add(new JLabel("Width:"));
-        JTextField widthField = new JTextField();
+        JTextField widthField = new JTextField("50");
         createPanel.add(widthField);
 
         panel.add(createPanel);
@@ -148,10 +155,20 @@ public class MainWindow extends JFrame {
         startButton.addActionListener(action -> {
             int height = Integer.parseInt(heightField.getText().trim());
             int width = Integer.parseInt(widthField.getText().trim());
-            new MapFrame(new Engine(new Map(height, width)));
+            try {
+                new MapFrame(new Engine(getJSMachine(), new Map(height, width)));
+            } catch (FileNotFoundException | NullPointerException | ScriptException ignored){
+                ignored.printStackTrace();
+            }
         });
         panel.add(startButton);
 
         add(panel);
+    }
+
+    private Invocable getJSMachine() throws FileNotFoundException, ScriptException {
+        ScriptEngine engine = engineManager.getEngineByName("JavaScript");
+        engine.eval(new InputStreamReader(new FileInputStream(chosenScript.toFile())));
+        return (Invocable) engine;
     }
 }

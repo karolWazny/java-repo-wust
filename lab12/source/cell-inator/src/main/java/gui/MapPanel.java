@@ -20,7 +20,7 @@ public class MapPanel extends JPanel implements MouseListener {
     private final double minX = 10;
     private final double minY = 10;
 
-    private final Double cellSize = 40.0;
+    private final Double cellSize = 20.0;
 
     private final double maxX;
     private final double maxY;
@@ -40,16 +40,16 @@ public class MapPanel extends JPanel implements MouseListener {
         maxX = minX + cellSize * width;
 
 
-        setPreferredSize(new Dimension((int) (10 + maxX), (int) (10 + maxY)));
+        setPreferredSize(new Dimension((int) (minX + maxX), (int) (minY + maxY)));
 
 
         gridYPoints = IntStream.range(0, height + 2)
-                .mapToDouble(index-> 10 + index * 40)
+                .mapToDouble(index-> minY + index * cellSize)
                 .boxed()
                 .collect(Collectors.toList());
 
         gridXPoints = IntStream.range(0, width + 2)
-                .mapToDouble(index-> 10 + index * 40)
+                .mapToDouble(index-> minX + index * cellSize)
                 .boxed()
                 .collect(Collectors.toList());
 

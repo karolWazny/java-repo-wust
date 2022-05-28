@@ -1,17 +1,44 @@
 package engine;
 
+import javax.script.Invocable;
+import javax.script.ScriptException;
 import java.awt.*;
 import java.util.stream.IntStream;
 
 public class Engine {
     private Map map;
+    private Invocable invocable;
 
-    public Engine(Map map) {
+    public Engine(Invocable invocable, Map map) {
+        this.invocable = invocable;
         this.map = map;
     }
 
     public String engineName(){
+        try {
+            return (String) invocable.invokeFunction("engineName");
+        } catch (ScriptException | NoSuchMethodException e) {
+            e.printStackTrace();
+        }
         return "engine";
+    }
+
+    public Color colorForState(int state){
+        switch (state){
+            case 0:
+                return Color.CYAN;
+            case 1:
+                return Color.ORANGE;
+        }
+        return Color.WHITE;
+    }
+
+    public int nextState(int state){
+        return (state + 1) % 2;
+    }
+
+    private int stateFromNeighbourhood(int[][] neighbourhood){
+        return (neighbourhood[1][1] + 1) % 2;
     }
 
     public void step(){
@@ -20,7 +47,7 @@ public class Engine {
                     return IntStream.range(0, map.getWidth())
                             .map(x->{
                                 int[][] neighbourhood = map.getNeighbourhood(new Position(x, y));
-                                return nextState(neighbourhood[1][1]);
+                                return stateFromNeighbourhood(neighbourhood);
                             })
                             .toArray();
                 }).toArray(int[][]::new);
@@ -36,21 +63,8 @@ public class Engine {
         map.setState(position, nextState(currentState));
     }
 
-    public int nextState(int state){
-        return (state + 1) % 2;
-    }
 
     public Color colorOnPosition(Position position){
         return colorForState(map.getState(position));
-    }
-
-    public Color colorForState(int state){
-        switch (state){
-            case 0:
-                return Color.CYAN;
-            case 1:
-                return Color.ORANGE;
-        }
-        return Color.WHITE;
     }
 }
