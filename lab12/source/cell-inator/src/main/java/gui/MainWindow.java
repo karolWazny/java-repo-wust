@@ -86,7 +86,8 @@ public class MainWindow extends JFrame {
                     listModel.addAll(scriptsInDirectory(lastLocation));
                 } else {
                     lastLocation = chosen.toPath();
-                    listModel.addElement(lastLocation);
+                    if(lastLocation.toString().endsWith(".js"))
+                        listModel.addElement(lastLocation);
                 }
             } catch (NullPointerException | IOException e){
                 e.printStackTrace();
