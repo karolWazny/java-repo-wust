@@ -1,10 +1,13 @@
 package gui;
 
 import engine.Engine;
+import persistence.Persistence;
 
 import javax.swing.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MapFrame extends JFrame {
@@ -106,7 +109,23 @@ public class MapFrame extends JFrame {
             repaint();
         });
         buttons.add(stepButton);
-        buttons.add(new JButton("Save"));
+        JButton saveButton = new JButton("Save");
+        saveButton.addActionListener(action->{
+            Persistence persistence = new Persistence();
+            try {
+                JFileChooser chooser = new JFileChooser();
+                chooser.setCurrentDirectory(Paths.get("").toAbsolutePath().toFile());
+                chooser.setFileSelectionMode(JFileChooser.SAVE_DIALOG);
+                chooser.showOpenDialog(this);
+                Path path = chooser.getSelectedFile().toPath();
+                persistence.saveAs(engine.getMap(), path);
+            } catch (NullPointerException ignored) {
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        buttons.add(saveButton);
         add(buttons);
 
         pack();

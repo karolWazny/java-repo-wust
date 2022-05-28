@@ -1,15 +1,20 @@
 package engine;
 
+import lombok.Builder;
+
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
+@Builder
 public class Map {
     private int[][] cells;
     private final int height;
     private final int width;
+    private final String engineName;
 
-    public Map(int height, int width) {
+    public Map(int height, int width, String engineName) {
+        this.engineName = engineName;
         this.height = height;
         this.width = width;
         cells = IntStream.range(0, height)
@@ -57,5 +62,13 @@ public class Map {
                         throw new RuntimeException("Wrong map dimension!");
                 });
         this.cells = cells;
+    }
+
+    public int[][] getCells() {
+        return cells;
+    }
+
+    public String getEngineName() {
+        return engineName;
     }
 }

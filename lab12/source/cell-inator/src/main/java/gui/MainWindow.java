@@ -180,7 +180,7 @@ public class MainWindow extends JFrame {
             int height = Integer.parseInt(heightField.getText().trim());
             int width = Integer.parseInt(widthField.getText().trim());
             try {
-                new MapFrame(new Engine(getJSMachine(), new Map(height, width)));
+                new MapFrame(new Engine(getJSMachine(), new Map(height, width, chosenScript.getFileName().toString())));
             } catch (FileNotFoundException | NullPointerException | ScriptException ignored){
                 ignored.printStackTrace();
             }
