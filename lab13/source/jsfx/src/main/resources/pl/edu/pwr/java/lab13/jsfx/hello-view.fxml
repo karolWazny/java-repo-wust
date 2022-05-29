@@ -4,12 +4,58 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseMoved="initializeChoiceBox();" prefHeight="380.0" prefWidth="456.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="380.0" prefWidth="456.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+      <TextArea layoutX="29.0" layoutY="229.0" prefHeight="106.0" prefWidth="398.0" />
+      <Button fx:id="previousButt" layoutX="195.0" layoutY="335.0" mnemonicParsing="false" text="&lt;&lt;" />
+      <Button fx:id="nextButt" layoutX="228.0" layoutY="335.0" mnemonicParsing="false" text="&gt;&gt;" />
+
+      <ChoiceBox fx:id="templateChoice" layoutX="29.0" layoutY="30.0" onAction="choiceCallback();" prefHeight="25.0" prefWidth="398.0" />
+      <TextField fx:id="dataFileField" disable="true" layoutX="29.0" layoutY="55.0" prefHeight="25.0" prefWidth="314.0" />
+      <Button layoutX="342.0" layoutY="55.0" mnemonicParsing="false" onAction="dataFileButtonCallback();" text="Find data file" />
+      <Label fx:id="countLabel" layoutX="329.0" layoutY="339.0" />
+      <ScrollPane layoutX="29.0" layoutY="80.0" prefHeight="150.0" prefWidth="398.0">
+         <content>
+            <VBox fx:id="inputPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" />
+         </content></ScrollPane>
+   </children>
     <fx:script>
         var Template = Java.type("pl.edu.pwr.java.lab13.jsfx.template.Template");
         var HelloApplication = Java.type("pl.edu.pwr.java.lab13.jsfx.HelloApplication");
         var templates = loadTemplates();
-        var choiceInitialized = false;
+        var chosenTemplate = null;
+        templateChoice.getItems().addAll(templates);
+
+        function dataFileButtonCallback(){
+            var chooser = new javax.swing.JFileChooser();
+            chooser.setFileSelectionMode(javax.swing.JFileChooser.FILES_ONLY);
+            chooser.setMultiSelectionEnabled(false);
+            chooser.setCurrentDirectory(java.nio.file.Paths.get("").toAbsolutePath().toFile());
+            chooser.showOpenDialog(null);
+            var filePath = chooser.getSelectedFile();
+            if(filePath !== null){
+                dataFileField.setText(filePath);
+            }
+        }
+
+        function choiceCallback(){
+            chosenTemplate = templateChoice.getValue();
+
+            clearNode(inputPane);
+
+            chosenTemplate.getFields().forEach(function(field){
+                var element = new javafx.scene.layout.HBox();
+                var label = new javafx.scene.control.Label(field.getLabel());
+                var tfield = new javafx.scene.control.TextField();
+                tfield.setPrefWidth(250);
+                tfield.setId(field.getFieldId());
+                element.getChildren().add(label);
+                element.getChildren().add(new javafx.scene.control.Separator);
+                element.getChildren().add(tfield);
+                inputPane.getChildren().add(element);
+                inputPane.getChildren().add(new javafx.scene.control.Separator);
+            });
+        }
 
         function loadTemplates(){
             var reflections = new org.reflections.Reflections("templates", org.reflections.scanners.Scanners.Resources);
@@ -26,40 +72,8 @@
             return templateList;
         }
 
-        function initializeChoiceBox(){
-            if(!choiceInitialized){
-                templateChoice.getItems().addAll(templates);
-                choiceInitialized = true;
-            }
-        }
-
-        function buttonAction(event){
-            java.lang.System.out.println("finally we get to print something.");
-        }
-
         function clearNode(node){
             node.getChildren().clear();
         }
-
-        function addElement(event){
-            var element = new javafx.scene.layout.VBox();
-            var label = new javafx.scene.control.Label("Piwo to moje paliwo");
-            element.getChildren().add(label);
-            inputPane.getChildren().add(element);
-        }
     </fx:script>
-    <children>
-      <TextArea layoutX="29.0" layoutY="229.0" prefHeight="106.0" prefWidth="398.0" />
-      <Button fx:id="previousButt" layoutX="195.0" layoutY="335.0" mnemonicParsing="false" onAction="clearNode(inputPane);addElement(event);" text="&lt;&lt;" />
-      <Button fx:id="nextButt" layoutX="228.0" layoutY="335.0" mnemonicParsing="false" text="&gt;&gt;" />
-
-      <ChoiceBox fx:id="templateChoice" layoutX="29.0" layoutY="30.0" prefHeight="25.0" prefWidth="398.0" />
-      <TextField layoutX="29.0" layoutY="55.0" prefHeight="25.0" prefWidth="314.0" />
-      <Button layoutX="342.0" layoutY="55.0" mnemonicParsing="false" text="Find data file" />
-      <Label fx:id="countLabel" layoutX="329.0" layoutY="339.0" />
-      <ScrollPane layoutX="29.0" layoutY="80.0" prefHeight="150.0" prefWidth="398.0">
-         <content>
-            <FlowPane fx:id="inputPane" prefWrapLength="0.0" rowValignment="TOP" />
-         </content></ScrollPane>
-   </children>
 </AnchorPane>

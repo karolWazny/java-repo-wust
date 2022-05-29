@@ -3,8 +3,8 @@ package pl.edu.pwr.java.lab13.jsfx;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 
 public class HelloApplication extends Application {
@@ -15,9 +15,6 @@ public class HelloApplication extends Application {
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
-
-        ChoiceBox<String> box = new ChoiceBox<>();
-        box.getItems().add("");
     }
 
     public static void main(String[] args) {
