@@ -2,9 +2,35 @@
     <templateName>Wedding</templateName>
     <fields>
         <field>
-            <label>Which birthday</label>
-            <fieldId>number</fieldId>
+            <label>Where</label>
+            <fieldId>place</fieldId>
+        </field>
+        <field>
+            <label>When</label>
+            <fieldId>date</fieldId>
+        </field>
+        <field>
+            <label>Hour</label>
+            <fieldId>hour</fieldId>
+        </field>
+        <field>
+            <label>What we don't want</label>
+            <fieldId>unwanted</fieldId>
+        </field>
+        <field>
+            <label>Groom</label>
+            <fieldId>groom</fieldId>
+        </field>
+        <field>
+            <label>Bride</label>
+            <fieldId>bride</fieldId>
         </field>
     </fields>
-    <templateString>I hereby invite ${firstName} ${lastName} to my ${number} birthday.</templateString>
+    <templateString>We would like to invite you, ${firstName} ${lastName}, to share our happiness on this very special day of our wedding!
+When: ${date}
+Where: ${place}
+We start at: ${hour}
+And just for the record, we don't want you to bring us any ${unwanted}.
+    You can't miss it!
+    ${bride} &amp; ${groom}</templateString>
 </template>
