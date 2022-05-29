@@ -4,9 +4,34 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="380.0" prefWidth="456.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseMoved="initializeChoiceBox();" prefHeight="380.0" prefWidth="456.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
     <fx:script>
-        
+        var Template = Java.type("pl.edu.pwr.java.lab13.jsfx.template.Template");
+        var HelloApplication = Java.type("pl.edu.pwr.java.lab13.jsfx.HelloApplication");
+        var templates = loadTemplates();
+        var choiceInitialized = false;
+
+        function loadTemplates(){
+            var reflections = new org.reflections.Reflections("templates", org.reflections.scanners.Scanners.Resources);
+            var resourcePaths = reflections.getResources(java.util.regex.Pattern.compile(".*\\.xml"));
+            var templateList = new java.util.ArrayList();
+
+            var serializer = new org.simpleframework.xml.core.Persister();
+
+            resourcePaths.forEach(function(element){
+                templateList.add(
+                        serializer.read(Template.class, HelloApplication.class.getResourceAsStream("/" + element))
+                );
+            });
+            return templateList;
+        }
+
+        function initializeChoiceBox(){
+            if(!choiceInitialized){
+                templateChoice.getItems().addAll(templates);
+                choiceInitialized = true;
+            }
+        }
 
         function buttonAction(event){
             java.lang.System.out.println("finally we get to print something.");
