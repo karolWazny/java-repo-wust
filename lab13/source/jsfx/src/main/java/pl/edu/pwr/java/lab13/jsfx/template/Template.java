@@ -20,7 +20,7 @@ public class Template {
     private List<Field> fields;
 
     @Element
-    private String rawTemplate;
+    private String templateString;
 
     @Override
     public String toString(){

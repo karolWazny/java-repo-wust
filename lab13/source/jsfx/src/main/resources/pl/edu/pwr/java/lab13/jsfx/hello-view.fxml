@@ -4,11 +4,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="380.0" prefWidth="456.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="scene" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="380.0" prefWidth="456.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-      <TextArea layoutX="29.0" layoutY="229.0" prefHeight="106.0" prefWidth="398.0" />
-      <Button fx:id="previousButt" layoutX="195.0" layoutY="335.0" mnemonicParsing="false" text="&lt;&lt;" />
-      <Button fx:id="nextButt" layoutX="228.0" layoutY="335.0" mnemonicParsing="false" text="&gt;&gt;" />
+      <TextArea fx:id="outputArea" layoutX="29.0" layoutY="229.0" prefHeight="106.0" prefWidth="398.0" wrapText="true" />
+      <Button fx:id="previousButt" layoutX="195.0" layoutY="335.0" mnemonicParsing="false" onAction="previousCallback();" text="&lt;&lt;" />
+      <Button fx:id="nextButt" layoutX="228.0" layoutY="335.0" mnemonicParsing="false" onAction="nextCallback();" text="&gt;&gt;" />
 
       <ChoiceBox fx:id="templateChoice" layoutX="29.0" layoutY="30.0" onAction="choiceCallback();" prefHeight="25.0" prefWidth="398.0" />
       <TextField fx:id="dataFileField" disable="true" layoutX="29.0" layoutY="55.0" prefHeight="25.0" prefWidth="314.0" />
@@ -22,28 +22,68 @@
     <fx:script>
         var Template = Java.type("pl.edu.pwr.java.lab13.jsfx.template.Template");
         var HelloApplication = Java.type("pl.edu.pwr.java.lab13.jsfx.HelloApplication");
+        var DataLoader = Java.type("pl.edu.pwr.java.lab13.jsfx.csv.CSVDataLoader");
+        var StringSubstitutor = Java.type("org.apache.commons.text.StringSubstitutor");
         var templates = loadTemplates();
         var chosenTemplate = null;
+        var dataCursor = null;
+        var dataSet = null;
         templateChoice.getItems().addAll(templates);
+        clearOutput();
 
-        function dataFileButtonCallback(){
+        function nextCallback(){
+            if(dataCursor.next()){
+                generateInvitation();
+            }
+        }
+
+        function previousCallback(){
+            if(dataCursor.previous()){
+                generateInvitation();
+            }
+        }
+
+        function generateInvitation(){
+            var map = new java.util.HashMap();
+            map.put("firstName", dataCursor.get("firstName"));
+            map.put("lastName", dataCursor.get("lastName"));
+            chosenTemplate.getFields().forEach(function(field){
+                map.put(field.getFieldId(), scene.lookup("#" + field.getFieldId()).getText());
+            });
+            var templateString = chosenTemplate.getTemplateString();
+            var substitutor = new StringSubstitutor(map);
+            var resolved = substitutor.replace(templateString);
+            outputArea.setText(resolved);
+        }
+
+        function dataFileButtonCallback() {
             var chooser = new javax.swing.JFileChooser();
             chooser.setFileSelectionMode(javax.swing.JFileChooser.FILES_ONLY);
             chooser.setMultiSelectionEnabled(false);
             chooser.setCurrentDirectory(java.nio.file.Paths.get("").toAbsolutePath().toFile());
             chooser.showOpenDialog(null);
             var filePath = chooser.getSelectedFile();
-            if(filePath !== null){
+            if (filePath !== null) {
+                var loader = new DataLoader();
+                dataSet = null;
+                dataSet = loader.readFromFile(filePath.toPath());
+                dataCursor = null;
+                dataCursor = dataSet.cursor();
+                clearOutput();
                 dataFileField.setText(filePath);
             }
         }
 
-        function choiceCallback(){
+        function clearOutput(){
+            outputArea.setText("");
+        }
+
+        function choiceCallback() {
             chosenTemplate = templateChoice.getValue();
 
             clearNode(inputPane);
 
-            chosenTemplate.getFields().forEach(function(field){
+            chosenTemplate.getFields().forEach(function (field) {
                 var element = new javafx.scene.layout.HBox();
                 var label = new javafx.scene.control.Label(field.getLabel());
                 var tfield = new javafx.scene.control.TextField();
@@ -55,16 +95,24 @@
                 inputPane.getChildren().add(element);
                 inputPane.getChildren().add(new javafx.scene.control.Separator);
             });
+
+            clearOutput();
+            try {
+                dataCursor = null;
+                dataCursor = dataSet.cursor();
+            } catch (e){
+
+            }
         }
 
-        function loadTemplates(){
+        function loadTemplates() {
             var reflections = new org.reflections.Reflections("templates", org.reflections.scanners.Scanners.Resources);
             var resourcePaths = reflections.getResources(java.util.regex.Pattern.compile(".*\\.xml"));
             var templateList = new java.util.ArrayList();
 
             var serializer = new org.simpleframework.xml.core.Persister();
 
-            resourcePaths.forEach(function(element){
+            resourcePaths.forEach(function (element) {
                 templateList.add(
                         serializer.read(Template.class, HelloApplication.class.getResourceAsStream("/" + element))
                 );
@@ -72,7 +120,7 @@
             return templateList;
         }
 
-        function clearNode(node){
+        function clearNode(node) {
             node.getChildren().clear();
         }
     </fx:script>

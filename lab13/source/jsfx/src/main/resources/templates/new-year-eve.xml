@@ -2,9 +2,27 @@
     <templateName>New Year's Eve</templateName>
     <fields>
         <field>
-            <label>Which birthday</label>
-            <fieldId>number</fieldId>
+            <label>Starting hour</label>
+            <fieldId>hour</fieldId>
+        </field>
+        <field>
+            <label>Where</label>
+            <fieldId>place</fieldId>
+        </field>
+        <field>
+            <label>Confirmation date</label>
+            <fieldId>confDate</fieldId>
+        </field>
+        <field>
+            <label>Host</label>
+            <fieldId>host</fieldId>
         </field>
     </fields>
-    <rawTemplate>I hereby invite {firstName} {lastName} to my {number} birthday.</rawTemplate>
+    <templateString>Dear ${firstName},
+I'd like to invite you for a New Year's Eve party.
+Fun begins at ${hour} and continues as long as there is still somebody standing! ;P
+And, yes, of course you can take a '+1' with you, the more, the merrier! ;P
+The party takes place at ${place}. Please, confirm before ${confDate}.
+    Cheers!
+    ${host}</templateString>
 </template>

@@ -6,5 +6,5 @@
          <fieldId>number</fieldId>
       </field>
    </fields>
-   <rawTemplate>I hereby invite {firstName} {lastName} to my {number} birthday.</rawTemplate>
+   <templateString>I hereby invite ${firstName} ${lastName} to my ${number} birthday.</templateString>
 </template>
