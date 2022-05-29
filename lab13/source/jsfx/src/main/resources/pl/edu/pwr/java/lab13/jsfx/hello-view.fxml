@@ -1,16 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
+<?language javascript?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="pl.edu.pwr.java.lab13.jsfx.HelloController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
-
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
-</VBox>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="380.0" prefWidth="456.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+    <fx:script>
+        var System = Java.type("java.lang.System")
+        function buttonAction(event){
+            java.lang.System.out.println("finally we get to print something.");
+        }
+        function clearPane(event){
+            turboPane.getChildren().clear();
+        }
+    </fx:script>
+    <children>
+      <TextArea layoutX="29.0" layoutY="229.0" prefHeight="106.0" prefWidth="398.0" />
+      <Button fx:id="previousButt" layoutX="195.0" layoutY="335.0" mnemonicParsing="false" onAction="buttonAction(event);clearPane(event);" text="&lt;&lt;" />
+      <Button fx:id="nextButt" layoutX="228.0" layoutY="335.0" mnemonicParsing="false" text="&gt;&gt;" />
+      <ScrollPane layoutX="29.0" layoutY="80.0" prefHeight="149.0" prefWidth="398.0" />
+      <ChoiceBox layoutX="29.0" layoutY="30.0" prefHeight="25.0" prefWidth="398.0" />
+      <TextField layoutX="29.0" layoutY="55.0" prefHeight="25.0" prefWidth="314.0" />
+      <Button layoutX="342.0" layoutY="55.0" mnemonicParsing="false" text="Find data file" />
+      <Label fx:id="countLabel" layoutX="329.0" layoutY="339.0" />
+   </children>
+</AnchorPane>
