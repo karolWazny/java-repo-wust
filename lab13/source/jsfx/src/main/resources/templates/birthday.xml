@@ -1,0 +1,29 @@
+<template>
+    <templateName>Birthday</templateName>
+    <fields>
+        <field>
+            <label>Which birthday</label>
+            <fieldId>number</fieldId>
+        </field>
+        <field>
+            <label>Where</label>
+            <fieldId>place</fieldId>
+        </field>
+        <field>
+            <label>Day</label>
+            <fieldId>date</fieldId>
+        </field>
+        <field>
+            <label>Hour</label>
+            <fieldId>hour</fieldId>
+        </field>
+        <field>
+            <label>Whose birthday</label>
+            <fieldId>jubilee</fieldId>
+        </field>
+
+    </fields>
+    <templateString>I hereby invite ${firstName} ${lastName} to my ${number} birthday, that will take place ${date} in ${place} at ${hour}.
+
+        ${jubilee}</templateString>
+</template>

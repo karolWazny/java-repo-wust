@@ -1,0 +1,10 @@
+<template>
+   <templateName>Birthday</templateName>
+   <fields>
+      <field>
+         <label>Which birthday</label>
+         <fieldId>number</fieldId>
+      </field>
+   </fields>
+   <templateString>I hereby invite ${firstName} ${lastName} to my ${number} birthday.</templateString>
+</template>

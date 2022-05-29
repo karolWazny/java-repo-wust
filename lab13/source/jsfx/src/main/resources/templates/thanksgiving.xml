@@ -1,0 +1,22 @@
+<template>
+    <templateName>Thanksgiving</templateName>
+    <fields>
+        <field>
+            <label>Where will it take place</label>
+            <fieldId>where</fieldId>
+        </field>
+        <field>
+            <label>When will we start</label>
+            <fieldId>when</fieldId>
+        </field>
+        <field>
+            <label>Host</label>
+            <fieldId>host</fieldId>
+        </field>
+    </fields>
+    <templateString>${firstName},
+I would like to invite you and your family for a Thanksgiving dinner ${where}.
+We would like to start ${when}. Please confirm your presence at your earliest convenience.
+    See you at the party,
+    ${host}</templateString>
+</template>
