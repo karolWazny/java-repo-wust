@@ -22,9 +22,23 @@ Aby użyć aplikacji, należy wybrać plik csv z danymi gości. Służy do tego 
 "Find data file". Jego naciśnięcie otwiera dialog pozwalający wybrać plik z systemu
 plików.
 
+![Screenshot](lab13/docs/pics/Obraz1.png)
+
+![Screenshot](lab13/docs/pics/Obraz2.png)
+
+![Screenshot](lab13/docs/pics/Obraz3.png)
+
 Plik z danymi gości musi zawierać dwie kolumny o nazwach "firstName" i "lastName" (kolejność nie ma znaczenia).
 
 Z rozwijanego menu należy wybrać szablon zaproszenia, wtedy pojawią się pola na dane,
 którymi chcemy uzupełnić szablon. Pola różnią się w zależności od szablonu.
 
+![Screenshot](lab13/docs/pics/Obraz4.png)
+
 Po uzupełnieniu pól przyciskami na dole można nawigować pomiędzy kolejnymi zaproszonymi gośćmi, tekst zaproszenia wyświetla się w polu na dole.
+
+![Screenshot](lab13/docs/pics/Obraz5.png)
+
+![Screenshot](lab13/docs/pics/Obraz6.png)
+
+![Screenshot](lab13/docs/pics/Obraz7.png)
